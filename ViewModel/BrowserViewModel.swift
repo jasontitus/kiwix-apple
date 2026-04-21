@@ -190,6 +190,7 @@ import CoreKiwix
         canGoForwardObserver?.invalidate()
         titleURLObserver?.cancel()
         isLoadingObserver?.invalidate()
+        geolocationService.stopAllWatches()
         let contentController = webView.configuration.userContentController
         contentController.removeScriptMessageHandler(forName: "headings")
         contentController.removeScriptMessageHandler(forName: "geolocation")
@@ -506,6 +507,13 @@ import CoreKiwix
     }
 
     @MainActor
+    func webView(_ webView: WKWebView, didCommit _: WKNavigation!) {
+        // The previous document's watchPosition callbacks are gone; stop feeding
+        // CoreLocation updates to the replaced page.
+        geolocationService.stopAllWatches()
+    }
+
+    @MainActor
     func webView(_ webView: WKWebView, didFinish _: WKNavigation!) {
         webView.evaluateJavaScript("expandAllDetailTags(); getOutlineItems();")
 #if os(iOS)
@@ -559,22 +567,46 @@ import CoreKiwix
 
     @MainActor
     private func handleGeolocationRequest(payload: [String: Any]) {
-        guard let id = payload["id"] as? Int else { return }
+        guard let type = payload["type"] as? String,
+              let id = payload["id"] as? Int else { return }
         let highAccuracy = payload["highAccuracy"] as? Bool ?? false
-        Task { @MainActor [weak self] in
-            guard let self else { return }
-            do {
-                let snapshot = try await self.geolocationService.requestLocation(highAccuracy: highAccuracy)
-                self.resolveGeolocation(id: id, snapshot: snapshot)
-            } catch let error as GeolocationError {
-                self.rejectGeolocation(id: id, code: error.rawValue, message: error.message)
-            } catch {
-                self.rejectGeolocation(
-                    id: id,
-                    code: GeolocationError.positionUnavailable.rawValue,
-                    message: error.localizedDescription
-                )
+        switch type {
+        case "getCurrentPosition":
+            Task { @MainActor [weak self] in
+                guard let self else { return }
+                do {
+                    let snapshot = try await self.geolocationService
+                        .requestLocation(highAccuracy: highAccuracy)
+                    self.resolveGeolocation(id: id, snapshot: snapshot)
+                } catch let error as GeolocationError {
+                    self.rejectGeolocation(id: id, code: error.rawValue, message: error.message)
+                } catch {
+                    self.rejectGeolocation(
+                        id: id,
+                        code: GeolocationError.positionUnavailable.rawValue,
+                        message: error.localizedDescription
+                    )
+                }
             }
+        case "watchPosition":
+            Task { @MainActor [weak self] in
+                guard let self else { return }
+                await self.geolocationService.startWatching(
+                    id: id,
+                    highAccuracy: highAccuracy
+                ) { [weak self] result in
+                    switch result {
+                    case .success(let snapshot):
+                        self?.resolveGeolocation(id: id, snapshot: snapshot)
+                    case .failure(let error):
+                        self?.rejectGeolocation(id: id, code: error.rawValue, message: error.message)
+                    }
+                }
+            }
+        case "clearWatch":
+            geolocationService.stopWatching(id: id)
+        default:
+            break
         }
     }
 

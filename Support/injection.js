@@ -100,6 +100,7 @@ function disableVideoContextMenu() {
 // Bridge the HTML5 Geolocation API to CoreLocation via a script message handler.
 // This lets map ZIM files (e.g. WikiVoyage) use navigator.geolocation; the
 // native side prompts the user for CoreLocation permission on first use.
+// Supports both getCurrentPosition (one-shot) and watchPosition (continuous).
 (function () {
     const handler = window.webkit &&
         window.webkit.messageHandlers &&
@@ -109,41 +110,73 @@ function disableVideoContextMenu() {
     const pending = new Map()
     let nextId = 1
 
+    function deliverSuccess(success, payload) {
+        if (typeof success !== 'function') { return }
+        success({
+            coords: {
+                latitude: payload.coords.latitude,
+                longitude: payload.coords.longitude,
+                accuracy: payload.coords.accuracy,
+                altitude: payload.coords.altitude ?? null,
+                altitudeAccuracy: payload.coords.altitudeAccuracy ?? null,
+                heading: payload.coords.heading ?? null,
+                speed: payload.coords.speed ?? null
+            },
+            timestamp: payload.timestamp
+        })
+    }
+
+    function deliverError(error, err) {
+        if (typeof error !== 'function') { return }
+        error({
+            code: err.code,
+            message: err.message,
+            PERMISSION_DENIED: 1,
+            POSITION_UNAVAILABLE: 2,
+            TIMEOUT: 3
+        })
+    }
+
     window.__kiwixGeolocationResolve = function (id, payload) {
-        const callbacks = pending.get(id)
-        if (!callbacks) { return }
-        pending.delete(id)
-        if (payload && payload.coords && typeof callbacks.success === 'function') {
-            callbacks.success({
-                coords: {
-                    latitude: payload.coords.latitude,
-                    longitude: payload.coords.longitude,
-                    accuracy: payload.coords.accuracy,
-                    altitude: payload.coords.altitude ?? null,
-                    altitudeAccuracy: payload.coords.altitudeAccuracy ?? null,
-                    heading: payload.coords.heading ?? null,
-                    speed: payload.coords.speed ?? null
-                },
-                timestamp: payload.timestamp
-            })
-        } else if (payload && payload.error && typeof callbacks.error === 'function') {
-            callbacks.error({
-                code: payload.error.code,
-                message: payload.error.message,
-                PERMISSION_DENIED: 1,
-                POSITION_UNAVAILABLE: 2,
-                TIMEOUT: 3
-            })
+        const entry = pending.get(id)
+        if (!entry) { return }
+        if (payload && payload.coords) {
+            deliverSuccess(entry.success, payload)
+        } else if (payload && payload.error) {
+            deliverError(entry.error, payload.error)
+        }
+        // One-shot requests are cleaned up after a single delivery; watches
+        // are retained until clearWatch() is called from the page.
+        if (!entry.isWatch) {
+            pending.delete(id)
         }
     }
 
     function getCurrentPosition(success, error, options) {
         const id = nextId++
-        pending.set(id, { success: success, error: error })
+        pending.set(id, { success: success, error: error, isWatch: false })
         handler.postMessage({
+            type: 'getCurrentPosition',
             id: id,
             highAccuracy: !!(options && options.enableHighAccuracy)
         })
+    }
+
+    function watchPosition(success, error, options) {
+        const id = nextId++
+        pending.set(id, { success: success, error: error, isWatch: true })
+        handler.postMessage({
+            type: 'watchPosition',
+            id: id,
+            highAccuracy: !!(options && options.enableHighAccuracy)
+        })
+        return id
+    }
+
+    function clearWatch(id) {
+        if (!pending.has(id)) { return }
+        pending.delete(id)
+        handler.postMessage({ type: 'clearWatch', id: id })
     }
 
     try {
@@ -151,14 +184,8 @@ function disableVideoContextMenu() {
             configurable: true,
             value: {
                 getCurrentPosition: getCurrentPosition,
-                // Implement watchPosition as a single-shot; it is enough for
-                // most map ZIMs, and avoids keeping CoreLocation running
-                // indefinitely.
-                watchPosition: function (success, error, options) {
-                    getCurrentPosition(success, error, options)
-                    return 0
-                },
-                clearWatch: function () {}
+                watchPosition: watchPosition,
+                clearWatch: clearWatch
             }
         })
     } catch (_) {
