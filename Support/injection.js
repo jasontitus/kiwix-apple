@@ -97,6 +97,75 @@ function disableVideoContextMenu() {
     });
 }
 
+// Bridge the HTML5 Geolocation API to CoreLocation via a script message handler.
+// This lets map ZIM files (e.g. WikiVoyage) use navigator.geolocation; the
+// native side prompts the user for CoreLocation permission on first use.
+(function () {
+    const handler = window.webkit &&
+        window.webkit.messageHandlers &&
+        window.webkit.messageHandlers.geolocation
+    if (!handler) { return }
+
+    const pending = new Map()
+    let nextId = 1
+
+    window.__kiwixGeolocationResolve = function (id, payload) {
+        const callbacks = pending.get(id)
+        if (!callbacks) { return }
+        pending.delete(id)
+        if (payload && payload.coords && typeof callbacks.success === 'function') {
+            callbacks.success({
+                coords: {
+                    latitude: payload.coords.latitude,
+                    longitude: payload.coords.longitude,
+                    accuracy: payload.coords.accuracy,
+                    altitude: payload.coords.altitude ?? null,
+                    altitudeAccuracy: payload.coords.altitudeAccuracy ?? null,
+                    heading: payload.coords.heading ?? null,
+                    speed: payload.coords.speed ?? null
+                },
+                timestamp: payload.timestamp
+            })
+        } else if (payload && payload.error && typeof callbacks.error === 'function') {
+            callbacks.error({
+                code: payload.error.code,
+                message: payload.error.message,
+                PERMISSION_DENIED: 1,
+                POSITION_UNAVAILABLE: 2,
+                TIMEOUT: 3
+            })
+        }
+    }
+
+    function getCurrentPosition(success, error, options) {
+        const id = nextId++
+        pending.set(id, { success: success, error: error })
+        handler.postMessage({
+            id: id,
+            highAccuracy: !!(options && options.enableHighAccuracy)
+        })
+    }
+
+    try {
+        Object.defineProperty(navigator, 'geolocation', {
+            configurable: true,
+            value: {
+                getCurrentPosition: getCurrentPosition,
+                // Implement watchPosition as a single-shot; it is enough for
+                // most map ZIMs, and avoids keeping CoreLocation running
+                // indefinitely.
+                watchPosition: function (success, error, options) {
+                    getCurrentPosition(success, error, options)
+                    return 0
+                },
+                clearWatch: function () {}
+            }
+        })
+    } catch (_) {
+        // Fall through; native navigator.geolocation remains in place.
+    }
+})();
+
 function fixVideoElements() {
 
     function fixVideoAttributes(element) {
