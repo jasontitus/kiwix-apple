@@ -2,6 +2,7 @@
 // Exported from translatewiki.net
 // Author: Key0121
 // Author: Kly
+// Author: LowensteinYang
 // Author: Winston Sung
 // Author: 列维劳德
 // Author: 臺灣象象
@@ -39,6 +40,8 @@
 "common.button.share_as_pdf" = "以 PDF 格式分享";
 "common.search" = "搜尋";
 "common.search.inpage" = "在頁面搜尋";
+"common.find_next" = "尋找下一筆";
+"common.find_previous" = "尋找上一筆";
 "common.search.suggestion" = "您是不是指：";
 "common.tab.manager.title" = "分頁管理器";
 "common.tab.navigation.title" = "分頁";
@@ -52,15 +55,15 @@
 "common.export_file.alert.description" = "您要匯出檔案「%@」嗎？";
 "common.export_file.alert.button.title" = "匯出";
 "outline_button.outline.title" = "大綱";
-"outline_button.outline.help" = "顯示條目大綱";
+"outline_button.outline.help" = "顯示頁面大綱";
 "outline_button.outline.empty.message" = "沒有可用的大綱";
-"bookmark_button.show.help" = "顯示書籤表，可在此從書籤加入/移除目前的條目。";
-"article_shortcut.main.button.title" = "主條目";
-"article_shortcut.main.button.help" = "顯示主條目";
-"article_shortcut.random.button.title.mac" = "隨機條目";
+"bookmark_button.show.help" = "顯示書籤表，可在此從書籤加入/移除目前的頁面。";
+"article_shortcut.main.button.title" = "主頁面";
+"article_shortcut.main.button.help" = "顯示主頁面";
+"article_shortcut.random.button.title.mac" = "隨機頁面";
 "article_shortcut.random.button.title.ios" = "隨機頁面";
-"article_shortcut.random.button.help" = "顯示隨機條目";
-"alert_handler.alert.failed.title" = "無法載入請求的條目。";
+"article_shortcut.random.button.help" = "顯示隨機頁面";
+"alert_handler.alert.failed.title" = "無法載入請求的頁面。";
 "bookmark_context_menu.view.title" = "檢視";
 "bookmark_context_menu.remove.title" = "移除";
 "external_link_handler.alert.title" = "外部連結";
@@ -83,11 +86,13 @@
 "flavor_tag.help.mini" = "僅有文字的子集合可用，有可能是第一段落";
 "library_refresh_time.last" = "現在";
 "library_refresh_time.never" = "永不";
-"zim_file_cell.article_count.suffix" = "條目";
+"zim_file_cell.page_count" = "%@ 個頁面";
+"zim_file_cell.media_count" = "%@ 個媒體";
 "zim_file_missing_indicator.help" = "遺失 Zim 檔案。";
 "hotspot.action.start_hotspot.title" = "啟動熱點";
 "hotspot.action.stop_hotspot.title" = "停止熱點";
 "hotspot.settings.port_number" = "埠號";
+"hotspot.select_zim_files.message" = "選擇 ZIM 檔案來啟動您的熱點服務。";
 "hotspot.settings.recommended_port_range" = "熱點使用的網路埠號應介於 %@ 和 %@ 之間";
 "hotspot.error.port_already_used_by_another_app_title" = "由於埠號 %@ 已被佔用，熱點無法啟動。";
 "hotspot.error.port_already_used_by_another_app_description" = "要解決此問題，請關閉正在使用熱點的應用程式，或在設定中更改 Kiwix 熱點埠號。";
@@ -98,10 +103,17 @@
 "library.zim_file_context.main_page.label" = "主頁";
 "library.zim_file_context.random.label" = "隨機頁面";
 "library.zim_file_context.copy_url" = "複製 URL";
-"zim_file_opened.overlay.no-opened.message" = "沒有開啟的 ZIM 檔案";
+"zim_file_opened.overlay.no-zim-files-at-all.message" = "找不到 ZIM 檔案。";
+"zim_file_opened.overlay.no-available-zim-files.message" = "找不到可用的 ZIM 檔案。";
+"zim_file_opened.overlay.no-missing-zim-files.message" = "找不到缺少的 ZIM 檔案。";
 "zim_file_opened.toolbar.open.title" = "開啟…";
 "zim_file_opened.toolbar.open.help" = "開啟一個 ZIM 檔案";
 "zim_file_category.title" = "分類";
+"zim_file_opened.toolbar.filter.show_all" = "顯示全部";
+"zim_file_opened.toolbar.filter.show_only_available" = "僅顯示可用檔案";
+"zim_file_opened.toolbar.filter.show_only_missing" = "僅顯示缺少檔案";
+"zim_file_opened.toolbar.sort_by.name" = "依名稱排序";
+"zim_file_opened.toolbar.sort_by.size" = "依大小排序";
 "zim_file_catalog.fetching.message" = "正在抓取目錄…";
 "zim_file_category.section.empty.message" = "此分類下沒有 ZIM 檔案。";
 "zim_file_downloads.overlay.empty.message" = "沒有下載任務";
@@ -111,17 +123,18 @@
 "zim_file.list.description.text" = "描述";
 "zim_file.list.actions.text" = "操作";
 "zim_file.list.info.text" = "資訊";
+"zim_file.list.content.text" = "內容";
 "zim_file.action.locate.title" = "定位";
 "zim_file.action.open_main_page.title" = "開啟主頁";
 "zim_file.action.reveal_in_finder.title" = "在 Finder 中顯示";
 "zim_file.action.toggle_cellular" = "使用蜂巢式網路下載";
 "zim_file.action.unlink.title" = "取消連結";
-"zim_file.action.unlink.message" = "連結到該 ZIM 檔案的所有加入到書籤的條目都將被刪除，不過原始檔案會保留於原處。";
+"zim_file.action.unlink.message" = "連結到該 ZIM 檔案的所有加入到書籤的頁面都將被刪除，不過原始檔案會保留於原處。";
 "zim_file.action.unlink.multi_title" = "取消連結 %@ 個 ZIM 檔案";
-"zim_file.action.unlink.multi_message" = "連結到這些 %@ 個 ZIM 檔案的所有書籤條目都會被刪除，不過原始檔案會保留於原處。";
+"zim_file.action.unlink.multi_message" = "連結到這些 %@ 個 ZIM 檔案的所有書籤頁面都會被刪除，不過原始檔案會保留於原處。";
 "zim_file.action.unlink.button.title" = "取消連結";
 "zim_file.action.delete.title" = "刪除";
-"zim_file.action.delete.message" = "ZIM 檔案與連結到該檔案的所有加入到書籤的條目都將被刪除。";
+"zim_file.action.delete.message" = "ZIM 檔案與連結到該檔案的所有加入到書籤的頁面都將被刪除。";
 "zim_file.action.delete.button.title" = "刪除";
 "zim_file.action.download.title" = "下載";
 "zim_file.action.download.warning.title" = "空間警告";
@@ -141,8 +154,8 @@
 "zim_file.bool_info.details" = "詳細資訊";
 "zim_file.bool_info.require_service_workers" = "需要 service worker";
 "zim_file.bool_info.zim_archive_integrity" = "ZIM 存檔完整性";
-"zim_file.counts.article_count" = "條目總計";
-"zim_file.counts.article.media_count" = "多媒體總計";
+"zim_file.counts.pages_count" = "頁數";
+"zim_file.counts.media_count" = "多媒體總計";
 "zim_file.detail.id.title" = "ID";
 "zim_file.download_task.action.title.cancel" = "取消";
 "zim_file.download_task.action.try_recover" = "嘗試恢復";
@@ -167,7 +180,6 @@
 "library_settings.last_refresh.text" = "上一次重整";
 "library_settings.auto_refresh.toggle" = "自動重整";
 "library_settings.catalog_warning.text" = "啟用後，在文庫目錄過期時會自動重整。";
-"library_settings.languages.title" = "語言";
 "settings.navigation.title" = "設定";
 "library_settings.toggle.cellular" = "使用蜂巢式網路下載";
 "library_settings.new-download-task-description" = "更改內容僅套用到新的下載任務。";
@@ -190,8 +202,6 @@
 "language_selector.no_language.title" = "沒有語言";
 "language_selector.showing.header" = "顯示";
 "language_selector.hiding.header" = "隱藏";
-"language_selector.navitation.title" = "語言";
-"language_selector.toolbar.sorting" = "排序";
 "settings.about.title" = "關於";
 "settings.about.release" = "發行";
 "settings.about.dependencies" = "相依";
@@ -205,10 +215,19 @@
 "settings.about.our_website.button" = "我們的網站";
 "settings.about.source.title" = "來源";
 "settings.about.button.license" = "GNU 通用公眾授權條款 v3";
+"download_mac_settings.tab.title" = "下載";
+"download_mac_folder.button.change" = "變更";
+"download_mac_folder.button.reset" = "重設成預設值";
+"download_mac_folder.unknown" = "未知";
+"download_mac_folder.panel.message" = "選擇一個用於存放 ZIM 下載檔案的資料夾";
+"download_mac_folder.error.title" = "無法使用此資料夾。";
+"download_mac_folder.error.not_writable" = "您沒有權限在此儲存檔案。";
+"download_mac_folder.error.save_failed" = "無法設定下載資料夾，請重試。";
 "bookmark.navigation.title" = "書籤";
 "bookmark.overlay.empty.title" = "沒有書籤";
 "search_result.zimfile.empty.message" = "沒有開啟的 ZIM 檔案";
 "search_result.zimfile.no_result.message" = "沒有結果";
+"search_result.zimfile.voice_over_count" = "找到結果：%@";
 "search_result.sidebar.button.remove" = "移除";
 "search_result.header.text" = "最近搜尋";
 "search_result.button.clear" = "清除";
@@ -227,6 +246,7 @@
 "app_macos_commands.open_file" = "開啟…";
 "app_macos_commands.new" = "新分頁";
 "app_macos_navigation.button.library" = "文庫";
+"app_macos_navigation.button.restore_previous_session" = "恢復上一次連線階段";
 "sidebar_view.navigation.button.close" = "關閉";
 "enum.category.wikipedia" = "維基百科";
 "enum.category.wikibooks" = "維基教科書";
@@ -241,9 +261,6 @@
 "enum.external_link_loading_policy.always_ask" = "永遠詢問";
 "enum.external_link_loading_policy.always_load" = "永遠載入";
 "enum.external_link_loading_policy.never_load" = "永不載入";
-"enum.flavor.max" = "最大";
-"enum.flavor.no_pic" = "沒有圖片";
-"enum.flavor.mini" = "最小";
 "enum.library_language_sorting_model.a-z" = "A 到 Z";
 "enum.library_language_sorting_model.by_count" = "依總計";
 "enum.libray_tab_item.opened" = "已開啟";
@@ -268,17 +285,19 @@
 "payment.monthly_support.label" = "每月支持 Kiwix";
 "payment.summary.title" = "Kiwix";
 "payment.textfield.custom_amount.label" = "自訂金額";
-"payment.confirm.button.title" = "確認";
-"payment.selection.average_monthly_donation.subtitle" = "每月捐款";
-"payment.selection.last_year_average.subtitle" = "去年的平均";
-"payment.selection.custom_amount" = "自訂金額";
+"payment.continue.button.title" = "繼續";
 "payment.selection.option.one_time" = "單筆";
 "payment.selection.option.monthly" = "每月";
 "payment.support_fallback_message" = "很抱歉，您的裝置不支援 Apple Pay。";
-"payment.success.title" = "非常感謝您的捐款！";
-"payment.success.description" = "您的慷慨行為對我們至關重要。";
+"payment.success.title" = "非常感謝您的捐款。";
+"payment.success.description" = "您的支持，幫助到知識能持續自由開放，並可在離線情況下取得。";
 "payment.error.title" = "唔，真尷尬。";
 "payment.error.description" = "您的付款出現了問題。請重試。";
+"payment.error_already_subscribed.title" = "您已有每月捐款";
+"payment.error_already_subscribed.description" = "請依照我們之前發送的電子郵件中的說明進行更新。";
+"payment.donation_reason.title" = "協助我們持續更新 Kiwix 與 ZIM 檔案。";
+"payment.donation_cell.description" = "無廣告，無追蹤，僅由捐款資助";
+"payment.donation_is_encrypted" = "您的捐款會以 Apple 內建的安全機制加密。";
 "download_service.error.client.backgroundSessionInUseByAnotherProcess" = "無法與背景傳輸服務通信";
 "download_service.error.client.backgroundSessionWasDisconnected" = "與背景傳輸服務斷開連線";
 "download_service.error.client.cancelled" = "已取消";
@@ -322,3 +341,6 @@
 "download_service.error.client.cannotMoveFile" = "無法移動檔案";
 "download_service.error.client.downloadDecodingFailedMidStream" = "下載解碼失敗";
 "download_service.error.client.downloadDecodingFailedToComplete" = "下載解碼失敗";
+"geolocation_error.permission_denied" = "使用者已拒絕地理位置權限。";
+"geolocation_error.position_unavailable" = "位置不可用。";
+"geolocation_error.timeout" = "位置請求逾時。";

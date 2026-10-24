@@ -57,7 +57,9 @@ struct Favicon: View {
     }
     
     static func asyncImageData(url: URL) async throws -> Data? {
-        let (data, response) = try await URLSession.shared.data(from: url)
+        var request = URLRequest(url: url)
+        request.allHTTPHeaderFields = ["User-Agent": UserAgent.current]
+        let (data, response) = try await URLSession.shared.data(for: request)
         guard let response = response as? HTTPURLResponse,
               response.statusCode == 200,
               let mimeType = response.mimeType,
@@ -70,12 +72,11 @@ struct Favicon: View {
 
 struct Favicon_Previews: PreviewProvider {
     static var previews: some View {
+        let img = "https://opds.library.kiwix.org/catalog/v2/illustration/7b656250-40ad-8d4d-5fa2-1486590278da/?size=48"
         Favicon(
             category: .wikipedia,
             imageData: nil,
-            imageURL: URL(
-                string: "https://opds.library.kiwix.org/v2/illustration/e82e6816-a2dc-a7f0-2d15-58d24709db93/?size=48"
-            )!
+            imageURL: URL(string: img)!
         ).frame(width: 200, height: 200).previewLayout(.sizeThatFits)
         Favicon(
             category: .ted,

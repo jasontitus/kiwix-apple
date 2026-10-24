@@ -23,22 +23,24 @@ struct PaymentSummary: View {
 
     private let selectedAmount: SelectedAmount
     private let payment: Payment
-    private let onComplete: @MainActor () -> Void
     @State private var paymentDetermined: Bool = false
-    @State private var paymentButtonLabel: PayWithApplePayButtonLabel?
+    @State private var paymentButtonLabel: PaymentButtonType?
 
-    init(selectedAmount: SelectedAmount,
-         onComplete: @escaping @MainActor () -> Void) {
+    init(selectedAmount: SelectedAmount) {
         self.selectedAmount = selectedAmount
-        self.onComplete = onComplete
         payment = Payment()
     }
 
     var body: some View {
         VStack {
+            Text(LocalString.payment_donation_reason_title)
+                .font(.callout)
+                .padding()
+
             Text(LocalString.payment_summary_page_title)
                 .font(.largeTitle)
                 .padding()
+            
             if selectedAmount.isMonthly {
                 Text(LocalString.payment_selection_option_monthly).font(.title)
                     .padding()
@@ -46,11 +48,22 @@ struct PaymentSummary: View {
                 Text(LocalString.payment_selection_option_one_time).font(.title)
                     .padding()
             }
-            Text(selectedAmount.value.formatted(.currency(code: selectedAmount.currency))).font(.title).bold()
+            Text(
+                selectedAmount.value
+                    .formatted(.currency(code: selectedAmount.currency.rawValue).locale(.current))
+            )
+                .font(.title)
+                .bold()
             if paymentDetermined {
                 if let paymentButtonLabel {
+                    let label = {
+                        switch paymentButtonLabel {
+                        case .setUp: PayWithApplePayButtonLabel.setUp
+                        case .donate: PayWithApplePayButtonLabel.donate
+                        }
+                    }()
                     PayWithApplePayButton(
-                        paymentButtonLabel,
+                        label,
                         request: payment.donationRequest(for: selectedAmount),
                         onPaymentAuthorizationChange: { phase in
                             payment.onPaymentAuthPhase(selectedAmount: selectedAmount,
@@ -67,9 +80,15 @@ struct PaymentSummary: View {
                 }
             } else {
                 LoadingProgressView()
+                    .frame(width: 186, height: 44)
+                    .padding()
             }
-        }.onReceive(payment.completeSubject) {
-            onComplete()
+            Text(LocalString.payment_donation_is_encrypted)
+                .multilineTextAlignment(.center)
+                .font(.callout)
+                .foregroundStyle(.tertiary)
+                .padding(.vertical, 32)
+                .padding(.horizontal, 48)
         }
         .task {
             paymentButtonLabel = await Payment.paymentButtonTypeAsync()
@@ -79,10 +98,13 @@ struct PaymentSummary: View {
 }
 
 #Preview {
-    PaymentSummary(
-        selectedAmount: SelectedAmount(value: 34,
-                                       currency: "CHF",
-                                       isMonthly: true),
-        onComplete: {}
-    )
+    Rectangle()
+        .background(Color.white)
+        .frame(minWidth: .infinity, minHeight: .infinity)
+        .sheet(isPresented: Binding<Bool>.constant(true)) {
+            PaymentSummary(
+                selectedAmount: SelectedAmount(value: 34, currency: .chf, isMonthly: true)
+            )
+            .presentationDetents([.fraction(0.83)])
+        }
 }

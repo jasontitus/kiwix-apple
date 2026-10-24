@@ -18,7 +18,7 @@ import Foundation
 import SwiftUI
 
 extension Defaults.Keys {
-//    // reading
+    // reading
     static let webViewTextSizeAdjustFactor = Key<Double>("webViewZoomScale", default: 1)
     static let webViewPageZoom = Key<Double>("webViewPageZoom", default: 1)
     static let externalLinkLoadingPolicy = Key<ExternalLinkLoadingPolicy>(
@@ -32,13 +32,15 @@ extension Defaults.Keys {
     static let recentSearchTexts = Key<[String]>("recentSearchTexts", default: [])
 
     // library
-    static let libraryLanguageCodes = Key<Set<String>>("libraryLanguageCodes", default: Set())
+    /// deprecated, migrated to ordered [String]
+    static let libraryLanguageCodesSet = Key<Set<String>>("libraryLanguageCodes", default: Set())
+    static let libraryLanguageCodes = Key<[String]>("libraryLanguageCodesSorted", default: [])
+    
     static let libraryETag = Key<String>("libraryETag", default: "")
     static let libraryLanguageSortingMode = Key<LibraryLanguageSortingMode>(
         "libraryLanguageSortingMode", default: LibraryLanguageSortingMode.byCounts
     )
     static let libraryAutoRefresh = Key<Bool>("libraryAutoRefresh", default: true)
-    static let libraryUsingOldISOLangCodes = Key<Bool>("libraryUsingOldISOLangCodes", default: true)
     static let libraryLastRefresh = Key<Date?>("libraryLastRefresh")
 
     static let isFirstLaunch = Key<Bool>("isFirstLaunch", default: true)
@@ -50,6 +52,9 @@ extension Defaults.Keys {
     static let selectedCategory = Key<String?>("selectedCategory", default: nil)
     
     static let hotspotPortNumber = Key<Int>("hotspotPortNumber", default: Hotspot.defaultPort)
+    static let selectedHotspotIds = Key<Set<UUID>>("slectedHotspotIds", default: Set<UUID>())
+    static let openZIMsShowBy = Key<ZIMsShowBy>("openZIMsShowBy", default: ZIMsShowBy.all)
+    static let opneZIMsSorting = Key<ZIMsSortBy>("openZIMsSortBy", default: ZIMsSortBy.size(.forward))
 
     #if os(macOS)
     // window management:
@@ -59,10 +64,12 @@ extension Defaults.Keys {
     #endif
     
     #if os(iOS)
+    static let savedMenuNavigation = Key<MenuItem?>("savedMenuNavigation", default: nil)
     static let ipadSplitViewVisibility = Key<NavigationSplitViewVisibility>(
         "ipadSplitViewVisibility",
-        default: NavigationSplitViewVisibility.automatic
+        default: NavigationSplitViewVisibility.detailOnly
     )
+    static let lastDonationTime = Key<Date?>("lastDonationTime", default: nil)
     #endif
 }
 

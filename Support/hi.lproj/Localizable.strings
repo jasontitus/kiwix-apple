@@ -19,6 +19,7 @@
 "common.tab.list.close" = "टैब बंद करें";
 "common.tab.menu.library" = "पुस्तकालय";
 "common.tab.menu.settings" = "सेटिंग्स";
+"article_shortcut.main.button.title" = "मुख्य पृष्ठ";
 "bookmark_context_menu.view.title" = "देखें";
 "bookmark_context_menu.remove.title" = "हटाएँ";
 "external_link_handler.alert.title" = "बाहरी कड़ियाँ";
@@ -47,14 +48,12 @@
 "zim_file.download_task.action.resume" = "दुबारा शुरू करें";
 "reading_settings.zoom.reset.button" = "रीसेट करें";
 "reading_settings.tab.reading" = "पढ़ना";
-"library_settings.languages.title" = "भाषाएँ";
 "settings.navigation.title" = "सेटिंग्स";
 "library_settings.toggle.cellular" = "सेलुलर का उपयोग करके डाउनलोड करें";
 "settings.miscellaneous.navigation.about" = "विवरण";
 "settings.selected_language.title" = "भाषाएँ";
 "language_selector.name.title" = "नाम";
 "language_selector.count.table.title" = "गणना";
-"language_selector.navitation.title" = "भाषा";
 "settings.about.dependencies.name" = "नाम";
 "settings.about.dependencies.license" = "लाइसेंस";
 "settings.about.dependencies.version" = "संस्करण";
@@ -77,13 +76,11 @@
 "enum.category.wikivoyage" = "विकियात्रा";
 "enum.category.other" = "अन्य";
 "enum.external_link_loading_policy.always_ask" = "हमेशा पूछें";
-"enum.flavor.max" = "अधिकतम";
 "enum.libray_tab_item.categories" = "श्रेणियाँ";
 "enum.libray_tab_item.new" = "नया";
 "enum.navigation_item.new" = "नया";
 "enum.navigation_item.downloads" = "डाउनलोड";
 "enum.search_result_snippet_mode.disabled" = "अक्षम किया गया";
-"payment.confirm.button.title" = "पुष्टि करें";
 "download_service.error.client.backgroundSessionInUseByAnotherProcess" = "बैकग्राउंड ट्रांसफ़र सेवा से संपर्क नहीं हो सका";
 "download_service.error.client.backgroundSessionWasDisconnected" = "बैकग्राउंड ट्रांसफ़र सेवा से कनेक्शन अनुपलब्ध हो गया";
 "download_service.error.client.cancelled" = "रद्द";

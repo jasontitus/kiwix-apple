@@ -23,7 +23,7 @@ settings:
     INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.reference
     INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone: UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight
     INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad: UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight
-    INFOPLIST_KEY_NSPhotoLibraryUsageDescription: "Kiwix needs permission to saves images to your photos app."
+    INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription: "Kiwix needs permission to save images to your photos app."
     INFOPLIST_KEY_NSLocationWhenInUseUsageDescription: "Kiwix can share your location with map content from ZIM files you open."
     INFOPLIST_KEY_NSLocationUsageDescription: "Kiwix can share your location with map content from ZIM files you open."
     INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace: YES
@@ -69,7 +69,6 @@ targetTemplates:
         com.apple.security.network.client: true
         com.apple.security.network.server: true
         com.apple.security.print: true
-        com.apple.security.personal-information.location: true
     dependencies:
       - framework: CoreKiwix.xcframework
         embed: false
@@ -85,7 +84,7 @@ targetTemplates:
       - package: StripeApplePay
       - package: SwiftSystem
         product: SystemPackage
-        destinationFilters: 
+        destinationFilters:
           - macOS
     sources:
       - path: App
@@ -110,10 +109,11 @@ targets:
     entitlements:
       properties:
         com.apple.security.files.downloads.read-write: true
+        com.apple.security.personal-information.location: true
         com.apple.developer.in-app-payments: [merchant.org.kiwix.apple] # this line is removed for macOS FTP
     settings:
       base:
-        MARKETING_VERSION: "3.15.0"
+        MARKETING_VERSION: "3.18.0"
         PRODUCT_BUNDLE_IDENTIFIER: self.Kiwix
         INFOPLIST_KEY_CFBundleDisplayName: Kiwix
         INFOPLIST_FILE: Support/Info.plist
@@ -124,6 +124,7 @@ targets:
           - "**/qqq.lproj"
           - "**/igl.lproj"
           - "**/dag.lproj"
+          - "zimCookieTests/**"
       - path: Kiwix/SplashScreenKiwix.storyboard
         destinationFilters:
           - iOS

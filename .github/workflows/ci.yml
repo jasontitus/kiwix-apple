@@ -1,8 +1,12 @@
 name: CI
 
+permissions:
+  contents: read
+  pull-requests: write
+
 on:
-  pull_request_target:
   workflow_dispatch:
+  pull_request:
   push:
     branches:
       - main
@@ -10,13 +14,13 @@ on:
 jobs:
   authorize:
     # sets environment based on origin of PR: internal (non-existent) for own-repo or external (requires reviewer to run) for external repos
-    environment: ${{ github.event_name == 'pull_request_target' && github.event.pull_request.head.repo.full_name != github.repository && 'external' || 'internal' }}
+    environment: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository && 'external' || 'internal' }}
     runs-on: ubuntu-22.04
     steps:
       - run: true
   build:
     needs: authorize
-    runs-on: macos-15
+    runs-on: macos-26
     env:
       EXTRA_XCODEBUILD: ""
       APPLE_STORE_AUTH_KEY_PATH: /tmp/authkey.p8
@@ -28,10 +32,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          # /!\ important: this checks out code from the HEAD of the PR instead of the main branch (for pull_request_target)
-          ref: ${{ github.event.pull_request.head.sha || github.ref }}
+        uses: actions/checkout@v6
 
       - name: Validate localizations
         run: python localizations.py validate
@@ -41,7 +42,7 @@ jobs:
 
       - name: Set EXTRA_XCODEBUILD for iOS
         if: matrix.platform == 'iOS'
-        run: echo "EXTRA_XCODEBUILD=-sdk iphoneos26.1 ${{ env.APPLE_AUTH_PARAMS }}" >> $GITHUB_ENV
+        run: echo "EXTRA_XCODEBUILD=-sdk iphoneos26.4 ${{ env.APPLE_AUTH_PARAMS }}" >> $GITHUB_ENV
 
       - name: Set EXTRA_XCODEBUILD for macOS
         if: matrix.platform == 'macOS'
@@ -64,14 +65,14 @@ jobs:
 
       - name: Run Unit Tests on iOS
         if: matrix.platform == 'iOS'
-        run: xcodebuild clean test -scheme Kiwix -destination 'platform=iOS Simulator,name=iPhone 16 Pro'
+        run: xcodebuild clean test -scheme Kiwix -destination 'platform=iOS Simulator,name=iPhone 17 Pro'
 
       - name: Run Unit Tests on macOS
         if: matrix.platform == 'macOS'
         run: xcodebuild clean test -scheme Kiwix -configuration Debug -destination 'platform=macOS' CODE_SIGNING_ALLOWED=NO
 
       - name: Upload code coverage
-        uses: codecov/codecov-action@v4.2.0
+        uses: codecov/codecov-action@v6
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
@@ -79,15 +80,39 @@ jobs:
         if: matrix.platform == 'macOS'
         run: xcodebuild test -scheme UITests_macOS -destination 'platform=macOS'
 
-      # - name: Run UI Tests on iPhone
-      #   if: matrix.platform == 'iOS'
-      #   env:
-      #     DEVICE_NAME: "iPhone 16 Pro Max"
-      #   run: xcodebuild test -scheme UITests_iPhone -destination "platform=iOS Simulator,name=$DEVICE_NAME"
+      - name: Run UI Tests on iPhone
+        if: matrix.platform == 'iOS'
+        env:
+          DEVICE_NAME: "iPhone 17 Pro Max"
+        run: xcodebuild test -scheme UITests_iPhone -destination "platform=iOS Simulator,name=$DEVICE_NAME" -resultBundlePath Kiwix-UITests-IPhone.xcresult
+      
+      - name: Upload UI Tests xcresult file
+        if: ${{ matrix.platform == 'iOS' && failure() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: Kiwix-UITests-IPhone-${{ github.run_number }}.xcresult
+          path: Kiwix-UITests-IPhone.xcresult
 
-      # - name: Run UI Tests on iPad
-      #   if: matrix.platform == 'iOS'
-      #   env:
-      #     DEVICE_NAME: "iPad Pro 13-inch (M4)"
-      #   run: xcodebuild test -scheme UITests_iPad -destination "platform=iOS Simulator,name=$DEVICE_NAME"
+      - name: Get iPad Device ID
+        if: matrix.platform == 'iOS'
+        env:
+          DEVICE_NAME: "iPad Pro 13-inch (M5)"
+          DEVICE_OS: "26.4"
+        run: |
+          echo "IPAD_DEVICE_ID=`xcrun simctl list devices available '${{ env.DEVICE_OS }}' | grep '${{ env.DEVICE_NAME }}' | sort -r | head -1 | awk -F'[()]' '{print $4}'`" >> $GITHUB_ENV
 
+      - name: Run UI Tests on iPad
+        if: matrix.platform == 'iOS'
+        env:
+          DEVICE_ID: ${{ env.IPAD_DEVICE_ID }}
+        run: |
+            xcrun simctl boot ${{ env.DEVICE_ID }}
+            xcrun simctl uninstall ${{ env.DEVICE_ID }} self.Kiwix
+            xcodebuild test -scheme UITests_iPad -destination "platform=iOS Simulator,id=${{ env.DEVICE_ID }}" -resultBundlePath Kiwix-UITests-IPad.xcresult
+      
+      - name: Upload UI Tests xcresult file
+        if: ${{ matrix.platform == 'iOS' && failure() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: Kiwix-UITests-IPad-${{ github.run_number }}.xcresult
+          path: Kiwix-UITests-IPad.xcresult

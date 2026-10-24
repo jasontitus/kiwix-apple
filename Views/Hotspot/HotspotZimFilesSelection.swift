@@ -13,6 +13,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Kiwix; If not, see https://www.gnu.org/licenses/.
 
+import CoreData
 import SwiftUI
 
 /// A grid of zim files that are opened, or was open but is now missing.
@@ -48,8 +49,12 @@ struct HotspotZimFilesSelection: View {
     
     var body: some View {
         VStack(spacing: 0) {
+            if #unavailable(iOS 26.0), FeatureFlags.hasLibrary {
+                Text(LocalString.hotspot_select_zim_files_message)
+                    .font(.callout)
+            }
             if zimFiles.isEmpty {
-                Message(text: LocalString.zim_file_opened_overlay_no_opened_message)
+                Message(text: LocalString.zim_file_opened_overlay_no_zim_files_at_all_message)
             } else {
                 if case .started(let address, let qrCodeImage) = hotspot.state {
                     ScrollView {
@@ -78,7 +83,6 @@ struct HotspotZimFilesSelection: View {
                                 content: {
                                     ZimFileCell(
                                         zimFile,
-                                        prominent: .name,
                                         isSelected: selection.isSelected(zimFile),
                                         backgroundColoring: CellBackground.hotspotSelectionColorFor
                                     )
@@ -94,11 +98,12 @@ struct HotspotZimFilesSelection: View {
         }
         .modifier(ToolbarRoleBrowser())
         .navigationTitle(MenuItem.hotspot.name)
+        .modifier(NavigationSubtitleModifier(LocalString.hotspot_select_zim_files_message))
         .task {
             // make sure that our selection only contains still existing ZIM files
             selection.intersection(with: Set(zimFiles))
-            if !FeatureFlags.hasLibrary, let customZIM = zimFiles.first {
-                selection.singleSelect(zimFile: customZIM)
+            if !FeatureFlags.hasLibrary, let brandedZIM = zimFiles.first {
+                selection.singleSelect(zimFile: brandedZIM)
             }
         }
         .onReceive(hotspot.$state, perform: { state in
@@ -160,5 +165,22 @@ struct HotspotZimFilesSelection: View {
         // at the end resetError is also setting hotspotError to nil
         // but it's just too slow for UI
         hotspot.resetError()
+    }
+}
+
+private struct NavigationSubtitleModifier: ViewModifier {
+    private let subtitle: String
+    
+    init(_ subtitle: String) {
+        self.subtitle = subtitle
+    }
+    
+    func body(content: Content) -> some View {
+        if #available(iOS 26.0, *), FeatureFlags.hasLibrary {
+            content
+                .navigationSubtitle(subtitle)
+        } else {
+            content
+        }
     }
 }

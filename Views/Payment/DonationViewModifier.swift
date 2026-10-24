@@ -19,74 +19,81 @@ import Combine
 
 struct DonationViewModifier: ViewModifier {
     
-    enum DonationPopupState {
-        case selection
-        case selectedAmount(SelectedAmount)
+    enum DonationPopup: String, Identifiable {
+        case inputForm
         case thankYou
         case error
+        case errorAlreadyHasSubscription
+
+        var id: String { rawValue }
     }
-    private let openDonations = NotificationCenter.default.publisher(for: .openDonations)
-    private var amountSelected = PassthroughSubject<SelectedAmount?, Never>()
-    @State private var showDonationPopUp: Bool = false
-    @State private var donationPopUpState: DonationPopupState = .selection
     
-    // swiftlint:disable:next function_body_length
+    private let openDonations = NotificationCenter.default.publisher(for: .openDonations)
+    private let donationResult = NotificationCenter.default.publisher(for: .donationResult)
+    @State private var donationPopup: DonationPopup?
+    
     func body(content: Content) -> some View {
         content
             .onReceive(openDonations) { _ in
-                showDonationPopUp = true
-            }
-            .sheet(isPresented: $showDonationPopUp, onDismiss: {
-                let result = Payment.showResult()
-                switch result {
-                case .none:
-                    // reset
-                    donationPopUpState = .selection
-                    return
-                case .some(let finalResult):
-                    Task.detached(priority: .utility) {
-                        // we need to close the sheet in order to dismiss ApplePay,
-                        // and we need to re-open it again with a delay to show thank you state
-                        // Swift UI cannot yet handle multiple sheets
-                        try? await Task.sleep(for: .milliseconds(1000))
-                        await MainActor.run {
-                            switch finalResult {
-                            case .thankYou:
-                                donationPopUpState = .thankYou
-                            case .error:
-                                donationPopUpState = .error
-                            }
-                            showDonationPopUp = true
-                        }
+                Task {
+                    if !Brand.replaceDonation, await Payment.paymentButtonTypeAsync() != nil {
+                        donationPopup = .inputForm
+                    } else {
+                        _ = await UIApplication.shared.open(Brand.donationURL)
                     }
                 }
-            }, content: {
+            }
+            .onReceive(donationResult) { notification in
+                guard let finalResult = notification.userInfo?["result"] as? Payment.FinalResult else {
+                    // reset
+                    donationPopup = nil
+                    return
+                }
+                process(finalResult)
+            }
+            .sheet(item: $donationPopup, onDismiss: {
+                Log.Payment.debug("sheet onDismiss")
+            },
+            content: { item in
                 Group {
-                    switch donationPopUpState {
-                    case .selection:
-                        PaymentForm(amountSelected: amountSelected)
-                            .presentationDetents([.fraction(0.65)])
-                    case .selectedAmount(let selectedAmount):
-                        PaymentSummary(selectedAmount: selectedAmount, onComplete: {
-                            showDonationPopUp = false
-                        })
-                        .presentationDetents([.fraction(0.65)])
+                    switch item {
+                    case .inputForm:
+                        NavigationStack {
+                            DonationForm()
+                        }
+                        .presentationDetents([.fraction(0.83)])
                     case .thankYou:
                         PaymentResultPopUp(state: .thankYou)
-                            .presentationDetents([.fraction(0.33)])
+                            .presentationDetents([.fraction(0.43)])
                     case .error:
                         PaymentResultPopUp(state: .error)
                             .presentationDetents([.fraction(0.33)])
+                    case .errorAlreadyHasSubscription:
+                        PaymentResultPopUp(state: .errorAlreadyHasSubscription)
+                            .presentationDetents([.fraction(0.33)])
                     }
                 }
-                .onReceive(amountSelected) { value in
-                    if let amount = value {
-                        donationPopUpState = .selectedAmount(amount)
-                    } else {
-                        donationPopUpState = .selection
-                    }
-                }
+                // make sure payment sheet is not confusingly transparent on iPhone
+                .presentationBackground(Color(.secondarySystemBackground))
             })
+    }
+    
+    private func process(_ finalResult: Payment.FinalResult) {
+        Task(priority: .utility) {
+            // we need to wait until ApplePay dismisses properly,
+            // and we need to re-open the sheet again with a delay to show thank you / error state
+            // Swift UI cannot yet handle multiple sheets
+            try? await Task.sleep(for: .milliseconds(2000))
+            switch finalResult {
+            case .thankYou:
+                donationPopup = .thankYou
+            case .error:
+                donationPopup = .error
+            case .errorAlreadyHasSubscription:
+                donationPopup = .errorAlreadyHasSubscription
+            }
+        }
+        
     }
 }
 #endif

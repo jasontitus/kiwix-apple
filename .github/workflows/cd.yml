@@ -18,7 +18,7 @@ name: CD
 on:
   schedule:
   - cron: '32 1 * * *' # Nightly download.kiwix.org @ 01:32
-  - cron: '00 2 * * 1' # Weekly testflight          @ 02:00 on Monday
+  - cron: '00 2 * * *' # Nightly testflight         @ 02:00
   push:
     tags:
       - testflight     # On-demand TestFlight
@@ -33,7 +33,7 @@ env:
   APPLE_STORE_AUTH_KEY_PATH: /tmp/authkey.p8
   APPLE_AUTH_PARAMS: "-authenticationKeyPath /tmp/authkey.p8 -authenticationKeyID ${{ secrets.APPLE_STORE_AUTH_KEY_ID }} -authenticationKeyIssuerID ${{ secrets.APPLE_STORE_AUTH_KEY_ISSUER_ID }}"
   # conditionally updated later:
-  EXPORT_METHOD: "app-store"
+  EXPORT_METHOD: "app-store-connect"
   EXTRA_XCODEBUILD: ""
   UPLOAD_TO: "" # !important this filters down the matrix combinations
   VERSION: ""
@@ -48,12 +48,12 @@ jobs:
       matrix:
         platform: [iOS, macOS]
         destination: [app-store, ftp]
-    runs-on: macos-15
+    runs-on: macos-26
 
     steps:
 
     - name: Checkout code
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
 
     - name: Install python dependencies
       run: pip install pyyaml==6.0.1
@@ -63,7 +63,7 @@ jobs:
       if: matrix.platform == 'macOS' && matrix.destination == 'ftp'
       run: |
         sed -i '' '/in-app-payments/d' project.yml
-        plutil -insert HIDE_DONATION -bool true Support/Info.plist
+        plutil -insert REPLACE_DONATION -bool true Support/Info.plist
 
     - name: Set BUILD NUMBER by date
       run: |
@@ -95,7 +95,7 @@ jobs:
         with open(os.getenv("GITHUB_ENV"), "a") as fh:
           fh.write(f"HAS_CHANGED_LAST_WEEK={value}\n")
 
-    - name: Nightly setup # use ftp and overrwrite VERSION with current date
+    - name: download.kiwix.org nightly # Use FTP and overwrites VERSION with current date
       if: github.event_name == 'schedule' && github.event.schedule == '32 1 * * *'
       shell: python
       run: |
@@ -107,8 +107,8 @@ jobs:
           fh.write(f"UPLOAD_TO=\"ftp\"\n")
           fh.write(f"UPLOAD_FOLDER=nightly/{version}\n")
 
-    - name: Weekly setup
-      if: github.event_name == 'schedule' && github.event.schedule == '00 2 * * 1' && env.HAS_CHANGED_LAST_WEEK == 'yes'
+    - name: Testflight nightly
+      if: github.event_name == 'schedule' && github.event.schedule == '00 2 * * *' && env.HAS_CHANGED_LAST_WEEK == 'yes'
       run: echo 'UPLOAD_TO="app-store"' >> $GITHUB_ENV
 
     - name: Testflight tag setup
@@ -127,7 +127,7 @@ jobs:
 
     - name: Set iOS extra xcode params
       if: matrix.platform == 'iOS' && contains(env.UPLOAD_TO, matrix.destination)
-      run: echo "EXTRA_XCODEBUILD=-sdk iphoneos26.1 ${{ env.APPLE_AUTH_PARAMS }}" >> $GITHUB_ENV
+      run: echo "EXTRA_XCODEBUILD=-sdk iphoneos26.4 ${{ env.APPLE_AUTH_PARAMS }}" >> $GITHUB_ENV
 
     - name: Set macOS extra xcode params
       if: matrix.platform == 'macOS' && contains(env.UPLOAD_TO, matrix.destination)
@@ -223,18 +223,18 @@ jobs:
     - name: Write SSH private key (to upload packages) to filesystem
       if: matrix.destination == 'ftp' && contains(env.UPLOAD_TO, matrix.destination)
       run: |
-        echo "${{ secrets.KIWIX_FILE_UPLOAD_SSH_KEY }}" > $KIWIX_FILE_UPLOAD_SSH_KEY_PATH
+        echo "${{ secrets.KIWIXAPPLE_FILE_UPLOAD_KEY }}" > $KIWIX_FILE_UPLOAD_SSH_KEY_PATH
         chmod 600 $KIWIX_FILE_UPLOAD_SSH_KEY_PATH
 
     - name: Upload DMG
       if: matrix.platform == 'macOS' && matrix.destination == 'ftp' && contains(env.UPLOAD_TO, matrix.destination)
       run: |
         mv ${PWD}/kiwix-${VERSION}.dmg ${PWD}/kiwix-macos_${VERSION}.dmg
-        python .github/upload_file.py --src ${PWD}/kiwix-macos_${VERSION}.dmg --dest ci@master.download.kiwix.org:30022/data/download/${UPLOAD_FOLDER} --ssh-key ${KIWIX_FILE_UPLOAD_SSH_KEY_PATH}
+        python .github/upload_file.py --src ${PWD}/kiwix-macos_${VERSION}.dmg --dest kiwix-apple@master.download.kiwix.org:30322/data/kiwix/${UPLOAD_FOLDER} --ssh-key ${KIWIX_FILE_UPLOAD_SSH_KEY_PATH}
         mv ${PWD}/kiwix-macos_${VERSION}.dmg ${PWD}/kiwix-${VERSION}.dmg
 
     - name: Upload IPA
       if: matrix.platform == 'iOS' && matrix.destination == 'ftp' && contains(env.UPLOAD_TO, matrix.destination)
       run: |
         mv ${PWD}/export/Kiwix.ipa ${PWD}/export/kiwix-${VERSION}.ipa
-        python .github/upload_file.py --src ${PWD}/export/kiwix-${VERSION}.ipa --dest ci@master.download.kiwix.org:30022/data/download/${UPLOAD_FOLDER} --ssh-key ${KIWIX_FILE_UPLOAD_SSH_KEY_PATH}
+        python .github/upload_file.py --src ${PWD}/export/kiwix-${VERSION}.ipa --dest kiwix-apple@master.download.kiwix.org:30322/data/kiwix/${UPLOAD_FOLDER} --ssh-key ${KIWIX_FILE_UPLOAD_SSH_KEY_PATH}

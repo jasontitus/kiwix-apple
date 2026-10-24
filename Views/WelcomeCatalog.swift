@@ -29,7 +29,7 @@ struct WelcomeCatalog: View {
         ZStack {
             LogoView()
             welcomeContent
-        }.ignoresSafeArea()
+        }.ignoresSafeArea(.all, edges: .vertical)
     }
 
     private var welcomeContent: some View {
@@ -84,7 +84,7 @@ struct WelcomeCatalog: View {
     }
 
     private var fetchCatalogButton: some View {
-        Button {
+        Button { [weak library] in
             Task { [weak library] in
                 await library?.start(isUserInitiated: true)
             }

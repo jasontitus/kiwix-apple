@@ -53,14 +53,21 @@
 "common.export_file.alert.description" = "¿Quieres exportar el archivo %@?";
 "common.export_file.alert.button.title" = "Exportar";
 "outline_button.outline.title" = "Esquema";
+// Fuzzy
 "outline_button.outline.help" = "Mostrar el esquema del artículo";
 "outline_button.outline.empty.message" = "No hay ningún esquema disponible";
+// Fuzzy
 "bookmark_button.show.help" = "Mostrar la hoja de marcadores, donde se puede añadir o eliminar el artículo actual de los marcadores.";
+// Fuzzy
 "article_shortcut.main.button.title" = "Artículo principal";
+// Fuzzy
 "article_shortcut.main.button.help" = "Mostrar artículo principal";
+// Fuzzy
 "article_shortcut.random.button.title.mac" = "Artículo aleatorio";
 "article_shortcut.random.button.title.ios" = "Página aleatoria";
+// Fuzzy
 "article_shortcut.random.button.help" = "Mostrar artículo aleatorio";
+// Fuzzy
 "alert_handler.alert.failed.title" = "No se ha podido cargar el artículo solicitado.";
 "bookmark_context_menu.view.title" = "Visualizar";
 "bookmark_context_menu.remove.title" = "ELiminar";
@@ -78,12 +85,14 @@
 "download_again.question.title" = "Ya tiene este archivo.";
 "download_again.question.description_part_1" = "Parece que %@ ya está descargado.";
 "download_again.question.description_part_2" = "¿Aún desea descargar \"%@\"? Su archivo existente no se eliminará.";
+// Fuzzy
 "flavor_tag.help.max" = "todo excepto archivos multimedia grandes como vídeo/audio";
+// Fuzzy
 "flavor_tag.help.no_pic" = "la mayoría de las imágenes han sido eliminadas";
+// Fuzzy
 "flavor_tag.help.mini" = "sólo está disponible un subconjunto del texto, probablemente la primera sección";
 "library_refresh_time.last" = "Ahora mismo";
 "library_refresh_time.never" = "Nunca";
-"zim_file_cell.article_count.suffix" = "artículos";
 "zim_file_missing_indicator.help" = "Falta el archivo Zim.";
 "hotspot.action.start_hotspot.title" = "Iniciar servidor";
 "hotspot.action.stop_hotspot.title" = "Parar servidor";
@@ -98,7 +107,6 @@
 "library.zim_file_context.main_page.label" = "Página principal";
 "library.zim_file_context.random.label" = "Página aleatoria";
 "library.zim_file_context.copy_url" = "Copiar enlace";
-"zim_file_opened.overlay.no-opened.message" = "No se ha abierto el archivo ZIM";
 "zim_file_opened.toolbar.open.title" = "Abrir...";
 "zim_file_opened.toolbar.open.help" = "Abrir un archivo ZIM";
 "zim_file_category.title" = "Categoría";
@@ -116,11 +124,14 @@
 "zim_file.action.reveal_in_finder.title" = "Revelar en Finder";
 "zim_file.action.toggle_cellular" = "Descargar usando el móvil";
 "zim_file.action.unlink.title" = "Desenlazar";
+// Fuzzy
 "zim_file.action.unlink.message" = "Todos los artículos marcados vinculados a este archivo ZIM se eliminarán, pero el archivo original permanecerá en su lugar.";
 "zim_file.action.unlink.multi_title" = "Deseleccionar %@ archivos ZIM";
+// Fuzzy
 "zim_file.action.unlink.multi_message" = "Todos los artículos marcados vinculados a estos archivos %@ ZIM serán borrados, pero los archivos originales permanecerán en su lugar.";
 "zim_file.action.unlink.button.title" = "Desvincular";
 "zim_file.action.delete.title" = "Eliminar";
+// Fuzzy
 "zim_file.action.delete.message" = "El archivo ZIM y todos los marcadores vinculados a este se eliminarán.";
 "zim_file.action.delete.button.title" = "Eliminar";
 "zim_file.action.download.title" = "Descargar";
@@ -141,8 +152,7 @@
 "zim_file.bool_info.details" = "Detalles";
 "zim_file.bool_info.require_service_workers" = "Requiere trabajadores de servicio";
 "zim_file.bool_info.zim_archive_integrity" = "Integridad del archivo ZIM";
-"zim_file.counts.article_count" = "Número de artículos";
-"zim_file.counts.article.media_count" = "Recuento de medios";
+"zim_file.counts.media_count" = "Recuento de medios";
 "zim_file.detail.id.title" = "ID";
 "zim_file.download_task.action.title.cancel" = "Cancelar";
 "zim_file.download_task.action.try_recover" = "Intentar recuperar";
@@ -167,7 +177,6 @@
 "library_settings.last_refresh.text" = "Última actualización";
 "library_settings.auto_refresh.toggle" = "Actualización automática";
 "library_settings.catalog_warning.text" = "Si esta opción está activada, el catálogo de la biblioteca se actualizará automáticamente cuando quede obsoleto.";
-"library_settings.languages.title" = "Idiomas";
 "settings.navigation.title" = "Ajustes";
 "library_settings.toggle.cellular" = "Descargar usando el móvil";
 "library_settings.new-download-task-description" = "El cambio sólo se aplicará a las nuevas tareas de descarga.";
@@ -190,8 +199,6 @@
 "language_selector.no_language.title" = "Idiomas Disponibles";
 "language_selector.showing.header" = "Mostrando";
 "language_selector.hiding.header" = "Ocultando";
-"language_selector.navitation.title" = "Idioma";
-"language_selector.toolbar.sorting" = "Clasificación";
 "settings.about.title" = "Acerca de";
 "settings.about.release" = "Lanzamiento";
 "settings.about.dependencies" = "Dependencias";
@@ -243,9 +250,6 @@
 "enum.external_link_loading_policy.always_ask" = "Pregunta siempre";
 "enum.external_link_loading_policy.always_load" = "Cargar siempre";
 "enum.external_link_loading_policy.never_load" = "No cargar nunca";
-"enum.flavor.max" = "máximo";
-"enum.flavor.no_pic" = "sin imágen";
-"enum.flavor.mini" = "mini";
 "enum.library_language_sorting_model.a-z" = "A-Z";
 "enum.library_language_sorting_model.by_count" = "Por conteo";
 "enum.libray_tab_item.opened" = "Abierto";
@@ -270,14 +274,12 @@
 "payment.monthly_support.label" = "Pago mensual a Kiwix";
 "payment.summary.title" = "Kiwix";
 "payment.textfield.custom_amount.label" = "Cantidad personalizada";
-"payment.confirm.button.title" = "Confirmar";
-"payment.selection.average_monthly_donation.subtitle" = "Donación mensual promedio";
-"payment.selection.last_year_average.subtitle" = "Promedio del año pasado";
-"payment.selection.custom_amount" = "Cantidad personalizada";
 "payment.selection.option.one_time" = "Una vez";
 "payment.selection.option.monthly" = "Mensual";
 "payment.support_fallback_message" = "Lo sentimos, su dispositivo no soporta Apple Pay.";
+// Fuzzy
 "payment.success.title" = "Muchas grácias por su donación.";
+// Fuzzy
 "payment.success.description" = "Su generosidad significa todo para nosotros.";
 "payment.error.title" = "Bueno, esto es incómodo.";
 "payment.error.description" = "Ha habido un problema con su pago. Por favor, inténtelo de nuevo.";

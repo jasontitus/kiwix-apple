@@ -13,16 +13,22 @@
 // You should have received a copy of the GNU General Public License
 // along with Kiwix; If not, see https://www.gnu.org/licenses/.
 
+import Combine
+import CoreKiwix
+import Defaults
 import SwiftUI
 import UserNotifications
-import Combine
-import Defaults
-import CoreKiwix
 
 #if os(macOS)
 final class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
-        true
+        if SessionRestore.shared.isRestoring {
+            return false
+        }
+        return true
+    }
+    func applicationWillTerminate(_ notification: Notification) {
+        SessionRestore.shared.saveWindows()
     }
 }
 
@@ -42,18 +48,20 @@ struct Kiwix: App {
     @StateObject private var libraryRefreshViewModel = LibraryViewModel()
     private let notificationCenterDelegate = NotificationCenterDelegate()
     private var amountSelected = PassthroughSubject<SelectedAmount?, Never>()
-    @State private var selectedAmount: SelectedAmount?
-    @StateObject var formReset = FormReset()
     @FocusState private var isSearchFocused: Bool
+    @FocusState private var isSettingsSearchFocused: Bool
     @FocusedValue(\.browserURL) var browserURL
     @StateObject private var colorSchemeStore = UserColorSchemeStore()
     @State private var settingsTab: Int = SettingsTab.reading.rawValue
+    @ObservedObject private var sessionRestore = SessionRestore.shared
 
     init() {
         UNUserNotificationCenter.current().delegate = notificationCenterDelegate
+        Task {
+            await WebContentBlocker.compilePolicy()            
+        }
         Task(priority: .utility) {
             await Diagnostics.start()
-            await WebContentBlocker.compilePolicy()
             if FeatureFlags.hasLibrary {
                 await LibraryViewModel().start(isUserInitiated: false)
             }
@@ -65,8 +73,8 @@ struct Kiwix: App {
     }
 
     var body: some Scene {
-        WindowGroup {
-            RootView(isSearchFocused: $isSearchFocused)
+        WindowGroup(id: "rootView", for: WindowState.self) { (windowState: Binding<WindowState?>) in
+            RootView(isSearchFocused: $isSearchFocused, openedWithWindowState: windowState.wrappedValue)
                 .environment(\.managedObjectContext, Database.shared.viewContext)
                 .environmentObject(libraryRefreshViewModel)
                 .task { colorSchemeStore.update() }
@@ -97,6 +105,13 @@ struct Kiwix: App {
                 Divider()
                 SidebarNavigationCommands()
                 Divider()
+                Button(LocalString.app_macos_navigation_button_restore_previous_session) {
+                    sessionRestore.restore(using: { windowState in
+                        openWindow(id: "rootView", value: windowState)
+                    })
+                }
+                .disabled(sessionRestore.canRestore == false)
+                Divider()
             }
             CommandGroup(after: .pasteboard) {
                 Button(LocalString.library_zim_file_context_copy_url) {
@@ -110,11 +125,18 @@ struct Kiwix: App {
             }
             CommandGroup(after: .textEditing) {
                 Button(LocalString.common_search) {
-                    isSearchFocused = true
+                    // make sure we pick up the right window to search in
+                    let keyWindowId = NSApplication.shared.keyWindow?.identifier?.rawValue.lowercased()
+                    if keyWindowId?.contains("settings") == true, settingsTab == SettingsTab.catalog.rawValue {
+                        isSettingsSearchFocused = true
+                    } else {
+                        isSearchFocused = true
+                    }
                 }
                 .keyboardShortcut("f", modifiers: [.command])
             }
             CommandGroup(replacing: .help) {}
+            
         }
 
         Settings {
@@ -122,62 +144,55 @@ struct Kiwix: App {
                 ReadingSettings()
                     .environmentObject(colorSchemeStore)
                     .tag(SettingsTab.reading.rawValue)
+                    .frame(height: 200)
                 if FeatureFlags.hasLibrary {
-                    LibrarySettings()
+                    LibrarySettings(isSearchFocused: _isSettingsSearchFocused)
                         .environmentObject(libraryRefreshViewModel)
                         .tag(SettingsTab.catalog.rawValue)
+                        .frame(height: 800)
                 }
 //                enable as part of: https://github.com/kiwix/kiwix-apple/issues/1549
 //                DownloadsMacOsSettings()
 //                    .tag(SettingsTab.downloads.rawValue)
                 HotspotSettings()
                     .tag(SettingsTab.hotspot.rawValue)
+                    .frame(height: 140)
                 About()
                     .tag(SettingsTab.about.rawValue)
+                    .frame(height: 480)
                 if FeatureFlags.hasLibrary {
                     DiagnosticsView()
                         .environment(\.managedObjectContext, Database.shared.viewContext)
                         .tag(SettingsTab.diagnostics.rawValue)
+                        .frame(height: 220)
                 }
             }
-            .frame(width: 550, height: 400)
+            .frame(width: 550)
         }
         .handlesExternalEvents(matching: [])
         
         Window(LocalString.payment_donate_title, id: "donation") {
-            Group {
-                if let selectedAmount {
-                    PaymentSummary(selectedAmount: selectedAmount, onComplete: {
-                        closeDonation()
-                        switch Payment.showResult() {
-                        case .none: break
+            NavigationStack {
+                DonationForm()
+                    .onReceive(NotificationCenter.default.publisher(for: .donationResult)) { notification in
+                        guard let finalResult = notification.userInfo?["result"] as? Payment.FinalResult else {
+                            return
+                        }
+                        switch finalResult {
                         case .thankYou:
                             openWindow(id: "donation-thank-you")
                         case .error:
                             openWindow(id: "donation-error")
+                        case .errorAlreadyHasSubscription:
+                            openWindow(id: "donation-error-already-has-subscription")
                         }
-                    })
-                } else {
-                    PaymentForm(amountSelected: amountSelected)
-                        .frame(width: 320, height: 320)
-                }
+                    }
             }
-            .onReceive(amountSelected) { amount in
-                selectedAmount = amount
-            }
-            .onReceive(NotificationCenter.default.publisher(for: NSWindow.willCloseNotification)) { notification in
-                if let window = notification.object as? NSWindow,
-                   window.identifier?.rawValue == "donation" {
-                    formReset.reset()
-                    selectedAmount = nil
-                }
-            }
-            .environmentObject(formReset)
+            .frame(minWidth: 438, minHeight: 440)
         }
         .windowResizability(.contentMinSize)
-        .windowStyle(.titleBar)
         .commandsRemoved()
-        .defaultSize(width: 320, height: 400)
+        .defaultSize(width: 438, height: 440)
         .restorationBehaviourDisabled()
         .handlesExternalEvents(matching: [])
 
@@ -200,16 +215,16 @@ struct Kiwix: App {
         .defaultSize(width: 320, height: 198)
         .restorationBehaviourDisabled()
         .handlesExternalEvents(matching: [])
-    }
-
-    private func closeDonation() {
-        // after upgrading to macOS 14, use:
-        // @Environment(\.dismissWindow) var dismissWindow
-        // and call:
-        // dismissWindow(id: "donation")
-        NSApplication.shared.windows.first { window in
-            window.identifier?.rawValue == "donation"
-        }?.close()
+        
+        Window("", id: "donation-error-already-has-subscription") {
+            PaymentResultPopUp(state: .errorAlreadyHasSubscription)
+                .padding()
+        }
+        .windowResizability(.contentMinSize)
+        .commandsRemoved()
+        .defaultSize(width: 320, height: 198)
+        .restorationBehaviourDisabled()
+        .handlesExternalEvents(matching: [])
     }
 }
 

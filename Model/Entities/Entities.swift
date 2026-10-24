@@ -84,41 +84,6 @@ struct Language: Identifiable, Comparable {
     }
 }
 
-final class OutlineItem: ObservableObject, Identifiable {
-    let id: String
-    let index: Int
-    let text: String
-    let level: Int
-    private(set) var children: [OutlineItem]?
-
-    @Published var isExpanded = true
-
-    init(id: String, index: Int, text: String, level: Int) {
-        self.id = id
-        self.index = index
-        self.text = text
-        self.level = level
-    }
-
-    convenience init(index: Int, text: String, level: Int) {
-        self.init(id: String(index), index: index, text: text, level: level)
-    }
-
-    func addChild(_ item: OutlineItem) {
-        if children != nil {
-            children?.append(item)
-        } else {
-            children = [item]
-        }
-    }
-
-    @discardableResult
-    func removeAllChildren() -> [OutlineItem] {
-        defer { children = nil }
-        return children ?? []
-    }
-}
-
 final class Tab: NSManagedObject, Identifiable {
     @NSManaged var created: Date
     @NSManaged var interactionState: Data?
@@ -141,6 +106,20 @@ final class Tab: NSManagedObject, Identifiable {
         // swiftlint:disable:next force_cast
         let request = super.fetchRequest() as! NSFetchRequest<Tab>
         request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
+        return request
+    }
+    
+    static func fetchRequestEmptyTabs() -> NSFetchRequest<Tab> {
+        // swiftlint:disable:next force_cast
+        let request = super.fetchRequest() as! NSFetchRequest<Tab>
+        request.predicate = Predicate.noZimFile()
+        return request
+    }
+    
+    static func fetchRequestNonEmptyTabs() -> NSFetchRequest<Tab> {
+        // swiftlint:disable:next force_cast
+        let request = super.fetchRequest() as! NSFetchRequest<Tab>
+        request.predicate = Predicate.hasZimFile()
         return request
     }
     
@@ -175,8 +154,11 @@ final class Tab: NSManagedObject, Identifiable {
         private static func zimFileNotMissing() -> NSPredicate {
             NSPredicate(format: "zimFile.isMissing == false")
         }
-        private static func noZimFile() -> NSPredicate {
+        static func noZimFile() -> NSPredicate {
             NSPredicate(format: "zimFile == nil")
+        }
+        static func hasZimFile() -> NSPredicate {
+            NSPredicate(format: "zimFile != nil")
         }
     }
 }
@@ -292,11 +274,24 @@ final class ZimFile: NSManagedObject {
     @NSManaged var bookmarks: Set<Bookmark>
     @NSManaged var downloadTask: DownloadTask?
     @NSManaged var tabs: Set<Tab>
+    @NSManaged var tags: String
 
     var languageCodesListed: String {
         return languageCode.split(separator: ",").compactMap { code -> String? in
             return Locale.current.localizedString(forIdentifier: String(code))
         }.joined(separator: ",")
+    }
+    
+    var tagsListed: String {
+        tags.split(separator: ";").joined(separator: ", ")
+    }
+    
+    var pageCountFormatted: String {
+        articleCount.formatted(.number.notation(.compactName).locale(.current))
+    }
+    
+    var mediaCountFormatted: String {
+        mediaCount.formatted(.number.notation(.compactName).locale(.current))
     }
 
     enum Predicate {
@@ -309,18 +304,31 @@ final class ZimFile: NSManagedObject {
         static func notMissing() -> NSPredicate {
             NSPredicate(format: "isMissing == false")
         }
+        static func missing() -> NSPredicate {
+            NSPredicate(format: "isMissing == true")
+        }
     }
 
-    static func openedPredicate() -> NSPredicate {
-        NSCompoundPredicate(andPredicateWithSubpredicates: [
-            Predicate.isDownloaded(),
-            Predicate.notMissing()
-        ])
+    static func openedPredicate(showBy: ZIMsShowBy = .onlyAvailable) -> NSPredicate {
+        switch showBy {
+        case .all:
+            Predicate.isDownloaded()
+        case .onlyAvailable:
+            NSCompoundPredicate(andPredicateWithSubpredicates: [
+                Predicate.isDownloaded(),
+                Predicate.notMissing()
+            ])
+        case .onlyMissing:
+            NSCompoundPredicate(andPredicateWithSubpredicates: [
+                Predicate.isDownloaded(),
+                Predicate.missing()
+            ])
+        }
     }
     
-    // it's the same condition, dowloaded, but not missing
+    // it's the same condition, dowloaded and available (not missing)
     static func integrityCheckablePredicate() -> NSPredicate {
-        openedPredicate()
+        openedPredicate(showBy: .onlyAvailable)
     }
 
     static func fetchRequest(

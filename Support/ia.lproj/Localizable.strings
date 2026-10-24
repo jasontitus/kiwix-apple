@@ -48,15 +48,15 @@
 "common.export_file.alert.description" = "Vole tu exportar le file %@?";
 "common.export_file.alert.button.title" = "Exportar";
 "outline_button.outline.title" = "Schizzo";
-"outline_button.outline.help" = "Monstrar schizzo del articulo";
+"outline_button.outline.help" = "Monstrar schizzo del pagina";
 "outline_button.outline.empty.message" = "Necun schizzo disponibile";
-"bookmark_button.show.help" = "Monstrar le folio de marcapaginas ubi le articulo actual pote esser addite al marcapaginas o removite de illos.";
-"article_shortcut.main.button.title" = "Articulo principal";
-"article_shortcut.main.button.help" = "Monstrar articulo principal";
-"article_shortcut.random.button.title.mac" = "Articulo aleatori";
+"bookmark_button.show.help" = "Monstrar le folio de marcapaginas ubi le pagina actual pote esser addite al marcapaginas o removite de illos.";
+"article_shortcut.main.button.title" = "Pagina principal";
+"article_shortcut.main.button.help" = "Monstrar pagina principal";
+"article_shortcut.random.button.title.mac" = "Pagina aleatori";
 "article_shortcut.random.button.title.ios" = "Pagina aleatori";
-"article_shortcut.random.button.help" = "Monstrar articulo aleatori";
-"alert_handler.alert.failed.title" = "Impossibile cargar le articulo requestate.";
+"article_shortcut.random.button.help" = "Monstrar pagina aleatori";
+"alert_handler.alert.failed.title" = "Impossibile cargar le pagina requestate.";
 "bookmark_context_menu.view.title" = "Vider";
 "bookmark_context_menu.remove.title" = "Remover";
 "external_link_handler.alert.title" = "Ligamine externe";
@@ -74,12 +74,14 @@
 "download_again.question.title" = "Tu dispone ja de iste file.";
 "download_again.question.description_part_1" = "Sembla que %@ ha ja essite discargate.";
 "download_again.question.description_part_2" = "Vole tu totevia discargar “%@”? Tu file existente non essera delite.";
+// Fuzzy
 "flavor_tag.help.max" = "toto excepte grande files multimedial como video/audio";
+// Fuzzy
 "flavor_tag.help.no_pic" = "le major parte de imagines ha essite removite";
+// Fuzzy
 "flavor_tag.help.mini" = "solmente un parte del texto es disponibile, probabilemente le prime section";
 "library_refresh_time.last" = "Justo ora";
 "library_refresh_time.never" = "Nunquam";
-"zim_file_cell.article_count.suffix" = "articulos";
 "zim_file_missing_indicator.help" = "Le file ZIM manca.";
 "hotspot.action.start_hotspot.title" = "Aperir puncto de accesso";
 "hotspot.action.stop_hotspot.title" = "Clauder puncto de accesso";
@@ -94,7 +96,6 @@
 "library.zim_file_context.main_page.label" = "Pagina principal";
 "library.zim_file_context.random.label" = "Pagina aleatori";
 "library.zim_file_context.copy_url" = "Copiar URL";
-"zim_file_opened.overlay.no-opened.message" = "Necun file ZIM aperite";
 "zim_file_opened.toolbar.open.title" = "Aperir…";
 "zim_file_opened.toolbar.open.help" = "Aperir un file ZIM";
 "zim_file_category.title" = "Categoria";
@@ -112,12 +113,12 @@
 "zim_file.action.reveal_in_finder.title" = "Revelar in Finder";
 "zim_file.action.toggle_cellular" = "Discargar per rete mobile";
 "zim_file.action.unlink.title" = "Disligar";
-"zim_file.action.unlink.message" = "Tote le articulos mittite in marcapaginas e ligate a iste file ZIM essera delite, ma le file original remanera in su loco.";
+"zim_file.action.unlink.message" = "Tote le paginas mittite in marcapaginas e ligate a iste file ZIM essera delite, ma le file original remanera in su loco.";
 "zim_file.action.unlink.multi_title" = "Disligar %@ files ZIM";
-"zim_file.action.unlink.multi_message" = "Tote le articulos mittite in marcapaginas e ligate a iste %@ files ZIM essera delite, ma le files original remanera in lor loco.";
+"zim_file.action.unlink.multi_message" = "Tote le paginas mittite in marcapaginas e ligate a iste %@ files ZIM essera delite, ma le files original remanera in lor loco.";
 "zim_file.action.unlink.button.title" = "Disligar";
 "zim_file.action.delete.title" = "Deler";
-"zim_file.action.delete.message" = "Le file ZIM e tote le articulos mittite in marcapaginas e ligate a iste file ZIM essera delite.";
+"zim_file.action.delete.message" = "Le file ZIM e tote le paginas mittite in marcapaginas e ligate a iste file ZIM essera delite.";
 "zim_file.action.delete.button.title" = "Deler";
 "zim_file.action.download.title" = "Discargar";
 "zim_file.action.download.warning.title" = "Advertimento de spatio";
@@ -137,8 +138,7 @@
 "zim_file.bool_info.details" = "Detalios";
 "zim_file.bool_info.require_service_workers" = "Require ‘service workers’";
 "zim_file.bool_info.zim_archive_integrity" = "Integritate del archivo ZIM";
-"zim_file.counts.article_count" = "Numero de articulos";
-"zim_file.counts.article.media_count" = "Objectos multimedial";
+"zim_file.counts.media_count" = "Objectos multimedial";
 "zim_file.detail.id.title" = "ID";
 "zim_file.download_task.action.title.cancel" = "Cancellar";
 "zim_file.download_task.action.try_recover" = "Tentar recuperar";
@@ -163,7 +163,6 @@
 "library_settings.last_refresh.text" = "Ultime refrescamento";
 "library_settings.auto_refresh.toggle" = "Auto-refrescar";
 "library_settings.catalog_warning.text" = "Si es activate, le catalogo del bibliotheca essera refrescate automaticamente quando es obsolete.";
-"library_settings.languages.title" = "Linguas";
 "settings.navigation.title" = "Parametros";
 "library_settings.toggle.cellular" = "Discargar per rete mobile";
 "library_settings.new-download-task-description" = "Le cambiamento se applicara solmente al nove discargamentos.";
@@ -186,8 +185,6 @@
 "language_selector.no_language.title" = "Necun lingua";
 "language_selector.showing.header" = "Es monstrate:";
 "language_selector.hiding.header" = "Celamento";
-"language_selector.navitation.title" = "Lingua";
-"language_selector.toolbar.sorting" = "Ordinamento";
 "settings.about.title" = "A proposito";
 "settings.about.release" = "Edition";
 "settings.about.dependencies" = "Dependentias";
@@ -201,6 +198,14 @@
 "settings.about.our_website.button" = "Nostre sito web";
 "settings.about.source.title" = "Fonte";
 "settings.about.button.license" = "Licentia Public General de GNU v3";
+"download_mac_settings.tab.title" = "Discargamentos";
+"download_mac_folder.button.change" = "Cambiar";
+"download_mac_folder.button.reset" = "Reinitialisar al predefinition";
+"download_mac_folder.unknown" = "Incognite";
+"download_mac_folder.panel.message" = "Selige un dossier pro le discargamentos ZIM";
+"download_mac_folder.error.title" = "Iste dossier non es usabile.";
+"download_mac_folder.error.not_writable" = "Tu non ha le permission de salveguardar files hic.";
+"download_mac_folder.error.save_failed" = "Non poteva definir le dossier de discargamento. Tenta lo de novo.";
 "bookmark.navigation.title" = "Marcapaginas";
 "bookmark.overlay.empty.title" = "Necun marcapagina";
 "search_result.zimfile.empty.message" = "Necun file ZIM aperite";
@@ -237,9 +242,6 @@
 "enum.external_link_loading_policy.always_ask" = "Sempre demandar";
 "enum.external_link_loading_policy.always_load" = "Sempre cargar";
 "enum.external_link_loading_policy.never_load" = "Nunquam cargar";
-"enum.flavor.max" = "max";
-"enum.flavor.no_pic" = "necun imagine";
-"enum.flavor.mini" = "mini";
 "enum.library_language_sorting_model.a-z" = "A-Z";
 "enum.library_language_sorting_model.by_count" = "Per numero";
 "enum.libray_tab_item.opened" = "Aperite";
@@ -264,17 +266,15 @@
 "payment.monthly_support.label" = "Donation mensual a Kiwix";
 "payment.summary.title" = "Kiwix";
 "payment.textfield.custom_amount.label" = "Amonta personalisate";
-"payment.confirm.button.title" = "Confirmar";
-"payment.selection.average_monthly_donation.subtitle" = "Donation mensual medie";
-"payment.selection.last_year_average.subtitle" = "Media del ultime anno";
-"payment.selection.custom_amount" = "Amonta personalisate";
 "payment.selection.option.one_time" = "Unic";
 "payment.selection.option.monthly" = "Mensual";
 "payment.support_fallback_message" = "Regrettabilemente, tu apparato non supporta Apple Pay.";
 "payment.success.title" = "Multe gratias pro tu donation.";
-"payment.success.description" = "Tu generositate significa toto pro nos.";
+"payment.success.description" = "Tu generositate adjuta a mantener le cognoscentia liberemente accessibile etiam sin connexion a internet.";
 "payment.error.title" = "Ben, isto es embarassose.";
 "payment.error.description" = "Un problema ha occurrite con tu pagamento. Per favor tenta lo de novo.";
+"payment.error_already_subscribed.title" = "Tu ha ja un donation mensual";
+"payment.error_already_subscribed.description" = "Usa le instructiones in le message de e-mail que nos ha anteriormente inviate pro actualisar lo.";
 "download_service.error.client.backgroundSessionInUseByAnotherProcess" = "Non poteva communicar con le servicio de transferimento in secunde plano";
 "download_service.error.client.backgroundSessionWasDisconnected" = "Le connexion con le servicio de transferimento in secunde plano ha essite perdite";
 "download_service.error.client.cancelled" = "cancellate";
@@ -318,3 +318,6 @@
 "download_service.error.client.cannotMoveFile" = "Non pote displaciar file";
 "download_service.error.client.downloadDecodingFailedMidStream" = "Le decodification del discargamento ha fallite";
 "download_service.error.client.downloadDecodingFailedToComplete" = "Le decodification del discargamento ha fallite";
+"geolocation_error.permission_denied" = "Le usator ha refusate le permission de geolocalisation.";
+"geolocation_error.position_unavailable" = "Le position es indisponibile.";
+"geolocation_error.timeout" = "Le requesta de localisation ha expirate.";

@@ -78,15 +78,18 @@ extension Notification.Name {
     static let saveContent = Notification.Name("saveContent")
     static let navigateToHotspotSettings = Notification.Name("navigateToHotspotSettings")
     static let toggleSidebar = Notification.Name("toggleSidebar")
+    static let webViewDidScroll = Notification.Name("webViewDidScroll")
     #if os(macOS)
     static let keepOnlyTabs = Notification.Name("keepOnlyTabs")
     static let zimSearch = Notification.Name("zimSearch")
     #endif
     static let goBack = Notification.Name("goBack")
     static let goForward = Notification.Name("goForward")
+    static let donationResult = Notification.Name("donationResult")
     #if os(iOS)
     static let openDonations = Notification.Name("openDonations")
     static let hotspotShareURL = Notification.Name("hotspotShareURL")
+    static let enforceOneEmptyTab = Notification.Name("enforceOneEmptyTab")
     #endif
 }
 
@@ -133,9 +136,7 @@ extension NotificationCenter {
     }
     
     static func navigateToHotspotSettings() {
-        if FeatureFlags.hasLibrary {
-            NotificationCenter.default.post(name: .navigateToHotspotSettings, object: nil, userInfo: nil)
-        }
+        NotificationCenter.default.post(name: .navigateToHotspotSettings, object: nil, userInfo: nil)
     }
 
     static func toggleSidebar() {
@@ -149,6 +150,15 @@ extension NotificationCenter {
                                         userInfo: ["tabIds": tabIds])
     }
     #endif
+    
+    nonisolated static func donationResult(_ finalResult: Payment.FinalResult) {
+        _ = Task.detached(priority: .utility) {
+            try await Task.sleep(nanoseconds: 2000)
+            await MainActor.run {
+                NotificationCenter.default.post(name: .donationResult, object: nil, userInfo: ["result": finalResult])
+            }
+        }
+    }
     
     #if os(iOS)
     @MainActor static func openDonations() {

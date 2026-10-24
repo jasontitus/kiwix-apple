@@ -32,31 +32,25 @@ enum WebContentBlocker {
         let contentRules =
 """
 [
-    {
-        "action": {
-            "type": "block"
-        },
-        "trigger": {
-            "url-filter": ".*"
-        }
-    },
-    {
-        "action": {
-            "type": "ignore-previous-rules"
-        },
-        "trigger": {
-            "url-filter": "zim://"
-        }
-    }
+  { "action": { "type": "block" }, "trigger": { "url-filter": ".*" } },
+  { "action": { "type": "ignore-previous-rules" }, "trigger": { "url-filter": "^zim://" } },
+  { "action": { "type": "ignore-previous-rules" }, "trigger": { "url-filter": "^blob:" } },
+  { "action": { "type": "ignore-previous-rules" }, "trigger": { "url-filter": "^data:" } }
 ]
 """
-        guard let ruleList: WKContentRuleList = try? await blockListStore.compileContentRuleList(
-            forIdentifier: "externalUrls",
-            encodedContentRuleList: contentRules
-        ) else {
-            Log.URLSchemeHandler.error("blockList failed to compile")
-            return
+        do {
+            guard let ruleList: WKContentRuleList = try await blockListStore.compileContentRuleList(
+                forIdentifier: "externalUrls",
+                encodedContentRuleList: contentRules
+            ) else {
+                Log.URLSchemeHandler.error("blockList failed to compile")
+                assertionFailure("blockList failed to compile")
+                return
+            }
+            Self.ruleList = ruleList
+        } catch {
+            Log.URLSchemeHandler.error("blockList failed to compile: \(error)")
+            assertionFailure("blockList failed to compile: \(error)")
         }
-        Self.ruleList = ruleList
     }
 }

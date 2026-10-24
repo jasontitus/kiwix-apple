@@ -19,6 +19,8 @@
 "common.button.copied" = "نقل تھی ڳئے";
 "common.button.share" = "شیئر";
 "common.search" = "ڳولو";
+"common.find_next" = "اڳلا لبھو";
+"common.find_previous" = "پچھلا لبھو";
 "common.tab.navigation.title" = "ٹیباں";
 "common.tab.menu.new_tab" = "نویں ٹیب";
 "common.tab.menu.close_this" = "ایہ ٹیب بند کرو";
@@ -26,6 +28,7 @@
 "common.tab.menu.library" = "لائبریری";
 "common.tab.menu.settings" = "ترتیباں";
 "outline_button.outline.title" = "خاکہ";
+// Fuzzy
 "article_shortcut.main.button.title" = "اصلی مضمون";
 "bookmark_context_menu.view.title" = "ݙیکھو";
 "bookmark_context_menu.remove.title" = "ہٹاؤ";
@@ -36,7 +39,6 @@
 "download_task_cell.status.paused" = "جمب ڳیا";
 "library_refresh_time.last" = "ہُݨے ہُݨے";
 "library_refresh_time.never" = "کݙاہیں وی کائناں";
-"zim_file_cell.article_count.suffix" = "مضمون";
 "library.zim_file_context.main_page.label" = "پہلا پرت";
 "zim_file_opened.toolbar.open.title" = "کھولو۔۔۔";
 "zim_file_category.title" = "ونکی";
@@ -45,6 +47,7 @@
 "zim_file.list.description.text" = "تفصیل";
 "zim_file.list.actions.text" = "عمل";
 "zim_file.list.info.text" = "معلومات";
+"zim_file.list.content.text" = "شامل حصے";
 "zim_file.action.delete.title" = "مٹاؤ";
 "zim_file.action.delete.button.title" = "مٹاؤ";
 "zim_file.action.download.title" = "ڈاؤن لوڈ";
@@ -66,7 +69,6 @@
 "reading_settings.tab.reading" = "پڑھݨ";
 "library_settings.catalog.title" = "کیٹا لاگ";
 "library_settings.button.refresh_now" = "ہݨ تازہ کرو";
-"library_settings.languages.title" = "زباناں";
 "settings.navigation.title" = "ترتیباں";
 "catalog_settings.refresh_now.button" = "ہݨ تازہ کرو";
 "catalog_settings.header.text" = "کیٹا لاگ";
@@ -78,7 +80,6 @@
 "language_selector.name.title" = "ناں";
 "language_selector.count.table.title" = "ڳیݨ";
 "language_selector.no_language.title" = "کوئی زبان کائنی";
-"language_selector.navitation.title" = "زبان";
 "settings.about.title" = "تعارف";
 "settings.about.release" = "ریلیز";
 "settings.about.dependencies.name" = "ناں";
@@ -118,7 +119,6 @@
 "enum.category.wiktionary" = "وکشنری";
 "enum.category.vikidia" = "وکی ڈیا";
 "enum.category.other" = "ٻیا";
-"enum.flavor.max" = "ودھ و ودھ";
 "enum.libray_tab_item.opened" = "کھُل ڳیا";
 "enum.libray_tab_item.categories" = "ونکیاں";
 "enum.libray_tab_item.downloads" = "ڈاؤن لوڈ";
@@ -134,5 +134,4 @@
 "enum.search_result_snippet_mode.disabled" = "غیر فعال تھی ڳیا";
 "payment.donate.title" = "عطیہ ݙیوو";
 "payment.summary.title" = "کیویکس";
-"payment.confirm.button.title" = "تصدیق";
 "payment.selection.option.monthly" = "ماہانہ";

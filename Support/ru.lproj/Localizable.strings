@@ -7,6 +7,7 @@
 // Author: Pacha Tchernof
 // Author: Rofiatmustapha12
 // Author: Smavrina
+// Author: Yurina Tatiana
 
 // Fuzzy
 "library_refresh_error.retrieve.description" = "Ошибка получения данных библиотеки.";
@@ -42,15 +43,15 @@
 "common.export_file.alert.description" = "Вы хотите экспортировать файл %@?";
 "common.export_file.alert.button.title" = "Экспорт";
 "outline_button.outline.title" = "Содержание";
-"outline_button.outline.help" = "Показать содержание статьи";
+"outline_button.outline.help" = "Показать содержание страницы";
 "outline_button.outline.empty.message" = "Нет доступных содержаний";
-"bookmark_button.show.help" = "Показать лист закладок, где текущую статью можно добавить или удалить из закладок.";
-"article_shortcut.main.button.title" = "Основная статья";
-"article_shortcut.main.button.help" = "Показать основную статью";
-"article_shortcut.random.button.title.mac" = "Случайная статья";
+"bookmark_button.show.help" = "Показать лист закладок, где текущую страницу можно добавить или удалить из закладок.";
+"article_shortcut.main.button.title" = "Заглавная страница";
+"article_shortcut.main.button.help" = "Показать заглавную страницу";
+"article_shortcut.random.button.title.mac" = "Случайная страница";
 "article_shortcut.random.button.title.ios" = "Случайная страница";
-"article_shortcut.random.button.help" = "Ещё случайные статьи";
-"alert_handler.alert.failed.title" = "Не удалось загрузить запрошенную статью.";
+"article_shortcut.random.button.help" = "Показать случайную страницу";
+"alert_handler.alert.failed.title" = "Не удалось загрузить запрошенную страницу.";
 "bookmark_context_menu.view.title" = "Посмотреть";
 "bookmark_context_menu.remove.title" = "Удалить";
 "external_link_handler.alert.title" = "Внешняя ссылка";
@@ -63,18 +64,21 @@
 "download_task_cell.status.failed" = "Не удалось";
 "download_task_cell.status.downloading" = "Загрузка...";
 "download_task_cell.status.paused" = "Приостановлено";
+// Fuzzy
 "flavor_tag.help.max" = "все, кроме больших медиафайлов, таких как видео/аудио";
+// Fuzzy
 "flavor_tag.help.no_pic" = "большинство фотографий удалено";
+// Fuzzy
 "flavor_tag.help.mini" = "доступна только часть текста, вероятно, первый раздел";
 "library_refresh_time.last" = "Прямо сейчас";
 "library_refresh_time.never" = "Никогда";
-"zim_file_cell.article_count.suffix" = "статей";
+"zim_file_cell.page_count" = "%@ страниц";
+"zim_file_cell.media_count" = "%@ медиафайлов";
 "zim_file_missing_indicator.help" = "Zim-файл отсутствует.";
 "library.zim_file_details.side_panel.message" = "Выберите ZIM-файл, чтобы просмотреть подробности.";
 "library.zim_file_context.main_page.label" = "Заглавная страница";
 "library.zim_file_context.random.label" = "Случайная страница";
 "library.zim_file_context.copy_url" = "Скопировать URL-адрес";
-"zim_file_opened.overlay.no-opened.message" = "Нет открытого ZIM-файла";
 "zim_file_opened.toolbar.open.title" = "Открыть...";
 "zim_file_opened.toolbar.open.help" = "Открыть ZIM-файл";
 "zim_file_category.title" = "Категория";
@@ -92,10 +96,11 @@
 "zim_file.action.reveal_in_finder.title" = "Показать в Finder";
 "zim_file.action.toggle_cellular" = "Загрузка через мобильный интернет";
 "zim_file.action.unlink.title" = "Отсоединить";
-"zim_file.action.unlink.message" = "Все статьи с закладками, связанные с этим ZIM-файлом, будут удалены, но исходный файл останется на месте.";
+"zim_file.action.unlink.message" = "Все страницы с закладками, связанные с этим ZIM-файлом, будут удалены, но исходный файл останется на месте.";
+"zim_file.action.unlink.multi_message" = "Все страницы с закладками, связанные с этими %@ ZIM-файлами, будут удалены, но исходный файл останется на месте.";
 "zim_file.action.unlink.button.title" = "Отсоединить";
 "zim_file.action.delete.title" = "Удалить";
-"zim_file.action.delete.message" = "Zim-файл и все статьи с закладками, связанные с этим ZIM-файлом, будут удалены.";
+"zim_file.action.delete.message" = "ZIM-файл и все страницы с закладками, связанные с этим ZIM-файлом, будут удалены.";
 "zim_file.action.delete.button.title" = "Удалить";
 "zim_file.action.download.title" = "Скачать";
 "zim_file.action.download.warning.title" = "Предупреждение о свободном пространстве";
@@ -110,8 +115,8 @@
 "zim_file.bool_info.videos" = "Видео";
 "zim_file.bool_info.details" = "Подробности";
 "zim_file.bool_info.require_service_workers" = "Требуются сервисные работники";
-"zim_file.counts.article_count" = "Количество статей";
-"zim_file.counts.article.media_count" = "Количество медиа";
+"zim_file.counts.pages_count" = "Количество страниц";
+"zim_file.counts.media_count" = "Количество медиа";
 "zim_file.detail.id.title" = "ID";
 "zim_file.download_task.action.title.cancel" = "Отмена";
 "zim_file.download_task.action.try_recover" = "Попробуйте восстановить";
@@ -134,7 +139,6 @@
 "library_settings.last_refresh.text" = "Последнее обновление";
 "library_settings.auto_refresh.toggle" = "Автообновление";
 "library_settings.catalog_warning.text" = "Если эта опция включена, каталог библиотеки будет обновляться автоматически, если он устареет.";
-"library_settings.languages.title" = "Языки";
 "settings.navigation.title" = "Настройки";
 "library_settings.toggle.cellular" = "Загрузка через мобильный интернет";
 "library_settings.new-download-task-description" = "Изменение будет применяться только к новым задачам загрузки.";
@@ -157,8 +161,6 @@
 "language_selector.no_language.title" = "Нет языка";
 "language_selector.showing.header" = "Показано";
 "language_selector.hiding.header" = "Скрыто";
-"language_selector.navitation.title" = "Язык";
-"language_selector.toolbar.sorting" = "Сортировка";
 "settings.about.title" = "О приложении";
 "settings.about.release" = "Релиз";
 "settings.about.dependencies" = "Зависимости";
@@ -207,9 +209,6 @@
 "enum.external_link_loading_policy.always_ask" = "Всегда спрашивать";
 "enum.external_link_loading_policy.always_load" = "Всегда загружать";
 "enum.external_link_loading_policy.never_load" = "Никогда не загружать";
-"enum.flavor.max" = "макс.";
-"enum.flavor.no_pic" = "нет картинки";
-"enum.flavor.mini" = "мини";
 "enum.library_language_sorting_model.a-z" = "A-Z";
 "enum.library_language_sorting_model.by_count" = "По количеству";
 "enum.libray_tab_item.opened" = "Открыто";
@@ -231,7 +230,6 @@
 "payment.support_button.label" = "Поддержать Kiwix";
 "payment.monthly_support.label" = "Ежемесячная поддержка Kiwix";
 "payment.summary.title" = "Kiwix";
-"payment.confirm.button.title" = "Подтвердить";
 "payment.selection.option.one_time" = "Единожды";
 "payment.selection.option.monthly" = "Ежемесячно";
 "download_service.error.client.backgroundSessionInUseByAnotherProcess" = "Не удалось установить связь со службой фоновой передачи файлов";

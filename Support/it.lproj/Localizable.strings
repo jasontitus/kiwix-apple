@@ -4,6 +4,7 @@
 // Author: Clorofolle
 // Author: LametinoWiki
 // Author: Luca.favorido
+// Author: Matroz
 // Author: Wheelygay
 
 "library_refresh_error.retrieve.description" = "Errore durante il recupero dei dati del catalogo.";
@@ -27,6 +28,8 @@
 "common.button.share_as_pdf" = "Condividi come PDF";
 "common.search" = "Cerca";
 "common.search.inpage" = "Cerca nella pagina";
+"common.find_next" = "Trova successivo";
+"common.find_previous" = "Trova precedente";
 "common.tab.manager.title" = "Gestore delle schede";
 "common.tab.navigation.title" = "Schede";
 "common.tab.menu.new_tab" = "Nuova scheda";
@@ -34,10 +37,13 @@
 "common.tab.list.close" = "Chiudi scheda";
 "common.tab.menu.library" = "Libreria";
 "common.tab.menu.settings" = "Impostazioni";
-"bookmark_button.show.help" = "Mostra il foglio dei segnalibri, dove la voce attuale può essere aggiunta o rimossa dai segnalibri.";
+"bookmark_button.show.help" = "Mostra il foglio dei segnalibri, dove la pagina attuale può essere aggiunta o rimossa dai segnalibri.";
+"article_shortcut.main.button.title" = "Pagina principale";
+"article_shortcut.main.button.help" = "Mostra la pagina principale";
+"article_shortcut.random.button.title.mac" = "Una pagina a caso";
 "article_shortcut.random.button.title.ios" = "Una pagina a caso";
-"article_shortcut.random.button.help" = "Una voce a caso";
-"alert_handler.alert.failed.title" = "Impossibile caricare la voce richiesta.";
+"article_shortcut.random.button.help" = "Mostra una pagina a caso";
+"alert_handler.alert.failed.title" = "Impossibile caricare la pagina richiesta.";
 "bookmark_context_menu.view.title" = "Visualizza";
 "external_link_handler.alert.title" = "Collegamento esterno";
 "file_import.alert.no_open.message" = "%@ non può essere aperto.";
@@ -47,12 +53,12 @@
 "download_again.question.title" = "Hai già questo file.";
 "download_again.question.description_part_1" = "Sembra che %@ sia già stato scaricato.";
 "download_again.question.description_part_2" = "Vuoi comunque scaricare \"%@\"? Il file esistente non verrà cancellato.";
-"flavor_tag.help.max" = "ogni cosa eccetto i file multimediali di grandi dimensioni, come video/audio";
-"flavor_tag.help.no_pic" = "la maggior parte delle immagini sono state rimosse";
-"flavor_tag.help.mini" = "è disponibile solo una parte del testo, probabilmente la prima sezione";
+"flavor_tag.help.max" = "Tutto tranne i file multimediali di grandi dimensioni come video/audio";
+"flavor_tag.help.no_pic" = "La maggior parte delle immagini è stata rimossa";
+"flavor_tag.help.mini" = "È disponibile solo una parte del testo, probabilmente la prima sezione.";
 "library_refresh_time.last" = "Proprio adesso";
 "library_refresh_time.never" = "Mai";
-"zim_file_cell.article_count.suffix" = "voci";
+"zim_file_cell.page_count" = "%@ pagine";
 "zim_file_missing_indicator.help" = "Manca il file Zim.";
 "hotspot.action.start_hotspot.title" = "Avvia hotspot";
 "hotspot.action.stop_hotspot.title" = "Arresta hotspot";
@@ -62,10 +68,17 @@
 "library.zim_file_context.main_page.label" = "Pagina principale";
 "library.zim_file_context.random.label" = "Pagina a caso";
 "library.zim_file_context.copy_url" = "Copia l'URL";
-"zim_file_opened.overlay.no-opened.message" = "Nessun file ZIM aperto";
+"zim_file_opened.overlay.no-zim-files-at-all.message" = "Non sono stati trovati file ZIM.";
+"zim_file_opened.overlay.no-available-zim-files.message" = "Non sono stati trovati file ZIM disponibili.";
+"zim_file_opened.overlay.no-missing-zim-files.message" = "Non sono stati trovati file ZIM mancanti.";
 "zim_file_opened.toolbar.open.title" = "Apri...";
 "zim_file_opened.toolbar.open.help" = "Apri un file ZIM";
 "zim_file_category.title" = "Categoria";
+"zim_file_opened.toolbar.filter.show_all" = "Mostra tutto";
+"zim_file_opened.toolbar.filter.show_only_available" = "Mostra solo disponibili";
+"zim_file_opened.toolbar.filter.show_only_missing" = "Mostra solo mancanti";
+"zim_file_opened.toolbar.sort_by.name" = "Ordina per nome";
+"zim_file_opened.toolbar.sort_by.size" = "Ordina per dimensione";
 "zim_file_catalog.fetching.message" = "Recupero del catalogo in corso...";
 "zim_file_category.section.empty.message" = "Nessun file ZIM in questa categoria.";
 "zim_file_downloads.overlay.empty.message" = "Nessuna attività di download";
@@ -75,6 +88,7 @@
 "zim_file.list.description.text" = "Descrizione";
 "zim_file.list.actions.text" = "Azioni";
 "zim_file.list.info.text" = "Informazioni";
+"zim_file.list.content.text" = "Contenuto";
 "zim_file.action.locate.title" = "Localizza";
 "zim_file.action.open_main_page.title" = "Apri pagina principale";
 "zim_file.action.unlink.multi_title" = "Scollega %@ file ZIM";
@@ -98,7 +112,6 @@
 "theme_settings.option.system" = "Sistema";
 "reading_settings.zoom.title" = "Zoom della pagina";
 "library_settings.button.refresh_now" = "Aggiorna ora";
-"library_settings.languages.title" = "Lingue";
 "settings.navigation.title" = "Impostazioni";
 "library_settings.toggle.cellular" = "Scarica tramite cellulare";
 "catalog_settings.last_refresh.text" = "Ultimo aggiornamento";
@@ -112,8 +125,6 @@
 "language_selector.count.table.title" = "Conteggio";
 "language_selector.no_language.title" = "Nessuna lingua";
 "language_selector.showing.header" = "Sto mostrando:";
-"language_selector.navitation.title" = "Lingua";
-"language_selector.toolbar.sorting" = "Ordinamento";
 "settings.about.title" = "Informazioni";
 "settings.about.dependencies.name" = "Nome";
 "settings.about.description" = "Kiwix è un lettore offline per contenuti online come Wikipedia, Project Gutenberg o TED Talks. Rende la conoscenza disponibile a persone che non hanno o hanno un accesso limitato a Internet. Il software e il contenuto sono gratuiti per chiunque.";
@@ -146,8 +157,6 @@
 "enum.category.wiktionary" = "Wikizionario";
 "enum.category.vikidia" = "Vikidia";
 "enum.external_link_loading_policy.never_load" = "Non caricare mai";
-"enum.flavor.no_pic" = "nessuna foto";
-"enum.flavor.mini" = "mini";
 "enum.library_language_sorting_model.a-z" = "A-Z";
 "enum.libray_tab_item.opened" = "Aperto";
 "enum.libray_tab_item.categories" = "Categorie";
@@ -166,15 +175,13 @@
 "payment.monthly_support.label" = "Sostegno mensile per Kiwix";
 "payment.summary.title" = "Kiwix";
 "payment.textfield.custom_amount.label" = "Importo personalizzato";
-"payment.confirm.button.title" = "Conferma";
-"payment.selection.average_monthly_donation.subtitle" = "Donazione media mensile";
-"payment.selection.last_year_average.subtitle" = "Media dell'anno scorso";
-"payment.selection.custom_amount" = "Importo personalizzato";
 "payment.selection.option.one_time" = "Una volta";
 "payment.selection.option.monthly" = "Mensile";
-"payment.success.title" = "Grazie mille per la tua donazione.";
-"payment.success.description" = "La tua generosità significa tutto per noi.";
+"payment.success.title" = "Grazie per la tua donazione.";
+"payment.success.description" = "Il tuo supporto aiuta a mantenere la conoscenza libera e accessibile anche offline.";
 "payment.error.description" = "Si è verificato un problema con il pagamento. Riprova.";
+"payment.error_already_subscribed.title" = "Hai già una donazione mensile";
+"payment.donation_cell.description" = "Nessuna pubblicità, nessun sistema di tracciamento, finanziato dalle donazioni";
 "download_service.error.client.backgroundSessionInUseByAnotherProcess" = "Impossibile comunicare con il servizio di trasferimento in background";
 "download_service.error.client.backgroundSessionWasDisconnected" = "Connessione al servizio di trasferimento in background persa";
 "download_service.error.client.cancelled" = "annullato";
@@ -218,3 +225,6 @@
 "download_service.error.client.cannotMoveFile" = "Impossibile spostare il file";
 "download_service.error.client.downloadDecodingFailedMidStream" = "Decodifica download non riuscita";
 "download_service.error.client.downloadDecodingFailedToComplete" = "Decodifica download non riuscita";
+"geolocation_error.permission_denied" = "L'utente ha negato l'autorizzazione alla geolocalizzazione.";
+"geolocation_error.position_unavailable" = "La posizione non è disponibile.";
+"geolocation_error.timeout" = "Richiesta di localizzazione scaduta.";

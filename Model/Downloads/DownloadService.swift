@@ -39,6 +39,7 @@ final class DownloadService {
             downloadManager: downloadManager)
         
         let configuration = URLSessionConfiguration.background(withIdentifier: "org.kiwix.background")
+        configuration.httpAdditionalHeaders = ["User-Agent": UserAgent.current]
         configuration.allowsCellularAccess = true
         configuration.isDiscretionary = false
         configuration.sessionSendsLaunchEvents = true
@@ -109,7 +110,7 @@ final class DownloadService {
             let errorMessage = LocalString.download_service_error_option_directory
             DownloadUI.showAlert(.downloadErrorZIM(zimFileID: zimFileID, errorMessage: errorMessage))
             task.cancel()
-            await downloadManager.deleteDownloadTaskAsync(zimFileID: zimFileID)
+            downloadManager.deleteDownloadTask(zimFileID: zimFileID)
             return
         }
         
@@ -155,7 +156,7 @@ final class DownloadService {
         if let task = downloadTasks.filter({ $0.taskDescription == zimFileID.uuidString }).first {
             task.cancel()
         }
-        await downloadManager.deleteDownloadTaskAsync(zimFileID: zimFileID)
+        downloadManager.deleteDownloadTask(zimFileID: zimFileID)
     }
     
     /// Pause a zim file download task

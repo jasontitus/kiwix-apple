@@ -1,6 +1,7 @@
 // Messages for Hebrew (עברית)
 // Exported from translatewiki.net
 // Author: Amire80
+// Author: Neriah
 // Author: YaronSh
 
 "library_refresh_error.retrieve.description" = "שגיאה באחזור נתוני קטלוג.";
@@ -37,15 +38,15 @@
 "common.export_file.alert.description" = "לייצא את הקובץ %@?";
 "common.export_file.alert.button.title" = "יצוא";
 "outline_button.outline.title" = "מתאר";
-"outline_button.outline.help" = "הצגת מתאר הערך";
+"outline_button.outline.help" = "הצגת מתאר הדף";
 "outline_button.outline.empty.message" = "אין מתאר זמין";
-"bookmark_button.show.help" = "הצגת גיליון הסימניות, שבו ניתן להוסיף את הערך הנוכחי לסימניות או להסיר אותו מהן.";
-"article_shortcut.main.button.title" = "הערך הראשי";
-"article_shortcut.main.button.help" = "הצגת הערך הראשי";
-"article_shortcut.random.button.title.mac" = "ערך אקראי";
+"bookmark_button.show.help" = "הצגת גיליון הסימניות, שבו ניתן להוסיף את הדף הנוכחי לסימניות או להסיר אותו מהן.";
+"article_shortcut.main.button.title" = "עמוד ראשי";
+"article_shortcut.main.button.help" = "הצגת העמוד הראשי";
+"article_shortcut.random.button.title.mac" = "דף אקראי";
 "article_shortcut.random.button.title.ios" = "דף אקראי";
-"article_shortcut.random.button.help" = "הצגת ערך אקראי";
-"alert_handler.alert.failed.title" = "לא ניתן לטעון את הערך המבוקש.";
+"article_shortcut.random.button.help" = "הצגת דף אקראי";
+"alert_handler.alert.failed.title" = "לא ניתן לטעון את הדף המבוקש.";
 "bookmark_context_menu.view.title" = "צפייה";
 "bookmark_context_menu.remove.title" = "הסרה";
 "external_link_handler.alert.title" = "קישור חיצוני";
@@ -63,7 +64,7 @@
 "flavor_tag.help.mini" = "רק חלק מהטקסט זמין, כנראה הפרק הראשון";
 "library_refresh_time.last" = "זה עתה";
 "library_refresh_time.never" = "מעולם לא";
-"zim_file_cell.article_count.suffix" = "ערכים";
+"zim_file_cell.page_count" = "%@ דפים";
 "zim_file_missing_indicator.help" = "קובץ ה־zim חסר.";
 "hotspot.action.start_hotspot.title" = "התחלת נקודה חמה";
 "hotspot.action.stop_hotspot.title" = "עצירת נקודה חמה";
@@ -75,7 +76,6 @@
 "library.zim_file_context.main_page.label" = "עמוד ראשי";
 "library.zim_file_context.random.label" = "דף אקראי";
 "library.zim_file_context.copy_url" = "העתקת URL";
-"zim_file_opened.overlay.no-opened.message" = "לא נפתח קובץ ZIM";
 "zim_file_opened.toolbar.open.title" = "פתיחה...";
 "zim_file_opened.toolbar.open.help" = "פתיחת קובץ ZIM";
 "zim_file_category.title" = "קטגוריה";
@@ -83,7 +83,7 @@
 "zim_file_category.section.empty.message" = "אין קובץ ZIM בקטגוריה הזאת.";
 "zim_file_downloads.overlay.empty.message" = "אין משימות הורדה";
 "zim_file_new_overlay.empty" = "אין קובץ ZIM חדש";
-"zim_file_new.button.refresh" = "רענון";
+"zim_file_new.button.refresh" = "ריענון";
 "zim_file.list.name.text" = "שם";
 "zim_file.list.description.text" = "תיאור";
 "zim_file.list.actions.text" = "פעולות";
@@ -93,12 +93,12 @@
 "zim_file.action.reveal_in_finder.title" = "לחשוף ב־Finder";
 "zim_file.action.toggle_cellular" = "להוריד באמצעות הרשת הסלולרית";
 "zim_file.action.unlink.title" = "ניתוק הקשר";
-"zim_file.action.unlink.message" = "כל הערכים עם סימניות המקושרים לקובץ ה־ZIM הזה יימחקו, אך הקובץ המקורי יישאר במקומו.";
+"zim_file.action.unlink.message" = "כל הדפים עם סימניות המקושרים לקובץ ה־ZIM הזה יימחקו, אך הקובץ המקורי יישאר במקומו.";
 "zim_file.action.unlink.multi_title" = "ניתוק %@ קובצי ZIM";
-"zim_file.action.unlink.multi_message" = "כל הערכים המסומנים שמקושרים ל־%@ קובצי ה־ZIM האלה יימחקו, אבל הקבצים המקוריים יישארו במקומם.";
+"zim_file.action.unlink.multi_message" = "כל הדפים המסומנים שמקושרים ל־%@ קובצי ה־ZIM האלה יימחקו, אבל הקבצים המקוריים יישארו במקומם.";
 "zim_file.action.unlink.button.title" = "ניתוק הקשר";
 "zim_file.action.delete.title" = "מחיקה";
-"zim_file.action.delete.message" = "קובץ ה־ZIM וכל הערכים עם סימניות המקושרים לקובץ ה־zim הזה יימחקו.";
+"zim_file.action.delete.message" = "קובץ ה־ZIM וכל הדפים עם סימניות המקושרים לקובץ ה־zim הזה יימחקו.";
 "zim_file.action.delete.button.title" = "מחיקה";
 "zim_file.action.download.title" = "הורדה";
 "zim_file.action.download.warning.title" = "אזהרת נפח";
@@ -113,8 +113,7 @@
 "zim_file.bool_info.videos" = "וידאו";
 "zim_file.bool_info.details" = "פרטים";
 "zim_file.bool_info.require_service_workers" = "נדרשים Service Workers";
-"zim_file.counts.article_count" = "מונה הערכים";
-"zim_file.counts.article.media_count" = "מונה המדיה";
+"zim_file.counts.media_count" = "מונה המדיה";
 "zim_file.detail.id.title" = "מזהה";
 "zim_file.download_task.action.title.cancel" = "ביטול";
 "zim_file.download_task.action.try_recover" = "לנסות לשחזר";
@@ -139,7 +138,6 @@
 "library_settings.last_refresh.text" = "הרענון האחרון";
 "library_settings.auto_refresh.toggle" = "רענון אוטומטי";
 "library_settings.catalog_warning.text" = "כשזה מופעל, קטלוג הספרייה ירוענן אוטומטית כאשר הוא מתיישן.";
-"library_settings.languages.title" = "שפות";
 "settings.navigation.title" = "הגדרות";
 "library_settings.toggle.cellular" = "להוריד באמצעות הרשת הסלולרית";
 "library_settings.new-download-task-description" = "השינוי יחול רק על משימות הורדה חדשות.";
@@ -162,8 +160,6 @@
 "language_selector.no_language.title" = "אין שפה";
 "language_selector.showing.header" = "מוצגות";
 "language_selector.hiding.header" = "מוסתרות";
-"language_selector.navitation.title" = "שפה";
-"language_selector.toolbar.sorting" = "מיון";
 "settings.about.title" = "אודות";
 "settings.about.release" = "מהדורה";
 "settings.about.dependencies" = "תלויות";
@@ -213,9 +209,6 @@
 "enum.external_link_loading_policy.always_ask" = "תמיד לשאול";
 "enum.external_link_loading_policy.always_load" = "תמיד לטעון";
 "enum.external_link_loading_policy.never_load" = "לעולם לא לטעון";
-"enum.flavor.max" = "לכל היותר";
-"enum.flavor.no_pic" = "אין תמונה";
-"enum.flavor.mini" = "מיני";
 "enum.library_language_sorting_model.a-z" = "א–ת";
 "enum.library_language_sorting_model.by_count" = "לפי ספירה";
 "enum.libray_tab_item.opened" = "פתוחות";
@@ -240,14 +233,11 @@
 "payment.monthly_support.label" = "תמיכה חודשית בקיוויקס";
 "payment.summary.title" = "קיוויקס";
 "payment.textfield.custom_amount.label" = "כמות מותאמת אישית";
-"payment.confirm.button.title" = "אישור";
-"payment.selection.average_monthly_donation.subtitle" = "תרומה חודשית ממוצעת";
-"payment.selection.last_year_average.subtitle" = "הממוצע של השנה שעברה";
-"payment.selection.custom_amount" = "כמות מותאמת אישית";
 "payment.selection.option.one_time" = "חד־פעמי";
 "payment.selection.option.monthly" = "מדי חודש";
 "payment.support_fallback_message" = "אנו מצטערים, המכשיר שלך אינו תומך ב־Apple Pay.";
-"payment.success.title" = "תודה רבה על תרומתך.";
+"payment.success.title" = "תודה על תרומתך.";
+// Fuzzy
 "payment.success.description" = "הנדיבות שלך חשובה לנו כל־כך.";
 "payment.error.title" = "טוב, זה מביך.";
 "payment.error.description" = "הייתה בעיה עם תשלום שלך. נא לנסות שוב.";

@@ -39,12 +39,17 @@
 "common.export_file.alert.description" = "ايا تاسو %@ دوتنه بهرلېږل غواړئ؟";
 "common.export_file.alert.button.title" = "بهرلېږل";
 "outline_button.outline.title" = "لنډيز";
+// Fuzzy
 "outline_button.outline.help" = "د ليکنې لنډيز ښودل";
 "outline_button.outline.empty.message" = "هېڅ لنډيز د لاسرسي وړ نه دی";
+// Fuzzy
 "article_shortcut.main.button.title" = "اره ليکنه";
+// Fuzzy
 "article_shortcut.main.button.help" = "اره ليکنه ښودل";
+// Fuzzy
 "article_shortcut.random.button.title.mac" = "ناټاکلې ليکنه";
 "article_shortcut.random.button.title.ios" = "ناټاکلی مخ";
+// Fuzzy
 "article_shortcut.random.button.help" = "نورې ناڅاپي ليکنې";
 "bookmark_context_menu.view.title" = "کتل";
 "bookmark_context_menu.remove.title" = "لرې‌کول";
@@ -65,7 +70,6 @@
 "hotspot.server_full_explanation" = "نورو سولگرو کې د دې زيم دوتنو لټون لپاره، ځان ډاډه کړئ چې ټول وسايل يا په ورته وای فای بکې کې دي يا ستاسو شخصي هاټسپاټ سره نښلېدلې دي.";
 "hotspot.server_active_warning" = "ّهاټسپاټ يوازې کارنده پاتې کېږي؛ په داسې حال کې چې کاريال پرانېستی او کارېږي.";
 "hotspot.server_wifi_only_explanation" = "په نورو وسيلو کې د دې زيم دوتنو پلټلو لپاره ځان ډاډه کړئ چې ټول وسايل په ورته وای فای شبکې کې دي.";
-"zim_file_opened.overlay.no-opened.message" = "زيم دوتنه نه ده پرانېستل شوې";
 "zim_file.action.download.title" = "راکښته‌کول";
 "zim_file.action.download.warning.title" = "تشيال گواښ";
 "zim_file.action.download.warning.message" = "ښايي ستاسو وسيله کې د دې زيم دوتنې لپاره کافي ځای نه وي.";
@@ -117,6 +121,8 @@
 "payment.support_button.label" = "د کيويکس ملاتړ کول";
 "payment.monthly_support.label" = "د کيويکس مياشتنی ملاتړ کول";
 "payment.support_fallback_message" = "بښنه غواړو، ستاسو سولگر د اپل تاديې ملاتړ نه کوي.";
+"payment.error_already_subscribed.title" = "تاسو لادمخه میاشتنۍ بسپنه لرئ";
+"payment.error_already_subscribed.description" = "د دې هممهالولو لپاره برېښليک لارښوونې وکاروئ چې موږ مخکې درلېږلې دي.";
 "download_service.error.client.cancelled" = "ناگارل شوی";
 "download_service.error.client.badURL" = "بد وېبتړ";
 "download_service.error.client.timedOut" = "د غوښتنې وخت پای ته ورسېد.";

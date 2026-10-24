@@ -15,16 +15,16 @@
 
 #if os(iOS)
 import SwiftUI
-import CoreData
 
 @MainActor
 struct RootViewiOS: View {
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    
     var body: some View {
         if horizontalSizeClass == .compact {
             CompactView()
         } else {
-            SplitViewForiPad()
+            SplitViewForiPadContainer()
         }
     }
 }

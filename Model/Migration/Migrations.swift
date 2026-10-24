@@ -21,7 +21,9 @@ enum Migrations {
     /// they will be executed in the order specified here
     static func all() -> [Migration] {
         [
-            Self.schemeToZIM(using: Database.shared.viewContext)
+            Self.languageCodes(),
+            Self.schemeToZIM(using: Database.shared.viewContext),
+            Self.tags(using: Database.shared.viewContext)
         ]
     }
 }

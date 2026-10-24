@@ -13,16 +13,12 @@
 // You should have received a copy of the GNU General Public License
 // along with Kiwix; If not, see https://www.gnu.org/licenses/.
 
-//
-//  CompactViewController.swift
-//  Kiwix
-
 #if os(iOS)
 import Combine
-import SwiftUI
-import UIKit
 import CoreData
 import Defaults
+import SwiftUI
+import UIKit
 
 // iPhone portrait only
 struct CompactTabView: View {
@@ -31,12 +27,17 @@ struct CompactTabView: View {
     @State private var presentedSheet: PresentedSheet?
     @ObservedObject private var browser: BrowserViewModel
     @FocusedValue(\.hasZIMFiles) var hasZimFiles
+    @FetchRequest(
+        sortDescriptors: [],
+        predicate: Tab.Predicate.hasZimFile(),
+    ) private var tabs: FetchedResults<Tab>
     private let navigateToHotspotSettings = NotificationCenter.default.publisher(for: .navigateToHotspotSettings)
     private let hotspotShareURL = NotificationCenter.default.publisher(for: .hotspotShareURL)
     
     private enum PresentedSheet: Identifiable {
         case library(downloads: Bool)
         case customHotspot // for custom iPhone apps only
+        case bookmarks
         case hotspotShare(url: URL)
         case settings(scrollToHotspot: Bool)
         var id: String {
@@ -45,6 +46,7 @@ struct CompactTabView: View {
             case .library(false): return "library"
             case .hotspotShare: return "hotspot-share"
             case .customHotspot: return "custom-hotspot"
+            case .bookmarks: return "bookmarks"
             case .settings: return "settings"
             }
         }
@@ -89,8 +91,10 @@ struct CompactTabView: View {
                         browser?.webView.goForward()
                     })
                 SpacerBackCompatible()
-                TabsManagerButton()
-                SpacerBackCompatible()
+                if tabs.count > 0 {
+                    TabsManagerButton()
+                    SpacerBackCompatible()
+                }
                 if FeatureFlags.hasLibrary {
                     Button {
                         presentedSheet = .library(downloads: false)
@@ -103,9 +107,10 @@ struct CompactTabView: View {
                     OutlineButton(browser: browser)
                     SpacerBackCompatible()
                 }
-                MoreTabButton(browser: browser,
-                              presentHotspot: {
+                TabbarMoreMenu(browser: browser, presentHotspot: {
                     presentedSheet = .customHotspot
+                }, presentBookmarks: {
+                    presentedSheet = .bookmarks
                 })
                 Spacer()
             }
@@ -113,12 +118,20 @@ struct CompactTabView: View {
         .sheet(item: $presentedSheet) { presentedSheet in
             switch presentedSheet {
             case .library(downloads: false):
-                Library(dismiss: dismiss)
+                LibraryTab(dismiss: dismiss)
             case .library(downloads: true):
-                Library(dismiss: dismiss, tabItem: .downloads)
+                LibraryTab(dismiss: dismiss, tabItem: .downloads)
             case .customHotspot:
                 SheetContent {
                     HotspotZimFilesSelection()
+                }
+            case .bookmarks:
+                SheetContent { [browser] in
+                    BookmarksListing(articleBookmarked: browser.articleBookmarked,
+                                     isButtonDisabled: browser.zimFileName.isEmpty,
+                                     createBookmark: { [weak browser] in browser?.createBookmark() },
+                                     deleteBookmark: { [weak browser] in browser?.deleteBookmark() }
+                    )
                 }
             case .hotspotShare(let url):
                 // comes from HotspotZimFilesSelection
@@ -126,7 +139,7 @@ struct CompactTabView: View {
             case .settings(let scrollToHotspot):
                 NavigationStack {
                     Settings(scrollToHotspot: scrollToHotspot).toolbar {
-                        ToolbarItem(placement: .navigationBarLeading) {
+                        ToolbarItem(placement: .destructiveAction) {
                             Button {
                                 self.presentedSheet = nil
                             } label: {
@@ -143,7 +156,7 @@ struct CompactTabView: View {
                 // switching to the downloads tab
                 // is done within Library
                 break
-            case .hotspotShare, .customHotspot:
+            case .hotspotShare, .customHotspot, .bookmarks:
                 // doesn't apply
                 break
             case .settings, nil:

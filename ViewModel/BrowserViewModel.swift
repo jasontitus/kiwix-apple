@@ -93,6 +93,7 @@ import CoreKiwix
     @MainActor var zimFileId: UUID? { url?.zimFileID }
     @Published var externalURL: URL?
     private var metaData: URLContentMetaData?
+    private let cookieStore = CookieStore.shared
 
 #if os(macOS)
     private var windowURLs: [URL] {
@@ -101,12 +102,14 @@ import CoreKiwix
 #endif
     let webView: WKWebView
     let tabID: NSManagedObjectID
-    private let geolocationService = GeolocationService()
+    private var geolocationService: GeolocationService?
     private var isLoadingObserver: NSKeyValueObservation?
     private var canGoBackObserver: NSKeyValueObservation?
     private var canGoForwardObserver: NSKeyValueObservation?
     private var titleURLObserver: AnyCancellable?
     private let bookmarkFetchedResultsController: NSFetchedResultsController<Bookmark>
+    /// Maps to injected javascript: window.webkit?.messageHandlers.*
+    private let jsHandlers = ["headings", "geolocation", "scrollHandler", "zimCookies"]
 
     // MARK: - Lifecycle
 
@@ -131,10 +134,10 @@ import CoreKiwix
         // configure web view
         webView.allowsBackForwardNavigationGestures = true
         webView.configuration.defaultWebpagePreferences.preferredContentMode = .mobile // for font adjustment to work
-        webView.configuration.userContentController.removeScriptMessageHandler(forName: "headings")
-        webView.configuration.userContentController.add(self, name: "headings")
-        webView.configuration.userContentController.removeScriptMessageHandler(forName: "geolocation")
-        webView.configuration.userContentController.add(self, name: "geolocation")
+        jsHandlers.forEach { handler in
+            webView.configuration.userContentController.removeScriptMessageHandler(forName: handler)
+            webView.configuration.userContentController.add(self, name: handler)
+        }
         webView.navigationDelegate = self
         webView.uiDelegate = self
 
@@ -169,11 +172,13 @@ import CoreKiwix
             guard let title, let url else { return }
             self?.didUpdate(title: title, url: url)
         }
-
         isLoadingObserver = webView.observe(\.isLoading, options: .new) { [weak self] _, change in
             Task { @MainActor [weak self] in
                 if change.newValue != self?.isLoading {
                     self?.isLoading = change.newValue
+                }
+                if change.newValue == false {
+                    BrowserTabPreloader.shared.didLoadFirstBrowserTab()
                 }
             }
         }
@@ -190,10 +195,11 @@ import CoreKiwix
         canGoForwardObserver?.invalidate()
         titleURLObserver?.cancel()
         isLoadingObserver?.invalidate()
-        geolocationService.stopAllWatches()
+        geolocationService?.stopAll()
         let contentController = webView.configuration.userContentController
-        contentController.removeScriptMessageHandler(forName: "headings")
-        contentController.removeScriptMessageHandler(forName: "geolocation")
+        jsHandlers.forEach { handler in
+            contentController.removeScriptMessageHandler(forName: handler)
+        }
         contentController.removeAllUserScripts()
         webView.navigationDelegate = nil
         webView.uiDelegate = nil
@@ -265,6 +271,21 @@ import CoreKiwix
             let context = Database.shared.viewContext
             if let tab = try? context.existingObject(with: tabID) as? Tab {
                 tab.title = articleTitle
+#if os(iOS)
+                // navigating from empty tab to a zimfile
+                let isNavigatingAwayFromEmptyTab = tab.zimFile == nil && zimFile != nil
+                if isNavigatingAwayFromEmptyTab {
+                    // set back the date of creation of this tab to now
+                    // new tabs are created with a distant future date
+                    // so they always come first
+                    tab.created = Date()
+                }
+                defer {
+                    if isNavigatingAwayFromEmptyTab {
+                        NotificationCenter.default.post(name: .enforceOneEmptyTab, object: nil)
+                    }
+                }
+#endif
                 tab.zimFile = zimFile
             }
             if context.hasChanges {
@@ -313,6 +334,26 @@ import CoreKiwix
         }
         webView.load(URLRequest(url: url))
         self.url = url
+    }
+    
+    private func injectCookiesFor(url: URL) {
+        if let zimFileID = url.zimFileID, let jsScript = injectCookieJSScriptFor(zimFileID: zimFileID) {
+            webView.evaluateJavaScript(jsScript) { _, error in
+                if let error {
+                    Log.Cookies.error("unable to inject zimCookies: \(error.localizedDescription, privacy: .public)")
+                } else {
+                    Log.Cookies.debug("injected cookies for: \(zimFileID.uuidString)\n\(jsScript)")
+                }
+            }
+        }
+    }
+    
+    private func injectCookieJSScriptFor(zimFileID: UUID) -> String? {
+        guard let jsonValues: String = cookieStore.getAllFor(zimFileID: zimFileID) else {
+            Log.Cookies.debug("no ZIM Cookies for: \(zimFileID.uuidString)")
+            return nil
+        }
+        return "setZIMCookies(\(String(reflecting: jsonValues)));"
     }
 
     @MainActor
@@ -423,8 +464,12 @@ import CoreKiwix
         decidePolicyFor navigationAction: WKNavigationAction
     ) async -> WKNavigationActionPolicy {
         guard navigationAction.targetFrame?.isMainFrame == true else {
-            // Allow to load iFrame content via src-doc instead of external src
-            return .allow
+            if navigationAction.request.url?.isZIMURL == true {
+                // Allow to load iFrame content via src-doc instead of external src
+                return .allow
+            } else {
+                return .cancel
+            }
         }
         guard let url = navigationAction.request.url?.updatedToZIMSheme() else {
             return .cancel
@@ -506,11 +551,10 @@ import CoreKiwix
         decisionHandler(.allow)
     }
 
-    @MainActor
-    func webView(_ webView: WKWebView, didCommit _: WKNavigation!) {
-        // The previous document's watchPosition callbacks are gone; stop feeding
-        // CoreLocation updates to the replaced page.
-        geolocationService.stopAllWatches()
+    func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
+        // The previous document's geolocation callbacks are gone
+        geolocationService?.stopAll()
+        outlineItems = []
     }
 
     @MainActor
@@ -555,94 +599,65 @@ import CoreKiwix
 
     // MARK: - WKScriptMessageHandler
 
-    @MainActor
+    @MainActor // swiftlint:disable:next cyclomatic_complexity
     func userContentController(_: WKUserContentController, didReceive message: WKScriptMessage) {
         if message.name == "headings", let headings = message.body as? [[String: String]] {
             self.generateOutlineList(headings: headings)
             self.generateOutlineTree(headings: headings)
-        } else if message.name == "geolocation", let payload = message.body as? [String: Any] {
-            handleGeolocationRequest(payload: payload)
-        }
-    }
-
-    @MainActor
-    private func handleGeolocationRequest(payload: [String: Any]) {
-        guard let type = payload["type"] as? String,
-              let id = payload["id"] as? Int else { return }
-        let highAccuracy = payload["highAccuracy"] as? Bool ?? false
-        switch type {
-        case "getCurrentPosition":
-            Task { @MainActor [weak self] in
-                guard let self else { return }
-                do {
-                    let snapshot = try await self.geolocationService
-                        .requestLocation(highAccuracy: highAccuracy)
-                    self.resolveGeolocation(id: id, snapshot: snapshot)
-                } catch let error as GeolocationError {
-                    self.rejectGeolocation(id: id, code: error.rawValue, message: error.message)
-                } catch {
-                    self.rejectGeolocation(
-                        id: id,
-                        code: GeolocationError.positionUnavailable.rawValue,
-                        message: error.localizedDescription
-                    )
+        } else if message.name == "geolocation", let body = message.body as? [String: Any] {
+            guard let request = GeolocationRequest(jsRequest: body) else { return }
+            ensureGeolocationService().handle(request: request)
+        } else if message.name == "zimCookies", let body = message.body as? String {
+            if body == "zimCookieStoreReady" {
+                Log.Cookies.debug("zimCookieStoreReady")
+                if let url = webView.url {
+                    injectCookiesFor(url: url)
                 }
+            } else if let zimFileId {
+                cookieStore.save(zimFileID: zimFileId, cookies: body)
             }
-        case "watchPosition":
-            Task { @MainActor [weak self] in
-                guard let self else { return }
-                await self.geolocationService.startWatching(
-                    id: id,
-                    highAccuracy: highAccuracy
-                ) { [weak self] result in
-                    switch result {
-                    case .success(let snapshot):
-                        self?.resolveGeolocation(id: id, snapshot: snapshot)
-                    case .failure(let error):
-                        self?.rejectGeolocation(id: id, code: error.rawValue, message: error.message)
-                    }
-                }
+        } else if !Brand.disableImmersiveReading, message.name == "scrollHandler" {
+            switch message.body as? String {
+            case "up": NotificationCenter.default
+                    .post(name: .webViewDidScroll, object: webView, userInfo: ["direction": "up"])
+            case "down": NotificationCenter.default
+                    .post(name: .webViewDidScroll, object: webView, userInfo: ["direction": "down"])
+            default: break
             }
-        case "clearWatch":
-            geolocationService.stopWatching(id: id)
-        default:
-            break
         }
     }
-
-    @MainActor
-    private func resolveGeolocation(id: Int, snapshot: LocationSnapshot) {
-        var coords: [String: Any] = [
-            "latitude": snapshot.latitude,
-            "longitude": snapshot.longitude,
-            "accuracy": snapshot.horizontalAccuracy
-        ]
-        if let altitude = snapshot.altitude { coords["altitude"] = altitude }
-        if let verticalAccuracy = snapshot.verticalAccuracy {
-            coords["altitudeAccuracy"] = verticalAccuracy
+    
+    // MARK: - Geolocation
+    
+    private func ensureGeolocationService() -> GeolocationService {
+        if let service = geolocationService { return service }
+        let service = GeolocationService { [weak self] jsResponse in
+            Task {
+                await self?.respondToJSWithGeolocation(response: jsResponse)
+            }
         }
-        if let course = snapshot.course { coords["heading"] = course }
-        if let speed = snapshot.speed { coords["speed"] = speed }
-        let payload: [String: Any] = [
-            "coords": coords,
-            "timestamp": snapshot.timestamp.timeIntervalSince1970 * 1000
-        ]
-        evaluateGeolocationCallback(id: id, payload: payload)
+        geolocationService = service
+        return service
     }
 
-    @MainActor
-    private func rejectGeolocation(id: Int, code: Int, message: String) {
-        let payload: [String: Any] = [
-            "error": ["code": code, "message": message]
-        ]
-        evaluateGeolocationCallback(id: id, payload: payload)
-    }
-
-    @MainActor
-    private func evaluateGeolocationCallback(id: Int, payload: [String: Any]) {
-        guard let data = try? JSONSerialization.data(withJSONObject: payload, options: []),
-              let json = String(data: data, encoding: .utf8) else { return }
-        webView.evaluateJavaScript("window.__kiwixGeolocationResolve(\(id), \(json));")
+    private func respondToJSWithGeolocation(response: JSRespondable) async {
+        do {
+            _ = try await webView.callAsyncJavaScript(
+                "window.__kiwixGeolocationResolve(payload);",
+                arguments: ["payload": response.jsResponse],
+                in: nil,
+                contentWorld: .page
+            )
+        } catch let error as NSError where error.domain == WKError.errorDomain
+            && (error.code == WKError.webContentProcessTerminated.rawValue
+                || error.code == WKError.webViewInvalidated.rawValue) {
+            // Page is gone — expected during teardown, no signal worth keeping.
+        } catch {
+            let message = error.localizedDescription
+            Log.Geolocation.error(
+                "respondToJSWithGeolocation failed: \(message, privacy: .public)"
+            )
+        }
     }
 
     // MARK: - WKUIDelegate
@@ -825,43 +840,7 @@ import CoreKiwix
     /// Convert flattened heading element data to a tree of OutlineItems.
     /// - Parameter headings: list of heading element data retrieved from webview
     @MainActor private func generateOutlineTree(headings: [[String: String]]) {
-        let root = OutlineItem(index: -1, text: "", level: 0)
-        var stack: [OutlineItem] = [root]
-
-        headings.enumerated().forEach { index, heading in
-            guard let id = heading["id"],
-                  let text = heading["text"],
-                  let tag = heading["tag"], let level = Int(tag.suffix(1)) else { return }
-            let item = OutlineItem(id: id, index: index, text: text, level: level)
-
-            // get last item in stack
-            // if last item is child of item's sibling, unwind stack until a sibling is found
-            guard var lastItem = stack.last else { return }
-            while lastItem.level > item.level {
-                stack.removeLast()
-                lastItem = stack[stack.count - 1]
-            }
-
-            // if item is last item's sibling, add item to parent and replace last item with itself in stack
-            // if item is last item's child, add item to parent and add item to stack
-            if lastItem.level == item.level {
-                stack[stack.count - 2].addChild(item)
-                stack[stack.count - 1] = item
-            } else if lastItem.level < item.level {
-                stack[stack.count - 1].addChild(item)
-                stack.append(item)
-            }
-        }
-
-        // if there is only one item at top level, with the same text as the article title
-        // do not display it only it's children
-        if let rootChildren = root.children, rootChildren.count == 1,
-            let rootFirstChild = rootChildren.first,
-           rootFirstChild.text.lowercased() == articleTitle.lowercased() {
-            self.outlineItemTree = rootFirstChild.children ?? []
-        } else {
-            self.outlineItemTree = root.children ?? []
-        }
+        outlineItemTree = TableOfContents.generateOutlineTree(headings: headings, articleTitle: articleTitle)
     }
 
     private static func bookmarksPredicateFor(url: URL?) -> NSPredicate? {

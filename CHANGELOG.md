@@ -1,4 +1,104 @@
+# 3.18.0
+
+# 3.17.1
+
+- FIX:
+    - ZIM maps data loading (@BPerlakiH #1743)
+
+- UPDATED:
+    - Localisation updates from https://translatewiki.net (@translatewiki #1740)
+
+# 3.17.0
+
+- NEW:
+    - Support web cookies: document.cookies and CookieStoreAPI (@BPerlakiH #1679, #1680, #1681)
+    - Accessibility improvements (@BPerlakiH #1688, #1689, #1690)
+
+- FIX:
+    - Update the logic for catalog sync (@BPerlakiH #1644)
+    - Fix crash on accessing fileID after download cancellation (@BPerlakiH #1672)
+    - Hide orphaned bookmarks on New Tab (@Rozerxshashank #1676)
+    - Immerse reading based on webview scroll (@BPerlakiH #1687)
+    - Fix search result navigation on macOS (@BPerlakiH #1697)
+    - Fix title to id js conversion (@BPerlakiH #1704, #1705)
+    - Double block external iframe content (@BPerlakiH #1702)
+    - Block external URLs and not first-party content (@BPerlakiH #1700)
+    - Clean outlineItems on navigating away (@BPerlakiH #1708)
+    - Fix and test Table of Contents (@BPerlakiH #1710)
+    - Fix language selection and settings (@BPerlakiH #1719)
+    - Navigation fix (@BPerlakiH #1725)
+
+- UPDATED:
+    - Upload command method to app-store-connect (@BPerlakiH #1655)
+    - Trail align language switcher on iPad under categories (@BPerlakiH #1661)
+    - Persist hotspot selection (@BPerlakiH #1662)
+    - Save menu selection on iPad (@BPerlakiH #1663)
+    - Fix branded apps navigation to hotspot settings (@BPerlakiH #1669)
+    - Unify language toggle for news and categories (@BPerlakiH #1721)
+    - Unify ZIM categories to grid listing (@BPerlakiH #1717)
+    - Replace phrase Article with Page (@BPerlakiH #1722)
+    - Exclude downloaded ZIM files from catalog listings (@BPerlakiH #1723)
+    - Inline donation link for compact screens (@BPerlakiH #1730)
+    - Update Flavor handling, partial revert (@BPerlakiH #1731)
+    - 1592 update UI tests (@BPerlakiH #1735)
+    - Localisation updates from https://translatewiki.net (@translatewiki #1654, #1664, #1691, #1692, #1706, #1727)
+
+# 3.16.1
+
+- FIX:
+    - Apple pay button crash on unsupported platforms (@BPerlakiH #1653)
+
+# 3.16.0
+
+- NEW:
+    - Recurring donation payments using apple pay email (@BPerlakiH #1579)
+    - macOS window restoration (@BPerlakiH #1603)
+    - Persist state of tabs when backgrounding the app (@BPerlakiH #1606)
+    - Sort and filter opened ZIM files (@BPerlakiH #1609)
+    - Make languages searchable (@BPerlakiH #1625, @BPerlakiH #1634)
+    - Donation redesign (@BPerlakiH #1642, @BPerlakiH #1645)
+    - Multi-language category filtering (@BPerlakiH #1647)
+- FIX:
+    - Stop using pull_request_target trigger in CI (@kelson42 #1590)
+    - iPad initial navigation issues (@BPerlakiH #1608)
+    - Center welcome screen (@BPerlakiH #1611)
+    - BrowserTab and content preloading for quicker switching (@BPerlakiH #1587)
+    - Fix disappearing toolbars on iPad (@BPerlakiH #1616)
+    - Block external resources earlier - fix (@BPerlakiH #1617)
+    - Update tab bar menu for iOS, replace crashing overlay sheets (@BPerlakiH #1623)
+    - Enforce a single empty tab always on iOS (@BPerlakiH #1622)
+- UPDATED:
+    - Rename from custom apps to branded apps (@BPerlakiH #1581)
+    - Move location capability to Kiwix target only (@BPerlakiH #1582)
+    - Update dependencies (@BPerlakiH #1586)
+    - Use libkiwix_xcframework-14.2.1-2 (@BPerlakiH #1594)
+    - Update OPDS URL (@rgaudin #1599)
+    - Update README (@BPerlakiH #1612)
+    - Release each night testflight (@kelson42 #1615)
+    - Change photos permission to write only (@BPerlakiH #1626)
+    - Add PR template (@BPerlakiH #1635)
+    - Add subtitle to Hotspot service (@BPerlakiH #1638)
+    - Localisation updates from https://translatewiki.net (@translatewiki #1578, #1591, #1596, #1602, #1619, #1627, #1630, #1640)
+
+# 3.15.1
+
+- UPDATED:
+    - To libkiwix 14.2.1 (@BPerlakiH #1576)
+- FIX:
+    - Table of contents not accessible (@BPerlakiH #1568)
+    - Web content placement issues on iPad (@BPerlakiH #1574)
+
 # 3.15.0
+
+- NEW:
+    - Add geolocation api (@BPerlakiH, @jasontitus #1562)
+- UPDATED:
+    - Do not display missing ZIM files in search options (@BPerlakiH #1559)
+    - Use native immersive experience (@BPerlakiH #1555)
+    - Localisation updates from https://translatewiki.net (@translatewiki #1551, #1553, #1564)
+- FIX:
+    - Remember side bar state on iPad (@BPerlakiH #1563)
+    - Add macOS Downloads settings (@BPerlakiH #1546)
 
 # 3.14.0
 

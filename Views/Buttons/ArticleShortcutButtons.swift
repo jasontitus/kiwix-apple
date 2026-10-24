@@ -13,6 +13,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Kiwix; If not, see https://www.gnu.org/licenses/.
 
+import CoreData
 import SwiftUI
 
 struct ArticleShortcutButtons: View {
@@ -97,6 +98,7 @@ struct ArticleShortcutButtons: View {
         }
         .disabled(zimFiles.isEmpty)
         .help(LocalString.article_shortcut_random_button_help)
+        .accessibilityIdentifier("nav_random")
         #endif
     }
 }

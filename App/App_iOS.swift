@@ -14,8 +14,9 @@
 // along with Kiwix; If not, see https://www.gnu.org/licenses/.
 
 #if os(iOS)
-import SwiftUI
+import Defaults
 import Combine
+import SwiftUI
 import UserNotifications
 import os
 
@@ -28,11 +29,14 @@ struct Kiwix: App {
     @StateObject private var navigation = NavigationViewModel()
     @UIApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
     @StateObject private var colorSchemeStore = UserColorSchemeStore()
+    @Default(.savedMenuNavigation) private var savedMenuSelection: MenuItem?
     
     init() {
+        Task {
+            await WebContentBlocker.compilePolicy()
+        }
         Task(priority: .utility) {
             await Diagnostics.start()
-            await WebContentBlocker.compilePolicy()
         }
         UNUserNotificationCenter.current().delegate = appDelegate
         // MARK: - migrations
@@ -92,11 +96,15 @@ struct Kiwix: App {
                     case .kiwix:
                         await LibraryOperations.reValidate()
                         if !DeepLinkService.shared.isRunning() {
-                            navigation.navigateToMostRecentTab()
+                            if navigation.currentItem == .loading, let savedMenuSelection {
+                                navigation.currentItem = savedMenuSelection.navigationItem
+                            } else {
+                                navigation.navigateToMostRecentTab()
+                            }
                         }
                         LibraryOperations.applyFileBackupSetting()
                         DownloadService.shared.restartHeartbeatIfNeeded()
-                    case let .custom(zimFileURL):
+                    case let .branded(zimFileURL):
                         await LibraryOperations.open(url: zimFileURL)
                         await ZimMigration.forCustomApps()
                         navigation.navigateToMostRecentTab()

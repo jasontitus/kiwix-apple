@@ -83,12 +83,13 @@ struct ReadingSettings: View {
 struct LibrarySettings: View {
     @Default(.libraryAutoRefresh) private var libraryAutoRefresh
     @EnvironmentObject private var library: LibraryViewModel
+    @FocusState var isSearchFocused: Bool
 
     var body: some View {
         VStack(spacing: 16) {
             SettingSection(name: LocalString.library_settings_catalog_title, alignment: .top) {
                 HStack(spacing: 6) {
-                    Button(LocalString.library_settings_button_refresh_now) {
+                    Button(LocalString.library_settings_button_refresh_now) { [library] in
                         Task { [weak library] in
                             await library?.start(isUserInitiated: true)
                         }
@@ -111,10 +112,7 @@ struct LibrarySettings: View {
                         .foregroundColor(.secondary)
                 }
             }
-            SettingSection(name: LocalString.library_settings_languages_title, alignment: .top) {
-                LanguageSelector()
-                    .environmentObject(library)
-            }
+            LanguageSelector(isSearchFocused: _isSearchFocused).environmentObject(library)
         }
         .padding()
         .tabItem { Label(LocalString.library_settings_catalog_title, systemImage: "folder.badge.gearshape") }
@@ -164,7 +162,7 @@ struct Settings: View {
     @EnvironmentObject private var colorSchemeStore: UserColorSchemeStore
     @EnvironmentObject private var library: LibraryViewModel
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
-    @State private var paymentButtonLabel: PayWithApplePayButtonLabel?
+    @Environment(\.dismiss) private var dismiss
 
     enum Route {
         case languageSelector, about
@@ -198,7 +196,6 @@ struct Settings: View {
                     if scrollToHotspot {
                         proxy.scrollTo("hotspot", anchor: .top)
                     }
-                    paymentButtonLabel = await Payment.paymentButtonTypeAsync()
                 }
             }
         }
@@ -269,7 +266,7 @@ struct Settings: View {
                     ProgressView().progressViewStyle(.circular)
                 }
             } else {
-                Button(LocalString.catalog_settings_refresh_now_button) {
+                Button(LocalString.catalog_settings_refresh_now_button) { [weak library] in
                     Task { [weak library] in
                         await library?.start(isUserInitiated: true)
                     }
@@ -297,8 +294,12 @@ struct Settings: View {
 
     var miscellaneous: some View {
         Section(LocalString.settings_miscellaneous_title) {
-            if paymentButtonLabel != nil, horizontalSizeClass != .regular {
+            if Brand.showDonations, horizontalSizeClass != .regular {
+                // on iPhone
                 SupportKiwixButton {
+                    // need to dismiss settings first!
+                    dismiss()
+                    // as only 1 sheet can be presented at any given time
                     openDonation()
                 }
             }

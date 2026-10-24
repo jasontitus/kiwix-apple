@@ -21,7 +21,7 @@ private final class ViewModel: ObservableObject {
     
     @Published private(set) var zimFiles: [ZimFile] = []
     
-    private var languageCodes = Set<String>()
+    private var languageCodes: [String] = []
     private var searchText: String = ""
     
     private let sortDescriptors = [
@@ -30,7 +30,7 @@ private final class ViewModel: ObservableObject {
         NSSortDescriptor(keyPath: \ZimFile.size, ascending: false)
     ]
     
-    func update(languageCodes: Set<String>) {
+    func update(languageCodes: [String]) {
         guard languageCodes != self.languageCodes else { return }
         self.languageCodes = languageCodes
         Task {
@@ -46,7 +46,7 @@ private final class ViewModel: ObservableObject {
         }
     }
     
-    func forceRefreshWith(searchText: String, languageCodes: Set<String>) async {
+    func forceRefreshWith(searchText: String, languageCodes: [String]) async {
         self.searchText = searchText
         self.languageCodes = languageCodes
         await update()
@@ -77,10 +77,11 @@ private final class ViewModel: ObservableObject {
         }
     }
     
-    private static func buildPredicate(searchText: String, languageCodes: Set<String>) -> NSPredicate {
+    private static func buildPredicate(searchText: String, languageCodes: [String]) -> NSPredicate {
         var predicates = [
             NSPredicate(format: "languageCode IN %@", languageCodes),
-            NSPredicate(format: "requiresServiceWorkers == false")
+            NSPredicate(format: "requiresServiceWorkers == false"),
+            ZimFile.Predicate.notDownloaded()
         ]
         if let aMonthAgo = Calendar.current.date(byAdding: .month, value: -3, to: Date()) {
             predicates.append(NSPredicate(format: "created > %@", aMonthAgo as CVarArg))
@@ -104,6 +105,7 @@ struct ZimFilesNew: View {
     @EnvironmentObject private var selection: SelectedZimFileViewModel
     @EnvironmentObject var library: LibraryViewModel
     @Default(.libraryLanguageCodes) private var languageCodes
+    @State private var selectedLanguage: String = Defaults[.libraryLanguageCodes].first ?? "eng"
     @StateObject private var viewModel = ViewModel()
     @State private var searchText = ""
     let dismiss: (() -> Void)? // iOS only
@@ -119,7 +121,6 @@ struct ZimFilesNew: View {
                     content: {
                         ZimFileCell(
                             zimFile,
-                            prominent: .name,
                             isSelected: selection.isSelected(zimFile)
                         )
                     },
@@ -134,14 +135,19 @@ struct ZimFilesNew: View {
         .navigationTitle(MenuItem.new.name)
         .searchable(text: $searchText, prompt: LocalString.common_search)
         .task {
-            await viewModel.forceRefreshWith(searchText: searchText, languageCodes: languageCodes)
+            await viewModel.forceRefreshWith(searchText: searchText, languageCodes: [selectedLanguage])
             await library.start(isUserInitiated: false)
         }
         .onChange(of: searchText) { _, newSearchText in
             viewModel.update(searchText: newSearchText)
         }
-        .onChange(of: languageCodes) { _, newLanguageCodes in
-            viewModel.update(languageCodes: newLanguageCodes)
+        .onChange(of: selectedLanguage) {
+            viewModel.update(languageCodes: [selectedLanguage])
+        }
+        .onChange(of: languageCodes) {
+            if !languageCodes.contains(selectedLanguage) {
+                selectedLanguage = languageCodes.first ?? "eng"
+            }
         }
         .overlay {
             if viewModel.zimFiles.isEmpty {
@@ -156,14 +162,28 @@ struct ZimFilesNew: View {
             }
         }
         .toolbar {
-            ToolbarItem {
+#if os(iOS)
+            let languagePlacement: ToolbarItemPlacement = .topBarTrailing
+#else
+            let languagePlacement: ToolbarItemPlacement = .automatic
+#endif
+            ToolbarItem(placement: languagePlacement) {
+                ToggleAroundLanguageButton(items: $languageCodes, selection: $selectedLanguage)
+                    .disabled(languageCodes.count <= 1)
+            }
+#if os(iOS)
+            let refreshPlacement: ToolbarItemPlacement = .title
+#else
+            let refreshPlacement: ToolbarItemPlacement = .automatic
+#endif
+            ToolbarItem(placement: refreshPlacement) {
                 if library.state == .inProgress {
                     ProgressView()
-                    #if os(macOS)
+#if os(macOS)
                         .scaleEffect(0.5)
-                    #endif
+#endif
                 } else {
-                    Button {
+                    Button { [weak library] in
                         Task { [weak library] in
                             await library?.start(isUserInitiated: true)
                         }

@@ -26,12 +26,17 @@
 "common.export_file.alert.description" = "ਕੀ ਤੁਸੀਂ %@ ਫਾਈਲ ਨੂੰ ਬਰਾਮਦ ਕਰਨਾ ਚਾਹੁੰਦੇ ਹੋ?";
 "common.export_file.alert.button.title" = "ਬਰਾਮਦ";
 "outline_button.outline.title" = "ਰੂਪਰੇਖਾ";
+// Fuzzy
 "outline_button.outline.help" = "ਲੇਖ ਦੀ ਰੂਪ-ਰੇਖਾ ਵਿਖਾਓ";
 "outline_button.outline.empty.message" = "ਕੋਈ ਰੂਪ-ਰੇਖਾ ਉਪਲਬਧ ਨਹੀਂ ਐ";
+// Fuzzy
 "article_shortcut.main.button.title" = "ਮੁੱਖ ਲੇਖ";
+// Fuzzy
 "article_shortcut.main.button.help" = "ਮੁੱਢਲਾ ਲੇਖ ਵਿਖਾਓ";
+// Fuzzy
 "article_shortcut.random.button.title.mac" = "ਬੇਤਰਤੀਬ ਲੇਖ";
 "article_shortcut.random.button.title.ios" = "ਬੇਤਰਤੀਬ ਸਫ਼ਾ";
+// Fuzzy
 "article_shortcut.random.button.help" = "ਬੇਤਰਤੀਬ ਲੇਖ ਵਿਖਾਓ";
 "bookmark_context_menu.view.title" = "ਵੇਖੋ";
 "bookmark_context_menu.remove.title" = "ਹਟਾਓ";
@@ -43,11 +48,9 @@
 "download_task_cell.status.paused" = "ਰੋਕਿਆ ਗਿਆ";
 "library_refresh_time.last" = "ਹੁਣੇ ਹੀ";
 "library_refresh_time.never" = "ਕਦੇ ਨਹੀਂ";
-"zim_file_cell.article_count.suffix" = "ਲੇਖ";
 "library.zim_file_context.main_page.label" = "ਮੁੱਖ ਸਫ਼ਾ";
 "library.zim_file_context.random.label" = "ਬੇਤਰਤੀਬ ਸਫ਼ਾ";
 "library.zim_file_context.copy_url" = "URL ਨਕਲ ਕਰੋ";
-"zim_file_opened.overlay.no-opened.message" = "ਕੋਈ ZIM ਫਾਈਲ ਨਹੀਂ ਖੁੱਲ੍ਹੀ।";
 "zim_file_opened.toolbar.open.title" = "ਖੋਲ੍ਹੋ...";
 "zim_file_opened.toolbar.open.help" = "ਇੱਕ ZIM ਫਾਈਲ ਖੋਲ੍ਹੋ";
 "zim_file_category.title" = "ਸ਼੍ਰੇਣੀ";
@@ -75,8 +78,7 @@
 "zim_file.bool_info.videos" = "ਵੀਡੀਓਆਂ";
 "zim_file.bool_info.details" = "ਵੇਰਵੇ";
 "zim_file.bool_info.require_service_workers" = "ਸੇਵਾ ਕਰਮਚਾਰੀਆਂ ਦੀ ਲੋੜ ਐ";
-"zim_file.counts.article_count" = "ਲੇਖਾਂ ਦੀ ਗਿਣਤੀ";
-"zim_file.counts.article.media_count" = "ਮੀਡੀਆ ਗਿਣਤੀ";
+"zim_file.counts.media_count" = "ਮੀਡੀਆ ਗਿਣਤੀ";
 "zim_file.detail.id.title" = "ਸ਼ਨਾਖ਼ਤ";
 "zim_file.download_task.action.title.cancel" = "ਰੱਦ ਕਰੋ";
 "zim_file.download_task.action.try_recover" = "ਮੁੜ ਪ੍ਰਾਪਤ ਕਰਨ ਦੀ ਕੋਸ਼ਿਸ਼ ਕਰੋ";
@@ -91,7 +93,6 @@
 "reading_settings.external_link.title" = "ਬਾਹਰੀ ਕੜੀ";
 "reading_settings.tab.reading" = "ਪੜ੍ਹ ਰਿਹਾ ਏ";
 "library_settings.button.refresh_now" = "ਹੁਣੇ ਤਾਜ਼ਾ ਕਰੋ";
-"library_settings.languages.title" = "ਬੋਲੀਆਂ";
 "settings.navigation.title" = "ਤਰਜੀਹਾਂ";
 "library_settings.toggle.cellular" = "ਸੈਲੂਲਰ ਦੀ ਵਰਤੋਂ ਕਰਕੇ ਲਾਹੋ (ਉਤਾਰਾ ਕਰੋ)";
 "library_settings.new-download-task-description" = "ਬਦਲਾਅ ਸਿਰਫ਼ ਨਵੇਂ ਲਾਹੇ ਕਾਰਜਾਂ 'ਤੇ ਲਾਗੂ ਹੋਵੇਗਾ।";
@@ -107,8 +108,6 @@
 "language_selector.no_language.title" = "ਕੋਈ ਭਾਸ਼ਾ ਨਹੀਂ";
 "language_selector.showing.header" = "ਵਿਖਾ ਰਿਹਾ ਐ";
 "language_selector.hiding.header" = "ਲੁਕਾ ਰਿਹਾ ਐ";
-"language_selector.navitation.title" = "ਬੋਲੀ";
-"language_selector.toolbar.sorting" = "ਛਾਂਟੀ";
 "settings.about.title" = "ਬਾਰੇ";
 "settings.about.dependencies.name" = "ਨਾਂ";
 "settings.about.dependencies.license" = "ਲਸੰਸ";
@@ -139,9 +138,6 @@
 "enum.category.wiktionary" = "ਵਿਕਸ਼ਨਰੀ";
 "enum.category.other" = "ਹੋਰ";
 "enum.external_link_loading_policy.always_ask" = "ਹਮੇਸ਼ਾ ਪੁੱਛੋ";
-"enum.flavor.max" = "ਵੱਧ ਤੋਂ ਵੱਧ";
-"enum.flavor.no_pic" = "ਕੋਈ ਤਸਵੀਰ ਨਹੀਂ";
-"enum.flavor.mini" = "ਛੋਟਾ";
 "enum.library_language_sorting_model.by_count" = "ਗਿਣਤੀ ਨਾਲ";
 "enum.libray_tab_item.opened" = "ਖੋਲ੍ਹਿਆ ਗਿਆ";
 "enum.libray_tab_item.categories" = "ਸ਼੍ਰੇਣੀਆਂ";
@@ -156,6 +152,5 @@
 "enum.search_result_snippet_mode.disabled" = "ਅਸਮਰੱਥ";
 "enum.search_result_snippet_mode.matches" = "ਮੇਲ ਖਾਂਦਾਂ";
 "payment.donate.title" = "ਦਾਨ ਕਰੋ";
-"payment.confirm.button.title" = "ਤਸਦੀਕ ਕਰੋ";
 "payment.selection.option.one_time" = "ਇੱਕ ਵਾਰ";
 "payment.error.title" = "ਖੈਰ, ਇਹ ਅਜੀਬ ਹੈ।";

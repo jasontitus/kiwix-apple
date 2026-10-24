@@ -53,6 +53,8 @@
 "common.button.share_as_pdf" = "Share as PDF";
 "common.search" = "Search";
 "common.search.inpage" = "Search in page";
+"common.find_next" = "Find next";
+"common.find_previous" = "Find previous";
 "common.search.suggestion" = "Did you mean:";
 
 "common.tab.manager.title" = "Tabs Manager";
@@ -68,18 +70,18 @@
 "common.export_file.alert.button.title" = "Export";
 
 "outline_button.outline.title" = "Outline";
-"outline_button.outline.help" = "Show article outline";
+"outline_button.outline.help" = "Show page outline";
 "outline_button.outline.empty.message" = "No outline available";
 
-"bookmark_button.show.help" = "Show the bookmark sheet, where the current article can be added or removed from bookmarks.";
+"bookmark_button.show.help" = "Show the bookmark sheet, where the current page can be added or removed from bookmarks.";
 
-"article_shortcut.main.button.title" = "Main Article";
-"article_shortcut.main.button.help" = "Show main article";
-"article_shortcut.random.button.title.mac" = "Random Article";
+"article_shortcut.main.button.title" = "Main Page";
+"article_shortcut.main.button.help" = "Show main page";
+"article_shortcut.random.button.title.mac" = "Random Page";
 "article_shortcut.random.button.title.ios" = "Random Page";
-"article_shortcut.random.button.help" = "Show random article";
+"article_shortcut.random.button.help" = "Show random page";
 
-"alert_handler.alert.failed.title" = "Unable to load the article requested.";
+"alert_handler.alert.failed.title" = "Unable to load the page requested.";
 
 "bookmark_context_menu.view.title" = "View";
 "bookmark_context_menu.remove.title" = "Remove";
@@ -103,20 +105,22 @@
 "download_again.question.description_part_1" = "It looks like %@ is already downloaded.";
 "download_again.question.description_part_2" = "Do you still want to download \"%@\"? Your existing file won't be deleted.";
 
-"flavor_tag.help.max" = "everything except large media files like video/audio";
-"flavor_tag.help.no_pic" = "most pictures have been removed";
-"flavor_tag.help.mini" = "only a subset of the text is available, probably the first section";
+"flavor_tag.help.max" = "Everything except large media files like video/audio";
+"flavor_tag.help.no_pic" = "Most pictures have been removed";
+"flavor_tag.help.mini" = "Only a subset of the text is available, probably the first section";
 
 "library_refresh_time.last" = "Just Now";
 "library_refresh_time.never" = "Never";
 
-"zim_file_cell.article_count.suffix" = "articles";
+"zim_file_cell.page_count" = "%@ pages";
+"zim_file_cell.media_count" = "%@ media";
 
 "zim_file_missing_indicator.help" = "Zim file is missing.";
 
 "hotspot.action.start_hotspot.title" = "Start Hotspot";
 "hotspot.action.stop_hotspot.title" = "Stop Hotspot";
 "hotspot.settings.port_number" = "Port number";
+"hotspot.select_zim_files.message" = "Select ZIM files to start your Hotspot service.";
 "hotspot.settings.recommended_port_range" = "The network port used by the Hotspot, should be between %@ and %@";
 "hotspot.error.port_already_used_by_another_app_title" = "Hotspot can't start because port %@ is in use.";
 "hotspot.error.port_already_used_by_another_app_description" = "To fix this, close the app using it or change the Kiwix Hotspot port in settings.";
@@ -128,10 +132,17 @@
 "library.zim_file_context.random.label" = "Random Page";
 "library.zim_file_context.copy_url" = "Copy URL";
 
-"zim_file_opened.overlay.no-opened.message" = "No opened ZIM file";
+"zim_file_opened.overlay.no-zim-files-at-all.message" = "No ZIM files found.";
+"zim_file_opened.overlay.no-available-zim-files.message" = "No available ZIM files found.";
+"zim_file_opened.overlay.no-missing-zim-files.message" = "No missing ZIM files found.";
 "zim_file_opened.toolbar.open.title" = "Open...";
 "zim_file_opened.toolbar.open.help" = "Open a ZIM file";
 "zim_file_category.title" = "Category";
+"zim_file_opened.toolbar.filter.show_all" = "Show all";
+"zim_file_opened.toolbar.filter.show_only_available" = "Show only available";
+"zim_file_opened.toolbar.filter.show_only_missing" = "Show only missing";
+"zim_file_opened.toolbar.sort_by.name" = "Sort by name";
+"zim_file_opened.toolbar.sort_by.size" = "Sort by size";
 
 "zim_file_catalog.fetching.message" = "Fetching Catalog ...";
 "zim_file_category.section.empty.message" = "No ZIM file under this category.";
@@ -144,17 +155,18 @@
 "zim_file.list.description.text" = "Description";
 "zim_file.list.actions.text" = "Actions";
 "zim_file.list.info.text" = "Info";
+"zim_file.list.content.text" = "Content";
 "zim_file.action.locate.title" = "Locate";
 "zim_file.action.open_main_page.title" = "Open Main Page";
 "zim_file.action.reveal_in_finder.title" = "Reveal in Finder";
 "zim_file.action.toggle_cellular" = "Download using cellular";
 "zim_file.action.unlink.title" = "Unlink";
-"zim_file.action.unlink.message" = "All bookmarked articles linked to this ZIM file will be deleted, but the original file will remain in place.";
+"zim_file.action.unlink.message" = "All bookmarked pages linked to this ZIM file will be deleted, but the original file will remain in place.";
 "zim_file.action.unlink.multi_title" = "Unlink %@ ZIM files";
-"zim_file.action.unlink.multi_message" = "All bookmarked articles linked to these %@ ZIM files will be deleted, but the original files will remain in place.";
+"zim_file.action.unlink.multi_message" = "All bookmarked pages linked to these %@ ZIM files will be deleted, but the original files will remain in place.";
 "zim_file.action.unlink.button.title" = "Unlink";
 "zim_file.action.delete.title" = "Delete";
-"zim_file.action.delete.message" = "The ZIM file and all bookmarked articles linked to this ZIM file will be deleted.";
+"zim_file.action.delete.message" = "The ZIM file and all bookmarked pages linked to this ZIM file will be deleted.";
 "zim_file.action.delete.button.title" = "Delete";
 "zim_file.action.download.title" = "Download";
 "zim_file.action.download.warning.title" = "Space Warning";
@@ -174,8 +186,8 @@
 "zim_file.bool_info.details" = "Details";
 "zim_file.bool_info.require_service_workers" = "Requires Service Workers";
 "zim_file.bool_info.zim_archive_integrity" = "ZIM archive integrity";
-"zim_file.counts.article_count" = "Article Count";
-"zim_file.counts.article.media_count" = "Media Count";
+"zim_file.counts.pages_count" = "Pages count";
+"zim_file.counts.media_count" = "Media count";
 "zim_file.detail.id.title" = "ID";
 "zim_file.download_task.action.title.cancel" = "Cancel";
 "zim_file.download_task.action.try_recover" = "Try to Recover";
@@ -201,7 +213,6 @@
 "library_settings.last_refresh.text" = "Last refresh";
 "library_settings.auto_refresh.toggle" = "Auto refresh";
 "library_settings.catalog_warning.text" = "When enabled, the library catalog will be refreshed automatically when outdated.";
-"library_settings.languages.title" = "Languages";
 "settings.navigation.title" = "Settings";
 "library_settings.toggle.cellular" = "Download using cellular";
 "library_settings.new-download-task-description" = "Change will only apply to new download tasks.";
@@ -224,8 +235,6 @@
 "language_selector.no_language.title" = "No language";
 "language_selector.showing.header" = "Showing";
 "language_selector.hiding.header" = "Hiding";
-"language_selector.navitation.title" = "Language";
-"language_selector.toolbar.sorting" = "Sorting";
 
 "settings.about.title" = "About";
 "settings.about.release" = "Release";
@@ -256,6 +265,7 @@
 
 "search_result.zimfile.empty.message" = "No opened ZIM file";
 "search_result.zimfile.no_result.message" = "No result";
+"search_result.zimfile.voice_over_count" = "Found results: %@";
 "search_result.sidebar.button.remove" = "Remove";
 "search_result.header.text" = "Recent Search";
 "search_result.button.clear" = "Clear";
@@ -277,6 +287,7 @@
 "app_macos_commands.open_file" = "Open...";
 "app_macos_commands.new" = "New Tab";
 "app_macos_navigation.button.library" = "Library";
+"app_macos_navigation.button.restore_previous_session" = "Restore Previous Session";
 
 "sidebar_view.navigation.button.close" = "Close";
 
@@ -295,9 +306,6 @@
 "enum.external_link_loading_policy.always_ask" = "Always Ask";
 "enum.external_link_loading_policy.always_load" = "Always Load";
 "enum.external_link_loading_policy.never_load" = "Never Load";
-"enum.flavor.max" = "max";
-"enum.flavor.no_pic" = "no pic";
-"enum.flavor.mini" = "mini";
 "enum.library_language_sorting_model.a-z" = "A-Z";
 "enum.library_language_sorting_model.by_count" = "By Count";
 "enum.libray_tab_item.opened" = "Opened";
@@ -324,17 +332,19 @@
 "payment.monthly_support.label" = "Monthly support for Kiwix";
 "payment.summary.title" = "Kiwix";
 "payment.textfield.custom_amount.label" = "Custom amount";
-"payment.confirm.button.title" = "Confirm";
-"payment.selection.average_monthly_donation.subtitle" = "Average monthly donation";
-"payment.selection.last_year_average.subtitle" = "Last year's average";
-"payment.selection.custom_amount" = "Custom amount";
+"payment.continue.button.title" = "Continue";
 "payment.selection.option.one_time" = "One time";
 "payment.selection.option.monthly" = "Monthly";
 "payment.support_fallback_message" = "We are sorry, your device does not support Apple Pay.";
-"payment.success.title" = "Thank you so much for your donation.";
-"payment.success.description" = "Your generosity means everything to us.";
+"payment.success.title" = "Thank you for your donation.";
+"payment.success.description" = "Your support helps keep knowledge free and accessible offline.";
 "payment.error.title" = "Well that's awkward.";
 "payment.error.description" = "There has been an issue with your payment. Please try again.";
+"payment.error_already_subscribed.title" = "You already have a monthly donation";
+"payment.error_already_subscribed.description" = "Use the instructions in the email we sent earlier to update it.";
+"payment.donation_reason.title" = "Help us keep Kiwix and ZIM files updated.";
+"payment.donation_cell.description" = "No ads, no trackers, funded by donations";
+"payment.donation_is_encrypted" = "Your donation is encrypted with Apple's built-in security.";
 "download_service.error.client.backgroundSessionInUseByAnotherProcess" = "Could not communicate with background transfer service";
 "download_service.error.client.backgroundSessionWasDisconnected" = "Lost connection to background transfer service";
 "download_service.error.client.cancelled" = "cancelled";
@@ -378,3 +388,6 @@
 "download_service.error.client.cannotMoveFile" = "Cannot move file";
 "download_service.error.client.downloadDecodingFailedMidStream" = "Download decoding failed";
 "download_service.error.client.downloadDecodingFailedToComplete" = "Download decoding failed";
+"geolocation_error.permission_denied" = "User denied geolocation permission.";
+"geolocation_error.position_unavailable" = "Location is unavailable.";
+"geolocation_error.timeout" = "Location request timed out.";

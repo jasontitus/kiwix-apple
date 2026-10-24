@@ -19,14 +19,33 @@ import Foundation
 import SwiftUI
 import Defaults
 
+struct SplitViewForiPadContainer: View {
+    @EnvironmentObject var navigation: NavigationViewModel
+    var body: some View {
+        if case .loading = navigation.currentItem {
+            LoadingDataView()
+                .task { [weak navigation] in
+                    navigation?.observeOpeningFiles()
+                }
+        } else {
+            SplitViewForiPad()
+        }
+    }
+}
+
 @MainActor
 struct SplitViewForiPad: View { // swiftlint:disable:this type_body_length
     @EnvironmentObject var navigation: NavigationViewModel
-    // start with side menu collapsed state by default
-    @State private var columnVisibility: NavigationSplitViewVisibility = .detailOnly
+    @State private var columnVisibility: NavigationSplitViewVisibility = Defaults[.ipadSplitViewVisibility]
     @State private var allSections: [MenuSection] = MenuSection.allMenuSections
     @State private var menuDict: [MenuSection: [MenuItem]] = MenuSection.staticDictionary
-    @State private var selection: MenuItem?
+    @State private var selection: MenuItem? {
+        didSet {
+            Log.Navigation.debug("\(#file) \(#function): \(selection.debugDescription)")
+        }
+    }
+    @Default(.libraryLanguageCodes) private var languages
+    @State private var selectedLang: String = Defaults[.libraryLanguageCodes].first ?? "eng"
     @State private var navPath = NavigationPath()
     @State private var titleUpdate: (NSManagedObjectID, String)?
     @FetchRequest(
@@ -37,6 +56,7 @@ struct SplitViewForiPad: View { // swiftlint:disable:this type_body_length
     private let selectFileById = NotificationCenter.default.publisher(for: .selectFile)
     @State private var hasZimFiles: Bool?
     @State private var navigateToHotspotSettingsTask: Task<Void, Never>?
+    @Environment(\.scenePhase) private var scenePhase
 
     var body: some View {
         NavigationSplitView(columnVisibility: $columnVisibility) {
@@ -47,27 +67,19 @@ struct SplitViewForiPad: View { // swiftlint:disable:this type_body_length
             }
             .listStyle(.sidebar)
             .navigationTitle(Brand.appName)
-            .toolbar {
-                Menu {
-                    Button(role: .destructive) {
-                        guard case let .tab(tabID) = navigation.currentItem else { return }
-                        Task { [weak navigation] in
-                            await navigation?.deleteTab(tabID: tabID)
+            .toolbar { [weak navigation] in
+                if hasNonEmptyTab() {
+                    Menu {
+                        Button(role: .destructive) {
+                            Task { [weak navigation] in
+                                await navigation?.deleteAllTabs(keepEmpty: true)
+                            }
+                        } label: {
+                            Label(LocalString.common_tab_menu_close_all, systemImage: "xmark.square.fill")
                         }
                     } label: {
-                        Label(LocalString.common_tab_menu_close_this, systemImage: "xmark.square")
+                        Label(LocalString.common_tab_menu_close_all, systemImage: "xmark.square")
                     }
-                    Button(role: .destructive) {
-                        Task { [weak navigation] in
-                            await navigation?.deleteAllTabs()
-                        }
-                    } label: {
-                        Label(LocalString.common_tab_menu_close_all, systemImage: "xmark.square.fill")
-                    }
-                } label: {
-                    Label(LocalString.common_tab_menu_new_tab, systemImage: "plus.square")
-                } primaryAction: {
-                    navigation.createTab()
                 }
             }
         } detail: {
@@ -82,7 +94,13 @@ struct SplitViewForiPad: View { // swiftlint:disable:this type_body_length
                 case .opened:
                     ZimFilesOpened()
                 case .categories:
-                    ZimFilesCategories(dismiss: nil)
+                    ZimFilesCategories(languageCode: $selectedLang, dismiss: nil)
+                        .toolbar {
+                            ToolbarItem(placement: .topBarTrailing) {
+                                ToggleAroundLanguageButton(items: $languages, selection: $selectedLang)
+                                    .disabled(languages.count <= 1)
+                            }
+                        }
                 case .new:
                     ZimFilesNew(dismiss: nil)
                 case .downloads:
@@ -96,30 +114,33 @@ struct SplitViewForiPad: View { // swiftlint:disable:this type_body_length
                     HotspotZimFilesSelection()
                 case nil:
                     LoadingDataView()
+                        .animation(nil, body: { _ in })
                 }
-            }
+            }.animation(.easeInOut(duration: 0.2), value: selection)
         }
         .task {
-            await loadDonations()
+            if let currentItem = navigation.currentItem {
+                // set up the default selection
+                // as direct opening a file (when the app is not launched)
+                // won't trigger .onChange(of: navigation.currentItem)
+                Log.Navigation.debug("\(#file) set up the default selection")
+                updateSelection(currentItem)
+            } else if let navItem = Defaults[.savedMenuNavigation]?.navigationItem {
+                // restore navigation point from saved selection
+                Log.Navigation.debug("\(#file) restore navigation point from saved selection")
+                updateSelection(navItem)
+            } else {
+                Log.Navigation.error("\(#file) no navigation item found")
+            }
+            if case let .tab(selectedTabId) = selection {
+                BrowserTabPreloader.shared.start(with: tabs, selectedTabId: selectedTabId)
+            }
+            showDonationButton()
             await observeHasZimFiles()
             observeNavigateToHotspotSettings()
-            navigation.observeOpeningFiles()
-            // set up the default selection
-            // as direct opening a file (when the app is not launched)
-            // won't trigger .onChange(of: navigation.currentItem)
-            if let currentItem = navigation.currentItem {
-                selection = MenuItem(from: currentItem)
-            }
         }
-        .onChange(of: navigation.currentItem) { oldValue, newValue in
-            if newValue != oldValue {
-                if hasZimFiles == true, newValue != .loading {
-                    // allow the side menu to be displayed
-                    columnVisibility = Defaults[.ipadSplitViewVisibility]
-                } else if hasZimFiles == false {
-                    columnVisibility = .detailOnly
-                }
-            }
+        .onChange(of: navigation.currentItem) { _, newValue in
+            Log.Navigation.debug("\(#file) \(#function) update selection")
             updateSelection(newValue)
         }
         // open file details, after importing file
@@ -129,8 +150,32 @@ struct SplitViewForiPad: View { // swiftlint:disable:this type_body_length
             }
             navPath.append(fileId)
         })
-        .onDisappear {
+        .onChange(of: columnVisibility) {
             Defaults[.ipadSplitViewVisibility] = columnVisibility
+        }
+        .onChange(of: scenePhase) { old, new in
+            switch (old, new) {
+            case (.active, .inactive):
+                Defaults[.ipadSplitViewVisibility] = columnVisibility
+                if let selection {
+                    Defaults[.savedMenuNavigation] = selection
+                }
+            case (_, .inactive):
+                columnVisibility = Defaults[.ipadSplitViewVisibility]
+            default:
+                break
+            }
+        }
+        .onChange(of: languages) { (_, new: [String]) in
+            if !new.contains(selectedLang) {
+                selectedLang = new.first ?? "eng"
+            }
+        }
+    }
+    
+    private func hasNonEmptyTab() -> Bool {
+        tabs.contains { tab in
+            tab.zimFile != nil
         }
     }
     
@@ -143,13 +188,16 @@ struct SplitViewForiPad: View { // swiftlint:disable:this type_body_length
                         labelFor(tab: tab)
                     }
                     .id(tab.id)
-                    .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-                        Button(role: .destructive) {
-                            Task { [weak navigation] in
-                                await navigation?.deleteTab(tabID: tab.objectID)
+                    .accessibilityIdentifier(tab.title ?? LocalString.common_tab_menu_new_tab)
+                    .swipeActions(edge: .trailing, allowsFullSwipe: true) { [weak navigation] in
+                        if tab.zimFile != nil {
+                            Button(role: .destructive) {
+                                Task { [weak navigation] in
+                                    await navigation?.deleteTab(tabID: tab.objectID)
+                                }
+                            } label: {
+                                Label(LocalString.sidebar_view_navigation_button_close, systemImage: "xmark")
                             }
-                        } label: {
-                            Label(LocalString.sidebar_view_navigation_button_close, systemImage: "xmark")
                         }
                     }
                 }
@@ -160,6 +208,7 @@ struct SplitViewForiPad: View { // swiftlint:disable:this type_body_length
                     ForEach(sectionItems, id: \.id) { (item: MenuItem) in
                         navigationLinkFor(item: item)
                             .id(item.id)
+                            .accessibilityIdentifier(item.accessibilityIdentifier)
                     }
                 } header: {
                     if let headerText = section.header {
@@ -208,6 +257,7 @@ struct SplitViewForiPad: View { // swiftlint:disable:this type_body_length
                 .frame(maxWidth: 22, maxHeight: 22)
                 .clipShape(RoundedRectangle(cornerSize: CGSize(width: 3, height: 3)))
         }
+        .accessibilityIdentifier(labelText)
     }
 
     private func iconImageFor(tab: Tab) -> Image {
@@ -261,21 +311,17 @@ struct SplitViewForiPad: View { // swiftlint:disable:this type_body_length
         }
     }
     
-    private func loadDonations() async {
+    private func showDonationButton() {
         guard allSections.contains(.donation) else { return }
-        if await Payment.paymentButtonTypeAsync() != nil {
-            menuDict[.donation] = [.donation]
-        }
+        menuDict[.donation] = [.donation]
     }
     
     private func updateSelection(_ newNavItem: NavigationItem?) {
         if let newNavItem, let newSelection = MenuItem(from: newNavItem) {
             if selection != newSelection {
                 selection = newSelection
-                while !navPath.isEmpty {
-                    navPath.removeLast()
-                }
-                navPath.append(newSelection)
+                Defaults[.savedMenuNavigation] = selection
+                navPath = NavigationPath([newSelection])
             }
         }
     }

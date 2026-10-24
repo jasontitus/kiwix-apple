@@ -145,7 +145,7 @@ struct LogoView: View {
                     x: geometry.size.width * 0.5,
                     y: logoCalc.logoCenterY
                 )
-            }.ignoresSafeArea()
+        }.ignoresSafeArea(.all, edges: .vertical)
     }
 }
 
@@ -176,7 +176,7 @@ struct LoadingProgressView: View {
         GeometryReader { geometry in
             ProgressView()
                 .progressViewStyle(.circular)
-                .tint(Color.primary)
+                .tint(.gray)
                 .frame(
                     width: geometry.size.width * 0.618,
                     height: geometry.size.height * 0.191
@@ -198,12 +198,12 @@ struct FetchingCatalogView: View {
     }
 }
 
-struct LoadingDataView: View {
+struct LoadingDataView: View {    
     var body: some View {
         ZStack {
             LogoView()
             LoadingMessageView(message: LocalString.welcome_loading_data_text)
-        }.ignoresSafeArea()
+        }.ignoresSafeArea(.all, edges: .vertical)
     }
 }
 

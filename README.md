@@ -16,7 +16,7 @@ This is the Apple version of Kiwix, supporting iOS and macOS.
 [![Codecov](https://codecov.io/gh/kiwix/kiwix-apple/branch/main/graph/badge.svg)](https://codecov.io/gh/kiwix/kiwix-apple)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 <img src="https://img.shields.io/badge/Swift-5.9-orange.svg" alt="Drawing="/>
-[![Join Slack](https://img.shields.io/badge/Join%20us%20on%20Slack%20%23kiwix--apple-2EB67D)](https://slack.kiwix.org)
+[![Join Slack](https://img.shields.io/badge/Join%20us%20on%20Slack%20%23kiwix--apple-2EB67D)](https://slack-invite.kiwix.org)
 
 ## Download
 
@@ -50,7 +50,12 @@ To get started, you will need the following:
 
 ### Steps
  1) clone this repository
- 2) from the project folder **run the following command: `brew bundle`**
+ 2) from the project folder **run the following commands:** 
+ ```
+ brew bundle
+ python localizations.py generate
+ xcodegen
+ ```
 
 ### Xcode settings
 

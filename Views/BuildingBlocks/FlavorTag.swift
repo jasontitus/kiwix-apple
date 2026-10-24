@@ -31,7 +31,7 @@ struct FlavorTag: View {
             .background(backgroundColor)
             .clipShape(Capsule(style: .continuous))
             .overlay(Capsule(style: .continuous).stroke(Color.gray, lineWidth: 0.5))
-            .help(help)
+            .help(flavor.help)
     }
 
     var backgroundColor: Color {
@@ -39,20 +39,9 @@ struct FlavorTag: View {
         case .max:
             return .green
         case .noPic:
-            return .blue
+            return .brown
         case .mini:
             return .orange
-        }
-    }
-
-    var help: String {
-        switch flavor {
-        case .max:
-            return LocalString.flavor_tag_help_max
-        case .noPic:
-            return LocalString.flavor_tag_help_no_pic
-        case .mini:
-            return LocalString.flavor_tag_help_mini
         }
     }
 }

@@ -13,9 +13,10 @@
 // You should have received a copy of the GNU General Public License
 // along with Kiwix; If not, see https://www.gnu.org/licenses/.
 
+#if os(iOS) // iPhone only
+import CoreData
 import SwiftUI
 
-#if os(iOS) // iPhone only
 struct TabsManagerButton: View {
     @EnvironmentObject private var navigation: NavigationViewModel
     @State private var presentedSheet: PresentedSheet?
@@ -28,22 +29,17 @@ struct TabsManagerButton: View {
     var body: some View {
         Menu {
             Section {
-                Button {
-                    navigation.createTab()
-                } label: {
-                    Label(LocalString.common_tab_menu_new_tab, systemImage: "plus.square")
-                }
-                Button(role: .destructive) {
-                    guard case .tab(let tabID) = navigation.currentItem else { return }
+                Button(role: .destructive) { [weak navigation] in
+                    guard case .tab(let tabID) = navigation?.currentItem else { return }
                     Task { [weak navigation] in
                         await navigation?.deleteTab(tabID: tabID)
                     }
                 } label: {
                     Label(LocalString.common_tab_menu_close_this, systemImage: "xmark.square")
                 }
-                Button(role: .destructive) {
+                Button(role: .destructive) { [weak navigation] in
                     Task { [weak navigation] in
-                        await navigation?.deleteAllTabs()
+                        await navigation?.deleteAllTabs(keepEmpty: true)
                     }
                 } label: {
                     Label(LocalString.common_tab_menu_close_all, systemImage: "xmark.square.fill")
@@ -94,41 +90,39 @@ struct TabManager: View {
             .listRowBackground(
                 navigation.currentItem == NavigationItem.tab(objectID: tab.objectID) ? Color.blue.opacity(0.2) : nil
             )
-            .swipeActions {
-                Button(role: .destructive) {
-                    Task { [weak navigation] in
-                        await navigation?.deleteTab(tabID: tab.objectID)
+            .swipeActions { [weak navigation] in
+                if tab.zimFile != nil {
+                    Button(role: .destructive) {
+                        Task { [weak navigation] in
+                            await navigation?.deleteTab(tabID: tab.objectID)
+                        }
+                    } label: {
+                        Label(LocalString.common_tab_list_close, systemImage: "xmark")
                     }
-                } label: {
-                    Label(LocalString.common_tab_list_close, systemImage: "xmark")
                 }
             }
         }
         .listStyle(.plain)
         .navigationTitle(LocalString.common_tab_navigation_title)
         .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
+        .toolbar { [weak navigation] in
             Menu {
                 Button(role: .destructive) {
-                    guard case let .tab(tabID) = navigation.currentItem else { return }
                     Task { [weak navigation] in
-                        await navigation?.deleteTab(tabID: tabID)                    
-                    }
-                } label: {
-                    Label(LocalString.common_tab_menu_close_this, systemImage: "xmark.square")
-                }
-                Button(role: .destructive) {
-                    Task { [weak navigation] in
-                        await navigation?.deleteAllTabs()
+                        await navigation?.deleteAllTabs(keepEmpty: true)
                     }
                 } label: {
                     Label(LocalString.common_tab_menu_close_all, systemImage: "xmark.square.fill")
                 }
             } label: {
-                Label(LocalString.common_tab_menu_new_tab, systemImage: "plus.square")
-            } primaryAction: {
-                navigation.createTab()
+                Label(LocalString.common_tab_menu_close_all, systemImage: "xmark.square")
             }
+        }
+        .task {
+            guard case let .tab(selectedTabId) = navigation.currentItem else {
+                return
+            }
+            BrowserTabPreloader.shared.start(with: tabs, selectedTabId: selectedTabId)
         }
     }
 }

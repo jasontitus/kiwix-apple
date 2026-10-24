@@ -22,9 +22,15 @@ struct Log {
     static let LibraryOperations = Logger(subsystem: subsystem, category: "LibraryOperations")
     static let QRCode = Logger(subsystem: subsystem, category: "QRCode")
     static let OPDS = Logger(subsystem: subsystem, category: "OPDS")
+    static let Cookies = Logger(subsystem: subsystem, category: "Cookies")
     static let URLSchemeHandler = Logger(subsystem: subsystem, category: "URLSchemeHandler")
     static let Branding = Logger(subsystem: subsystem, category: "Branding")
     static let Payment = Logger(subsystem: subsystem, category: "Payment")
+    static let Geolocation = Logger(subsystem: subsystem, category: "Geolocation")
+    static let Navigation = Logger(subsystem: subsystem, category: "Navigation")
+#if os(macOS)
+    static let SessionRestore = Logger(subsystem: subsystem, category: "SessionRestore")
+#endif
 }
 
 private let subsystem = KiwixLogger.subsystem

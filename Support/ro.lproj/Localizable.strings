@@ -1,5 +1,6 @@
 // Messages for Romanian (română)
 // Exported from translatewiki.net
+// Author: Chemballs
 // Author: MSClaudiu
 // Author: SZ475
 
@@ -35,14 +36,21 @@
 "common.export_file.alert.description" = "Doriți să exportați fișierul %@?";
 "common.export_file.alert.button.title" = "Exportă";
 "outline_button.outline.title" = "Descriere";
+// Fuzzy
 "outline_button.outline.help" = "Afișează descrierea articolului";
 "outline_button.outline.empty.message" = "Nu există descriere disponibilă";
+// Fuzzy
 "bookmark_button.show.help" = "Afișați fișa semnelor de carte, unde articolul curent poate fi adăugat sau eliminat din semne de carte.";
+// Fuzzy
 "article_shortcut.main.button.title" = "Articolul Principal";
+// Fuzzy
 "article_shortcut.main.button.help" = "Afișează articolul principal";
+// Fuzzy
 "article_shortcut.random.button.title.mac" = "Articol Aleatoriu";
 "article_shortcut.random.button.title.ios" = "Pagina Aleatorie";
+// Fuzzy
 "article_shortcut.random.button.help" = "Arată articolul aleatoriu";
+// Fuzzy
 "alert_handler.alert.failed.title" = "Nu se poate încărca articolul solicitat.";
 "bookmark_context_menu.view.title" = "Vizualizare";
 "bookmark_context_menu.remove.title" = "Elimină";
@@ -56,18 +64,19 @@
 "download_task_cell.status.failed" = "Nu a reușit";
 "download_task_cell.status.downloading" = "Descărcare...";
 "download_task_cell.status.paused" = "Pauză";
+// Fuzzy
 "flavor_tag.help.max" = "totul, cu excepția fișierelor media mari, cum ar fi video/audio";
+// Fuzzy
 "flavor_tag.help.no_pic" = "majoritatea pozelor au fost eliminate";
+// Fuzzy
 "flavor_tag.help.mini" = "doar un subset al textului este disponibil, probabil prima secțiune";
 "library_refresh_time.last" = "Chiar Acum";
 "library_refresh_time.never" = "Niciodată";
-"zim_file_cell.article_count.suffix" = "articole";
 "zim_file_missing_indicator.help" = "Fișierul Zim lipsește.";
 "library.zim_file_details.side_panel.message" = "Selectați un fișier ZIM pentru a vedea detalii";
 "library.zim_file_context.main_page.label" = "Pagina Principală";
 "library.zim_file_context.random.label" = "Pagină Aleatorie";
 "library.zim_file_context.copy_url" = "Copiază URL";
-"zim_file_opened.overlay.no-opened.message" = "Niciun fișier ZIM deschis";
 "zim_file_opened.toolbar.open.title" = "Deschide...";
 "zim_file_opened.toolbar.open.help" = "Deschide Fișierul Zim";
 "zim_file_category.title" = "Categorie";
@@ -85,9 +94,11 @@
 "zim_file.action.reveal_in_finder.title" = "Afișează în Finder";
 "zim_file.action.toggle_cellular" = "Descărcați folosind telefonul mobil";
 "zim_file.action.unlink.title" = "Deconectează";
+// Fuzzy
 "zim_file.action.unlink.message" = "Toate articolele marcate legate de acest fișier ZIM vor fi șterse, dar fișierul original va rămâne pe loc.";
 "zim_file.action.unlink.button.title" = "Deconectare";
 "zim_file.action.delete.title" = "Șterge";
+// Fuzzy
 "zim_file.action.delete.message" = "Fișierul ZIM și toate articolele marcate legate de acest fișier ZIM vor fi șterse.";
 "zim_file.action.delete.button.title" = "Șterge";
 "zim_file.action.download.title" = "Descărcare";
@@ -103,8 +114,7 @@
 "zim_file.bool_info.videos" = "Videouri";
 "zim_file.bool_info.details" = "Detalii";
 "zim_file.bool_info.require_service_workers" = "Necesită Lucrători de Serviciu";
-"zim_file.counts.article_count" = "Număr de Articole";
-"zim_file.counts.article.media_count" = "Numărul Media";
+"zim_file.counts.media_count" = "Numărul Media";
 "zim_file.detail.id.title" = "ID";
 "zim_file.download_task.action.title.cancel" = "Anulare";
 "zim_file.download_task.action.try_recover" = "Încearcă Recuperarea";
@@ -123,7 +133,6 @@
 "library_settings.last_refresh.text" = "Ultima actualizare";
 "library_settings.auto_refresh.toggle" = "Reîmprospătare automată";
 "library_settings.catalog_warning.text" = "Când este activat, catalogul bibliotecii va fi reîmprospătat automat când este învechit.";
-"library_settings.languages.title" = "Limbile";
 "settings.navigation.title" = "Setări";
 "library_settings.toggle.cellular" = "Descărcați folosind telefonul mobil";
 "library_settings.new-download-task-description" = "Modificarea se va aplica numai noilor sarcini de descărcare.";
@@ -146,8 +155,6 @@
 "language_selector.no_language.title" = "Fără limbă";
 "language_selector.showing.header" = "Arată";
 "language_selector.hiding.header" = "Ascunde";
-"language_selector.navitation.title" = "Limbă";
-"language_selector.toolbar.sorting" = "Sortare";
 "settings.about.title" = "Despre";
 "settings.about.release" = "Lansat";
 "settings.about.dependencies" = "Dependențe";
@@ -197,9 +204,6 @@
 "enum.external_link_loading_policy.always_ask" = "Întreabă Întotdeauna";
 "enum.external_link_loading_policy.always_load" = "Încărcați Întotdeauna";
 "enum.external_link_loading_policy.never_load" = "Nu Încărcați Niciodată";
-"enum.flavor.max" = "max";
-"enum.flavor.no_pic" = "nicio poza";
-"enum.flavor.mini" = "mini";
 "enum.library_language_sorting_model.a-z" = "A-Z";
 "enum.library_language_sorting_model.by_count" = "După Număr";
 "enum.libray_tab_item.opened" = "Deschis";
@@ -223,14 +227,11 @@
 "payment.monthly_support.label" = "Suport lunar pentru Kiwix";
 "payment.summary.title" = "Kiwix";
 "payment.textfield.custom_amount.label" = "Sumă personalizată";
-"payment.confirm.button.title" = "Confirmă";
-"payment.selection.average_monthly_donation.subtitle" = "Donația medie lunară";
-"payment.selection.last_year_average.subtitle" = "Media de anul trecut";
-"payment.selection.custom_amount" = "Sumă personalizată";
 "payment.selection.option.one_time" = "O dată";
 "payment.selection.option.monthly" = "Lunar";
 "payment.support_fallback_message" = "Ne pare rău, dispozitivul dvs. nu acceptă Apple Pay.";
-"payment.success.title" = "Vă mulțumesc mult pentru donație.";
+"payment.success.title" = "Vă mulțumim pentru donație.";
+// Fuzzy
 "payment.success.description" = "Generozitatea ta înseamnă totul pentru noi.";
 "payment.error.title" = "Ei bine, asta e ciudat.";
 "payment.error.description" = "A apărut o problemă cu plata dvs. Vă rugăm să încercați din nou.";

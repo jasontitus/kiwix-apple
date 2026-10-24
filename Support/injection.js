@@ -1,12 +1,16 @@
 let headings = Array.from(document.querySelectorAll('h1, h2, h3, h4, h5, h6'))
 
 // generate id for all headings if there isn't one already
-headings.forEach( (heading, index) => {
-	if (!heading.id) {
-		let parts = heading.textContent.trim().split(' ').concat([index])
-		heading.id = parts.join('_')
-	}
-})
+headings.forEach((heading, index) => {
+    if (!heading.id) {
+        heading.id = convertToId(heading.textContent, index);
+    }
+});
+
+function convertToId(textContent, index) {
+    let parts = textContent.trim().replace(/[\W_]+/g, "_").split("_").concat([index]);
+    return parts.join("_");
+}
 
 // create observer
 let observer = new IntersectionObserver(function(entries) {
@@ -28,14 +32,23 @@ let observer = new IntersectionObserver(function(entries) {
 	}
 }, { rootMargin: '-50px 0 -35% 0', threshold: 1.0 });
 
-// register scroll view to handle heading on top of the page
+// register scroll view to handle custom show/hide navigation bars
+var lastYOffset = 0;
+var lastDirection = undefined;
 window.onscroll = function() {
-	if (document.documentElement.scrollTop <= 0) {
-		const headingVisible = window.webkit.messageHandlers.headingVisible
-		if(headingVisible !== undefined && headingVisible.postMessage !== undefined) {
-			headingVisible.postMessage({id: headings[0].id})
-		}
-	}
+    const element = document.documentElement;
+    const maxYOffset = element.scrollHeight - element.clientHeight;
+    // trim off the values created by bounce-back animation at the top & bottom of the page
+    // which are over the normal scroll min/max values
+    const yOffset = Math.min(Math.max(element.scrollTop, 0), maxYOffset);
+    if(lastYOffset < yOffset && 50 < yOffset && lastDirection != "down") {
+        lastDirection = "down";
+        window.webkit?.messageHandlers?.scrollHandler?.postMessage("down");
+    } else if(yOffset < lastYOffset && lastDirection != "up") {
+        lastDirection = "up";
+        window.webkit?.messageHandlers?.scrollHandler?.postMessage("up");
+    }
+    lastYOffset = yOffset;
 }
 
 // expand all detail tags
@@ -96,102 +109,6 @@ function disableVideoContextMenu() {
         video.addEventListener("contextmenu", function(e) { e.preventDefault(); }, false);
     });
 }
-
-// Bridge the HTML5 Geolocation API to CoreLocation via a script message handler.
-// This lets map ZIM files (e.g. WikiVoyage) use navigator.geolocation; the
-// native side prompts the user for CoreLocation permission on first use.
-// Supports both getCurrentPosition (one-shot) and watchPosition (continuous).
-(function () {
-    const handler = window.webkit &&
-        window.webkit.messageHandlers &&
-        window.webkit.messageHandlers.geolocation
-    if (!handler) { return }
-
-    const pending = new Map()
-    let nextId = 1
-
-    function deliverSuccess(success, payload) {
-        if (typeof success !== 'function') { return }
-        success({
-            coords: {
-                latitude: payload.coords.latitude,
-                longitude: payload.coords.longitude,
-                accuracy: payload.coords.accuracy,
-                altitude: payload.coords.altitude ?? null,
-                altitudeAccuracy: payload.coords.altitudeAccuracy ?? null,
-                heading: payload.coords.heading ?? null,
-                speed: payload.coords.speed ?? null
-            },
-            timestamp: payload.timestamp
-        })
-    }
-
-    function deliverError(error, err) {
-        if (typeof error !== 'function') { return }
-        error({
-            code: err.code,
-            message: err.message,
-            PERMISSION_DENIED: 1,
-            POSITION_UNAVAILABLE: 2,
-            TIMEOUT: 3
-        })
-    }
-
-    window.__kiwixGeolocationResolve = function (id, payload) {
-        const entry = pending.get(id)
-        if (!entry) { return }
-        if (payload && payload.coords) {
-            deliverSuccess(entry.success, payload)
-        } else if (payload && payload.error) {
-            deliverError(entry.error, payload.error)
-        }
-        // One-shot requests are cleaned up after a single delivery; watches
-        // are retained until clearWatch() is called from the page.
-        if (!entry.isWatch) {
-            pending.delete(id)
-        }
-    }
-
-    function getCurrentPosition(success, error, options) {
-        const id = nextId++
-        pending.set(id, { success: success, error: error, isWatch: false })
-        handler.postMessage({
-            type: 'getCurrentPosition',
-            id: id,
-            highAccuracy: !!(options && options.enableHighAccuracy)
-        })
-    }
-
-    function watchPosition(success, error, options) {
-        const id = nextId++
-        pending.set(id, { success: success, error: error, isWatch: true })
-        handler.postMessage({
-            type: 'watchPosition',
-            id: id,
-            highAccuracy: !!(options && options.enableHighAccuracy)
-        })
-        return id
-    }
-
-    function clearWatch(id) {
-        if (!pending.has(id)) { return }
-        pending.delete(id)
-        handler.postMessage({ type: 'clearWatch', id: id })
-    }
-
-    try {
-        Object.defineProperty(navigator, 'geolocation', {
-            configurable: true,
-            value: {
-                getCurrentPosition: getCurrentPosition,
-                watchPosition: watchPosition,
-                clearWatch: clearWatch
-            }
-        })
-    } catch (_) {
-        // Fall through; native navigator.geolocation remains in place.
-    }
-})();
 
 function fixVideoElements() {
 

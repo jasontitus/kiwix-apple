@@ -13,15 +13,21 @@
 // You should have received a copy of the GNU General Public License
 // along with Kiwix; If not, see https://www.gnu.org/licenses/.
 
-import SwiftUI
 import Combine
+import CoreData
 import Defaults
+import SwiftUI
 
 /// Displays a grid of available local ZIM files. Used on new tab.
 struct LocalLibraryList: View {
+    #if os(iOS)
+    private let donationPromo = DonationPromo.shared
+    #endif
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     private let load: (URL) -> Void
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \Bookmark.created, ascending: false)],
+        predicate: NSPredicate(format: "zimFile.isMissing == false"),
         animation: .easeInOut
     ) private var bookmarks: FetchedResults<Bookmark>
     @FetchRequest(
@@ -40,6 +46,7 @@ struct LocalLibraryList: View {
             alignment: .leading,
             spacing: 12
         ) {
+            
             GridSection(title: LocalString.welcome_main_page_title) {
                 ForEach(zimFiles, id: \.fileID) { zimFile in
                     AsyncButtonView {
@@ -47,12 +54,27 @@ struct LocalLibraryList: View {
                             .getMainPageURL(zimFileID: zimFile.fileID) else { return }
                         load(url)
                     } label: {
-                        ZimFileCell(zimFile, prominent: .name, isSelected: false)
+                        ZimFileCell(zimFile, isSelected: false)
                     } loading: {
-                        ZimFileCell(zimFile, prominent: .name, isSelected: true, isLoading: true)
+                        ZimFileCell(zimFile, isSelected: true, isLoading: true)
                     }
                     .buttonStyle(.plain)
                 }
+#if os(iOS)
+                if donationPromo.showCell(), horizontalSizeClass == .compact {
+                    VStack {
+                        AsyncButtonView {
+                            NotificationCenter.default.post(name: .openDonations, object: nil, userInfo: nil)
+                        } label: {
+                            DonationCell(isLoading: false)
+                        } loading: {
+                            DonationCell(isLoading: true)
+                        }
+                        Spacer()
+                    }
+                }
+#endif
+
             }
             if !bookmarks.isEmpty {
                 GridSection(title: LocalString.welcome_grid_bookmarks_title) {
