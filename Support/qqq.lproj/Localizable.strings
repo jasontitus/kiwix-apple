@@ -343,3 +343,37 @@
 "geolocation_error.permission_denied" = "Error message returned to a ZIM web page when the user has denied geolocation permission.";
 "geolocation_error.position_unavailable" = "Error message returned to a ZIM web page when CoreLocation reports the location is unavailable (e.g. no satellites).";
 "geolocation_error.timeout" = "Error message returned to a ZIM web page when a geolocation request times out.";
+
+/* Offline map composition */
+"maps.category" = "Category title for composing and downloading offline maps.";
+"maps.heading" = "Heading in the offline map discovery form.";
+"maps.introduction" = "Description of the map download flow. Compose means combine shared map data with language-specific files.";
+"maps.loading" = "Progress message while retrieving the map catalog.";
+"maps.empty" = "Message when the map catalog contains no available maps.";
+"maps.reload" = "Button to refresh the available map catalog.";
+"maps.region" = "Label of the country/region picker for offline maps.";
+"maps.language" = "Label of the map language picker.";
+"maps.language_hint" = "Explanation of the map language default and override.";
+"maps.size" = "Label before the size of the final map file.";
+"maps.download_size" = "Label before an upper bound on the download size; verified shared parts may be reused.";
+"maps.reuse_hint" = "Explanation of shared map reuse and temporary disk space requirements.";
+"maps.keep_open" = "Instruction during foreground map composition.";
+"maps.cancel" = "Button to cancel composing a map.";
+"maps.download" = "Button to download the selected map and language and compose them on the device.";
+"maps.open" = "Button to open a completed offline map in the Kiwix reader.";
+"maps.clear_parts" = "Button to remove cached shared parts, preserving finished maps.";
+"maps.clear_hint" = "Explanation below the button to clear cached map parts.";
+"maps.preparing" = "Progress message while retrieving and validating the map recipe.";
+"maps.composing" = "Progress message while downloading verified data and writing the final map file.";
+"maps.importing" = "Progress message while importing a completed map.";
+"maps.completed" = "Success message after verification and import.";
+"maps.cancelled" = "Message after canceling a map download.";
+"maps.cleared" = "Confirmation after clearing cached shared parts.";
+"maps.error_catalog" = "Error when the server cannot provide the available map catalog.";
+"maps.error_recipe" = "Error for an unsupported or malformed map composition recipe.";
+"maps.error_response" = "Error when a server ignores a byte range or sends unexpected data.";
+"maps.error_integrity" = "Error when a source hash or final checksum does not match.";
+"maps.error_space" = "Error when map assembly requires more free disk space.";
+"maps.error_import" = "Error after the verified map is saved but library import fails.";
+"maps.progress" = "Progress of map composition: %1$@ is bytes written (e.g. 12 MB), %2$@ is total file size (e.g. 350 MB).";
+"maps.existing" = "Message when the selected map version is already installed; the reader can open it without downloading another copy.";

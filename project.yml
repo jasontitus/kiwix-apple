@@ -36,6 +36,8 @@ settings:
     APP_STORE_ID: $(APP_STORE_ID)
     INFOPLIST_KEY_UILaunchScreen_Generation: YES
     SWIFT_VERSION: 6
+    STREETZIM_CATALOG_URL: https://streetzim.web.app/build/recipes/index.json
+    STREETZIM_PROXY_URL: https://streetzim-preview-proxy.tiltastech.workers.dev
 
   configs:
     debug:

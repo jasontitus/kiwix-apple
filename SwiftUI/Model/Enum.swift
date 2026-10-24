@@ -52,6 +52,7 @@ enum Category: String, CaseIterable, Identifiable, LosslessStringConvertible, Ha
     case wiktionary
     case vikidia
     case ted
+    case maps
     case stackExchange = "stack_exchange"
     case other
 
@@ -87,6 +88,8 @@ enum Category: String, CaseIterable, Identifiable, LosslessStringConvertible, Ha
             return LocalString.enum_category_vikidia
         case .stackExchange:
             return LocalString.enum_category_stackexchange
+        case .maps:
+            return LocalString.maps_category
         case .other:
             return LocalString.enum_category_other
         }
@@ -116,6 +119,8 @@ enum Category: String, CaseIterable, Identifiable, LosslessStringConvertible, Ha
             return "Vikidia"
         case .stackExchange:
             return "StackExchange"
+        case .maps:
+            return "map"
         case .other:
             return "Other"
         }
