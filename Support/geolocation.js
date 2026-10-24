@@ -88,7 +88,7 @@
     }
 
     function clearWatch(id) {
-        pending = pending.filter((entry) => { entry.id !== id });
+        pending = pending.filter((entry) => entry.id !== id);
         handler.postMessage({ type: "clearWatch", id: id });
     }
 
