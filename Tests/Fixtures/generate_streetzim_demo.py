@@ -70,6 +70,10 @@ def main():
 <a href="index.html">Back to map</a>
 """))
         creator.set_mainpath("index.html")
+    write_catalog(output)
+
+
+def write_catalog(output):
     with output.open("rb") as archive:
         archive.seek(-16, 2)
         checksum = archive.read(16).hex()
@@ -77,17 +81,22 @@ def main():
     catalog = {
         "format": "streetzim-build-index/1",
         "regions": [{
-            "id": "testland", "title": "Testland",
+            "id": identifier, "title": title,
             "base": {
                 "file": output.name, "size": size,
                 "download": "https://streetzim-test.invalid/base.zim",
             },
             "menu": [{
-                "lang": code, "label": label, "name": "osm_" + code + "_testland",
-                "recipe": "recipes/testland/" + code + ".json",
+                "lang": code, "label": label, "name": "osm_" + code + "_" + identifier,
+                "recipe": "recipes/" + identifier + "/" + code + ".json",
                 "size": size, "download_bytes": 0, "md5": checksum,
             } for code, label in [("en", "English"), ("fr", "Français")]],
-        }],
+        } for identifier, title in [
+            ("testland", "Testland"),
+            ("washington-dc", "Washington, D.C."),
+            ("iceland", "Iceland"),
+            ("baltics", "Baltics"),
+        ]],
     }
     output.with_name("streetzim-demo-index.json").write_text(
         json.dumps(catalog, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"

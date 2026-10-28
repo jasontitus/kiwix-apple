@@ -352,7 +352,11 @@
 "maps.loading" = "Nalaganje zemljevidov…";
 "maps.empty" = "Zemljevidi še niso na voljo. Poskusite znova pozneje.";
 "maps.reload" = "Znova naloži zemljevide";
-"maps.region" = "Država ali regija";
+"maps.region" = "Območje zemljevida";
+"maps.areas.local" = "Mesta in lokalna območja";
+"maps.areas.countries" = "Države";
+"maps.areas.regions" = "Regije in celine";
+"maps.areas.other" = "Druga območja";
 "maps.language" = "Jezik";
 "maps.local_languages" = "Lokalni jeziki";
 "maps.other_languages" = "Drugi jeziki";

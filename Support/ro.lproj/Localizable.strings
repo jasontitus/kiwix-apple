@@ -288,7 +288,11 @@
 "maps.loading" = "Se încarcă hărțile…";
 "maps.empty" = "Nu există încă hărți disponibile. Încercați din nou mai târziu.";
 "maps.reload" = "Reîncărcați hărțile";
-"maps.region" = "Țară sau regiune";
+"maps.region" = "Zona hărții";
+"maps.areas.local" = "Orașe și zone locale";
+"maps.areas.countries" = "Țări";
+"maps.areas.regions" = "Regiuni și continente";
+"maps.areas.other" = "Alte zone";
 "maps.language" = "Limbă";
 "maps.local_languages" = "Limbi locale";
 "maps.other_languages" = "Alte limbi";

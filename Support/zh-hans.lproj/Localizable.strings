@@ -360,7 +360,11 @@
 "maps.loading" = "正在加载地图…";
 "maps.empty" = "暂无可用地图。请稍后重试。";
 "maps.reload" = "重新加载地图";
-"maps.region" = "国家或地区";
+"maps.region" = "地图区域";
+"maps.areas.local" = "城市和本地区域";
+"maps.areas.countries" = "国家";
+"maps.areas.regions" = "地区和大洲";
+"maps.areas.other" = "其他区域";
 "maps.language" = "语言";
 "maps.local_languages" = "本地语言";
 "maps.other_languages" = "其他语言";

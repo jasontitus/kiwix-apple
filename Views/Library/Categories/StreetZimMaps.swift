@@ -9,6 +9,7 @@ struct StreetZimMaps: View {
     @ObservedObject private var model = StreetZimViewModel.shared
     @Environment(\.locale) private var locale
     @Default(.downloadUsingCellular) private var downloadUsingCellular
+    @State private var isAreaPickerPresented = false
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \ZimFile.name, ascending: true)],
         predicate: ZimFile.downloadedMapsPredicate(),
@@ -16,10 +17,6 @@ struct StreetZimMaps: View {
     ) private var downloadedMaps: FetchedResults<ZimFile>
     let searchText: String
     let dismiss: (() -> Void)?
-
-    private var matchingRegions: [StreetZimCatalog.Region] {
-        model.regions.filter { searchText.isEmpty || $0.title.localizedStandardContains(searchText) }
-    }
 
     var body: some View {
         Form {
@@ -51,15 +48,20 @@ struct StreetZimMaps: View {
                 }
             } else {
                 Section {
-                    Picker(LocalString.maps_region, selection: $model.regionID) {
-                        // Preserve the current selection while narrowing the list.
-                        if let selected = model.region, !matchingRegions.contains(where: { $0.id == selected.id }) {
-                            Text(selected.title).tag(selected.id)
+                    Button {
+                        isAreaPickerPresented = true
+                    } label: {
+                        LabeledContent(LocalString.maps_region) {
+                            HStack {
+                                Text(model.region?.title ?? "")
+                                Image(systemName: "chevron.up.chevron.down")
+                                    .font(.caption)
+                            }
+                            .foregroundStyle(.secondary)
                         }
-                        ForEach(matchingRegions) { region in
-                            Text(region.title).tag(region.id)
-                        }
+                        .contentShape(Rectangle())
                     }
+                    .buttonStyle(.plain)
                     .accessibilityIdentifier("streetzim_region")
                     .onChange(of: model.regionID) { model.selectLanguage() }
                     Picker(LocalString.maps_language, selection: Binding(
@@ -133,6 +135,9 @@ struct StreetZimMaps: View {
         }
         .formStyle(.grouped)
         .task { if model.regions.isEmpty { await model.load() } }
+        .sheet(isPresented: $isAreaPickerPresented) {
+            StreetZimAreaPicker(regions: model.regions, selection: $model.regionID, initialQuery: searchText)
+        }
     }
     private func openMap(_ fileID: UUID) async {
         guard let url = await ZimFileService.shared.getMainPageURL(zimFileID: fileID) else { return }

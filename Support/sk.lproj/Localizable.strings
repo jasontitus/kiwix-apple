@@ -356,7 +356,11 @@
 "maps.loading" = "Načítavajú sa mapy…";
 "maps.empty" = "Zatiaľ nie sú dostupné žiadne mapy. Skúste to neskôr.";
 "maps.reload" = "Znova načítať mapy";
-"maps.region" = "Krajina alebo región";
+"maps.region" = "Oblasť mapy";
+"maps.areas.local" = "Mestá a miestne oblasti";
+"maps.areas.countries" = "Krajiny";
+"maps.areas.regions" = "Regióny a kontinenty";
+"maps.areas.other" = "Ostatné oblasti";
 "maps.language" = "Jazyk";
 "maps.local_languages" = "Miestne jazyky";
 "maps.other_languages" = "Ostatné jazyky";

@@ -401,7 +401,11 @@
 "maps.loading" = "Loading maps…";
 "maps.empty" = "No maps are available yet. Please try again later.";
 "maps.reload" = "Reload maps";
-"maps.region" = "Country or region";
+"maps.region" = "Map area";
+"maps.areas.local" = "Cities & local areas";
+"maps.areas.countries" = "Countries";
+"maps.areas.regions" = "Regions & continents";
+"maps.areas.other" = "Other areas";
 "maps.language" = "Language";
 "maps.local_languages" = "Local languages";
 "maps.other_languages" = "Other languages";

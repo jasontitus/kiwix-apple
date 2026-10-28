@@ -331,7 +331,11 @@
 "maps.loading" = "Cargamento del cartas…";
 "maps.empty" = "Nulle carta es ancora disponibile. Per favor, reproba plus tarde.";
 "maps.reload" = "Recargar le cartas";
-"maps.region" = "Pais o region";
+"maps.region" = "Area del carta";
+"maps.areas.local" = "Citates e areas local";
+"maps.areas.countries" = "Paises";
+"maps.areas.regions" = "Regiones e continentes";
+"maps.areas.other" = "Altere areas";
 "maps.language" = "Lingua";
 "maps.local_languages" = "Linguas local";
 "maps.other_languages" = "Altere linguas";

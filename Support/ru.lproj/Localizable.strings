@@ -285,7 +285,11 @@
 "maps.loading" = "Загрузка списка карт…";
 "maps.empty" = "Пока нет доступных карт. Повторите попытку позже.";
 "maps.reload" = "Обновить список карт";
-"maps.region" = "Страна или регион";
+"maps.region" = "Область карты";
+"maps.areas.local" = "Города и местные территории";
+"maps.areas.countries" = "Страны";
+"maps.areas.regions" = "Регионы и континенты";
+"maps.areas.other" = "Другие территории";
 "maps.language" = "Язык";
 "maps.local_languages" = "Местные языки";
 "maps.other_languages" = "Другие языки";

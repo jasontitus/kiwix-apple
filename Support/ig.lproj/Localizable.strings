@@ -236,7 +236,11 @@
 "maps.loading" = "Na-ebugo maapụ…";
 "maps.empty" = "Enweghị maapụ dị ugbu a. Biko nwaa ọzọ ma emechaa.";
 "maps.reload" = "Bugharịa maapụ ọzọ";
-"maps.region" = "Obodo ma ọ bụ mpaghara";
+"maps.region" = "Mpaghara maapụ";
+"maps.areas.local" = "Obodo ukwu na mpaghara dị nso";
+"maps.areas.countries" = "Mba";
+"maps.areas.regions" = "Mpaghara na kọntinent";
+"maps.areas.other" = "Mpaghara ndị ọzọ";
 "maps.language" = "Asụsụ";
 "maps.local_languages" = "Asụsụ mpaghara";
 "maps.other_languages" = "Asụsụ ndị ọzọ";

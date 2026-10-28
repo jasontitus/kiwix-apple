@@ -291,7 +291,11 @@
 "maps.loading" = "Завантаження списку мап…";
 "maps.empty" = "Доступних мап поки немає. Спробуйте пізніше.";
 "maps.reload" = "Оновити список мап";
-"maps.region" = "Країна або регіон";
+"maps.region" = "Область мапи";
+"maps.areas.local" = "Міста й місцеві території";
+"maps.areas.countries" = "Країни";
+"maps.areas.regions" = "Регіони й континенти";
+"maps.areas.other" = "Інші території";
 "maps.language" = "Мова";
 "maps.local_languages" = "Місцеві мови";
 "maps.other_languages" = "Інші мови";

@@ -1,7 +1,7 @@
 // This file is part of Kiwix for iOS & macOS.
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#if DEBUG && os(iOS)
+#if DEBUG
 import Foundation
 
 @MainActor
@@ -20,10 +20,14 @@ enum StreetZimUITestSupport {
         // and deleting the map cannot silently seed it again.
         let marker = directory.appendingPathComponent("fixture-seeded")
         guard !FileManager.default.fileExists(atPath: marker.path) else { return }
+        #if os(macOS)
+        let file = directory.appendingPathComponent("streetzim-ui-test.zim")
+        #else
         let documents = try FileManager.default.url(
             for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true
         )
         let file = documents.appendingPathComponent("streetzim-ui-test-\(directory.lastPathComponent).zim")
+        #endif
         if !FileManager.default.fileExists(atPath: file.path) {
             try FileManager.default.copyItem(at: archive, to: file)
         }

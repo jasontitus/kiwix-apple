@@ -145,7 +145,11 @@
 "maps.loading" = "نقشے لوڈ تھیندے پئے ہن…";
 "maps.empty" = "اڄݨ کوئی نقشے دستیاب کائنی۔ مہربانی کر کے بعد وچ ولدا کوشش کرو۔";
 "maps.reload" = "نقشے ولدا لوڈ کرو";
-"maps.region" = "ملک یا علاقہ";
+"maps.region" = "نقشے دا علاقہ";
+"maps.areas.local" = "شہر تے مقامی علاقے";
+"maps.areas.countries" = "ملک";
+"maps.areas.regions" = "خطے تے براعظم";
+"maps.areas.other" = "ٻئے علاقے";
 "maps.language" = "زبان";
 "maps.local_languages" = "مقامی زباناں";
 "maps.other_languages" = "ٻیاں زباناں";

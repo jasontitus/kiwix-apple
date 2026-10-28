@@ -368,7 +368,11 @@
 "maps.loading" = "Chargement des cartes…";
 "maps.empty" = "Aucune carte n’est encore disponible. Veuillez réessayer plus tard.";
 "maps.reload" = "Recharger les cartes";
-"maps.region" = "Pays ou région";
+"maps.region" = "Zone de la carte";
+"maps.areas.local" = "Villes et zones locales";
+"maps.areas.countries" = "Pays";
+"maps.areas.regions" = "Régions et continents";
+"maps.areas.other" = "Autres zones";
 "maps.language" = "Langue";
 "maps.local_languages" = "Langues locales";
 "maps.other_languages" = "Autres langues";

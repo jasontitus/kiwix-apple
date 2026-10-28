@@ -230,7 +230,11 @@
 "maps.loading" = "Po ngarkohen hartat…";
 "maps.empty" = "Ende s’ka harta të gatshme. Ju lutemi, riprovoni më vonë.";
 "maps.reload" = "Ringarko hartat";
-"maps.region" = "Shtet ose rajon";
+"maps.region" = "Zona e hartës";
+"maps.areas.local" = "Qytete dhe zona vendore";
+"maps.areas.countries" = "Shtete";
+"maps.areas.regions" = "Rajone dhe kontinente";
+"maps.areas.other" = "Zona të tjera";
 "maps.language" = "Gjuhë";
 "maps.local_languages" = "Gjuhët vendore";
 "maps.other_languages" = "Gjuhët e tjera";

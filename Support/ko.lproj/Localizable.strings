@@ -351,7 +351,11 @@
 "maps.loading" = "지도 불러오는 중…";
 "maps.empty" = "아직 사용할 수 있는 지도가 없습니다. 나중에 다시 시도하세요.";
 "maps.reload" = "지도 새로고침";
-"maps.region" = "국가 또는 지역";
+"maps.region" = "지도 영역";
+"maps.areas.local" = "도시 및 현지 지역";
+"maps.areas.countries" = "국가";
+"maps.areas.regions" = "광역 지역 및 대륙";
+"maps.areas.other" = "기타 지역";
 "maps.language" = "언어";
 "maps.local_languages" = "현지 언어";
 "maps.other_languages" = "기타 언어";

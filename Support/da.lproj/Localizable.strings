@@ -319,7 +319,11 @@
 "maps.loading" = "Indlæser kort…";
 "maps.empty" = "Der er ingen kort tilgængelige endnu. Prøv igen senere.";
 "maps.reload" = "Genindlæs kort";
-"maps.region" = "Land eller region";
+"maps.region" = "Kortområde";
+"maps.areas.local" = "Byer og lokalområder";
+"maps.areas.countries" = "Lande";
+"maps.areas.regions" = "Regioner og kontinenter";
+"maps.areas.other" = "Andre områder";
 "maps.language" = "Sprog";
 "maps.local_languages" = "Lokale sprog";
 "maps.other_languages" = "Andre sprog";

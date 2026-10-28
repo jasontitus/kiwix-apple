@@ -210,7 +210,11 @@
 "maps.loading" = "Ladataan karttoja…";
 "maps.empty" = "Karttoja ei ole vielä saatavilla. Yritä myöhemmin uudelleen.";
 "maps.reload" = "Lataa kartat uudelleen";
-"maps.region" = "Maa tai alue";
+"maps.region" = "Kartta-alue";
+"maps.areas.local" = "Kaupungit ja paikallisalueet";
+"maps.areas.countries" = "Maat";
+"maps.areas.regions" = "Alueet ja maanosat";
+"maps.areas.other" = "Muut alueet";
 "maps.language" = "Kieli";
 "maps.local_languages" = "Paikalliset kielet";
 "maps.other_languages" = "Muut kielet";

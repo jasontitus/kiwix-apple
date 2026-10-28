@@ -355,7 +355,11 @@
 "maps.loading" = "Läser in kartor…";
 "maps.empty" = "Inga kartor är tillgängliga ännu. Försök igen senare.";
 "maps.reload" = "Läs in kartor igen";
-"maps.region" = "Land eller region";
+"maps.region" = "Kartområde";
+"maps.areas.local" = "Städer och lokala områden";
+"maps.areas.countries" = "Länder";
+"maps.areas.regions" = "Regioner och kontinenter";
+"maps.areas.other" = "Andra områden";
 "maps.language" = "Språk";
 "maps.local_languages" = "Lokala språk";
 "maps.other_languages" = "Andra språk";

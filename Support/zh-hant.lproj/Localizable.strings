@@ -354,7 +354,11 @@
 "maps.loading" = "正在載入地圖…";
 "maps.empty" = "目前沒有可用的地圖。請稍後再試。";
 "maps.reload" = "重新載入地圖";
-"maps.region" = "國家或地區";
+"maps.region" = "地圖區域";
+"maps.areas.local" = "城市和本地區域";
+"maps.areas.countries" = "國家";
+"maps.areas.regions" = "地區和洲";
+"maps.areas.other" = "其他區域";
 "maps.language" = "語言";
 "maps.local_languages" = "本地語言";
 "maps.other_languages" = "其他語言";

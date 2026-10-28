@@ -146,7 +146,11 @@
 "maps.loading" = "نقشې بارېږي…";
 "maps.empty" = "تر اوسه هېڅ نقشه نشته. مهرباني وکړئ وروسته بیا هڅه وکړئ.";
 "maps.reload" = "نقشې بیا بارول";
-"maps.region" = "هېواد یا سیمه";
+"maps.region" = "د نقشې سیمه";
+"maps.areas.local" = "ښارونه او ځايي سیمې";
+"maps.areas.countries" = "هېوادونه";
+"maps.areas.regions" = "سیمې او لویې وچې";
+"maps.areas.other" = "نورې سیمې";
 "maps.language" = "ژبه";
 "maps.local_languages" = "ځايي ژبې";
 "maps.other_languages" = "نورې ژبې";

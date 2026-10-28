@@ -295,7 +295,11 @@
 "maps.loading" = "Memuat peta…";
 "maps.empty" = "Belum ada peta yang tersedia. Silakan coba lagi nanti.";
 "maps.reload" = "Muat ulang peta";
-"maps.region" = "Negara atau wilayah";
+"maps.region" = "Wilayah peta";
+"maps.areas.local" = "Kota dan wilayah lokal";
+"maps.areas.countries" = "Negara";
+"maps.areas.regions" = "Kawasan dan benua";
+"maps.areas.other" = "Wilayah lainnya";
 "maps.language" = "Bahasa";
 "maps.local_languages" = "Bahasa lokal";
 "maps.other_languages" = "Bahasa lainnya";

@@ -164,7 +164,11 @@
 "maps.loading" = "ਨਕਸ਼ੇ ਲੋਡ ਹੋ ਰਹੇ ਹਨ…";
 "maps.empty" = "ਹਾਲੇ ਕੋਈ ਨਕਸ਼ੇ ਉਪਲਬਧ ਨਹੀਂ ਹਨ। ਕਿਰਪਾ ਕਰਕੇ ਬਾਅਦ ਵਿੱਚ ਫਿਰ ਕੋਸ਼ਿਸ਼ ਕਰੋ।";
 "maps.reload" = "ਨਕਸ਼ੇ ਮੁੜ ਲੋਡ ਕਰੋ";
-"maps.region" = "ਦੇਸ਼ ਜਾਂ ਖੇਤਰ";
+"maps.region" = "ਨਕਸ਼ੇ ਦਾ ਖੇਤਰ";
+"maps.areas.local" = "ਸ਼ਹਿਰ ਅਤੇ ਸਥਾਨਕ ਖੇਤਰ";
+"maps.areas.countries" = "ਦੇਸ਼";
+"maps.areas.regions" = "ਖੇਤਰ ਅਤੇ ਮਹਾਂਦੀਪ";
+"maps.areas.other" = "ਹੋਰ ਖੇਤਰ";
 "maps.language" = "ਬੋਲੀ";
 "maps.local_languages" = "ਸਥਾਨਕ ਬੋਲੀਆਂ";
 "maps.other_languages" = "ਹੋਰ ਬੋਲੀਆਂ";

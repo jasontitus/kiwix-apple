@@ -29,6 +29,93 @@
           "md5": "eb0a5756543378ff074f94e30dcb0859"
         }
       ]
+    },
+    {
+      "id": "washington-dc",
+      "title": "Washington, D.C.",
+      "base": {
+        "file": "streetzim-demo.zim",
+        "size": 36196,
+        "download": "https://streetzim-test.invalid/base.zim"
+      },
+      "menu": [
+        {
+          "lang": "en",
+          "label": "English",
+          "name": "osm_en_washington-dc",
+          "recipe": "recipes/washington-dc/en.json",
+          "size": 36196,
+          "download_bytes": 0,
+          "md5": "eb0a5756543378ff074f94e30dcb0859"
+        },
+        {
+          "lang": "fr",
+          "label": "Français",
+          "name": "osm_fr_washington-dc",
+          "recipe": "recipes/washington-dc/fr.json",
+          "size": 36196,
+          "download_bytes": 0,
+          "md5": "eb0a5756543378ff074f94e30dcb0859"
+        }
+      ]
+    },
+    {
+      "id": "iceland",
+      "title": "Iceland",
+      "base": {
+        "file": "streetzim-demo.zim",
+        "size": 36196,
+        "download": "https://streetzim-test.invalid/base.zim"
+      },
+      "menu": [
+        {
+          "lang": "en",
+          "label": "English",
+          "name": "osm_en_iceland",
+          "recipe": "recipes/iceland/en.json",
+          "size": 36196,
+          "download_bytes": 0,
+          "md5": "eb0a5756543378ff074f94e30dcb0859"
+        },
+        {
+          "lang": "fr",
+          "label": "Français",
+          "name": "osm_fr_iceland",
+          "recipe": "recipes/iceland/fr.json",
+          "size": 36196,
+          "download_bytes": 0,
+          "md5": "eb0a5756543378ff074f94e30dcb0859"
+        }
+      ]
+    },
+    {
+      "id": "baltics",
+      "title": "Baltics",
+      "base": {
+        "file": "streetzim-demo.zim",
+        "size": 36196,
+        "download": "https://streetzim-test.invalid/base.zim"
+      },
+      "menu": [
+        {
+          "lang": "en",
+          "label": "English",
+          "name": "osm_en_baltics",
+          "recipe": "recipes/baltics/en.json",
+          "size": 36196,
+          "download_bytes": 0,
+          "md5": "eb0a5756543378ff074f94e30dcb0859"
+        },
+        {
+          "lang": "fr",
+          "label": "Français",
+          "name": "osm_fr_baltics",
+          "recipe": "recipes/baltics/fr.json",
+          "size": 36196,
+          "download_bytes": 0,
+          "md5": "eb0a5756543378ff074f94e30dcb0859"
+        }
+      ]
     }
   ]
 }

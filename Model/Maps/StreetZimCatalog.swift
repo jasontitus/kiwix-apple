@@ -26,6 +26,77 @@ struct StreetZimCatalog: Decodable, Sendable {
         }
     }
 
+    enum AreaGroup: String, CaseIterable, Identifiable, Sendable, Decodable {
+        case local
+        case country
+        case region
+        case other
+
+        var id: Self { self }
+
+        var title: String {
+            switch self {
+            case .local: return LocalString.maps_areas_local
+            case .country: return LocalString.maps_areas_countries
+            case .region: return LocalString.maps_areas_regions
+            case .other: return LocalString.maps_areas_other
+            }
+        }
+
+        var systemImage: String {
+            switch self {
+            case .local: return "building.2"
+            case .country: return "flag"
+            case .region: return "globe"
+            case .other: return "map"
+            }
+        }
+    }
+
+    struct AreaSection: Identifiable, Sendable {
+        let group: AreaGroup
+        let regions: [Region]
+        var id: AreaGroup { group }
+    }
+
+    // Explicit geographic categories, not StreetZim's build-size tiers.
+    // Unrecognized catalog IDs remain available in Other areas.
+    private static let areaGroups: [String: AreaGroup] = {
+        guard let url = Bundle.main.url(forResource: "StreetZimAreaGroups", withExtension: "plist"),
+              let data = try? Data(contentsOf: url),
+              let groups = try? PropertyListDecoder().decode([String: AreaGroup].self, from: data) else {
+            return [:]
+        }
+        return groups
+    }()
+
+    static func areaSections(in regions: [Region], matching query: String = "",
+                             locale: Locale = .current) -> [AreaSection] {
+        let query = query.trimmingCharacters(in: .whitespacesAndNewlines)
+            .replacingOccurrences(of: "-", with: " ")
+        var grouped: [AreaGroup: [Region]] = [:]
+        for region in regions {
+            if !query.isEmpty {
+                let options: String.CompareOptions = [.caseInsensitive, .diacriticInsensitive]
+                let title = region.title.replacingOccurrences(of: "-", with: " ")
+                let identifier = region.id.replacingOccurrences(of: "-", with: " ")
+                guard title.range(of: query, options: options, locale: locale) != nil
+                        || identifier.range(of: query, options: options, locale: locale) != nil else {
+                    continue
+                }
+            }
+            grouped[areaGroups[region.id] ?? .other, default: []].append(region)
+        }
+        return AreaGroup.allCases.compactMap { group in
+            guard let entries = grouped[group] else { return nil }
+            let sorted = entries.sorted {
+                let order = $0.title.compare($1.title, options: .caseInsensitive, locale: locale)
+                return order == .orderedSame ? $0.id < $1.id : order == .orderedAscending
+            }
+            return AreaSection(group: group, regions: sorted)
+        }
+    }
+
     struct Region: Decodable, Identifiable, Sendable {
         let id: String
         let title: String

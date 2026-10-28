@@ -351,7 +351,11 @@
 "maps.loading" = "Kaarten laden…";
 "maps.empty" = "Er zijn nog geen kaarten beschikbaar. Probeer het later opnieuw.";
 "maps.reload" = "Kaarten opnieuw laden";
-"maps.region" = "Land of regio";
+"maps.region" = "Kaartgebied";
+"maps.areas.local" = "Steden en lokale gebieden";
+"maps.areas.countries" = "Landen";
+"maps.areas.regions" = "Regio's en continenten";
+"maps.areas.other" = "Overige gebieden";
 "maps.language" = "Taal";
 "maps.local_languages" = "Lokale talen";
 "maps.other_languages" = "Andere talen";

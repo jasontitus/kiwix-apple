@@ -238,7 +238,11 @@
 "maps.loading" = "Caricamento delle mappe…";
 "maps.empty" = "Non ci sono ancora mappe disponibili. Riprova più tardi.";
 "maps.reload" = "Ricarica le mappe";
-"maps.region" = "Paese o regione";
+"maps.region" = "Area della mappa";
+"maps.areas.local" = "Città e aree locali";
+"maps.areas.countries" = "Paesi";
+"maps.areas.regions" = "Regioni e continenti";
+"maps.areas.other" = "Altre aree";
 "maps.language" = "Lingua";
 "maps.local_languages" = "Lingue locali";
 "maps.other_languages" = "Altre lingue";

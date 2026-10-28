@@ -294,7 +294,11 @@
 "maps.loading" = "המפות נטענות…";
 "maps.empty" = "אין עדיין מפות זמינות. נא לנסות שוב מאוחר יותר.";
 "maps.reload" = "טעינת המפות מחדש";
-"maps.region" = "מדינה או אזור";
+"maps.region" = "אזור המפה";
+"maps.areas.local" = "ערים ואזורים מקומיים";
+"maps.areas.countries" = "מדינות";
+"maps.areas.regions" = "אזורים ויבשות";
+"maps.areas.other" = "אזורים אחרים";
 "maps.language" = "שפה";
 "maps.local_languages" = "שפות מקומיות";
 "maps.other_languages" = "שפות אחרות";

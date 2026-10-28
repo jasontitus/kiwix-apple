@@ -353,7 +353,11 @@
 "maps.loading" = "Progress message while retrieving the map catalog.";
 "maps.empty" = "Message when the map catalog contains no available maps.";
 "maps.reload" = "Button to refresh the available map catalog.";
-"maps.region" = "Label of the country/region picker for offline maps.";
+"maps.region" = "Label of the offline map area browser. An area can be a city, local area, country, region or continent.";
+"maps.areas.local" = "Map area browser section heading for cities and local geographic areas, not the user's current location.";
+"maps.areas.countries" = "Map area browser section heading for countries.";
+"maps.areas.regions" = "Map area browser section heading for broad geographic regions and continents.";
+"maps.areas.other" = "Map area browser section heading for areas without a known geographic category; these remain selectable.";
 "maps.language" = "Label of the map language picker.";
 "maps.local_languages" = "Section heading in the map language picker for languages local to the selected country or region, not the user's device location.";
 "maps.other_languages" = "Section heading in the map language picker for the remaining available languages that are not local to the selected country or region.";

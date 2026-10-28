@@ -174,7 +174,11 @@
 "maps.loading" = "O kargañ ar c'hartennoù…";
 "maps.empty" = "N'eus kartenn ebet hegerz c'hoazh. Klaskit en-dro diwezhatoc'h, mar plij.";
 "maps.reload" = "Adkargañ ar c'hartennoù";
-"maps.region" = "Bro pe rannvro";
+"maps.region" = "Takad ar gartenn";
+"maps.areas.local" = "Kêrioù ha takadoù lec'hel";
+"maps.areas.countries" = "Broioù";
+"maps.areas.regions" = "Rannvroioù ha kevandirioù";
+"maps.areas.other" = "Takadoù all";
 "maps.language" = "Yezh";
 "maps.local_languages" = "Yezhoù lec'hel";
 "maps.other_languages" = "Yezhoù all";

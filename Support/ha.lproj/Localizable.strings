@@ -231,7 +231,11 @@
 "maps.loading" = "Ana loda taswirori…";
 "maps.empty" = "Babu taswirori tukuna. Da fatan za a sake gwadawa daga baya.";
 "maps.reload" = "Sake loda taswirori";
-"maps.region" = "Ƙasa ko yanki";
+"maps.region" = "Yankin taswira";
+"maps.areas.local" = "Birane da yankunan gida";
+"maps.areas.countries" = "Ƙasashe";
+"maps.areas.regions" = "Yankuna da nahiyoyi";
+"maps.areas.other" = "Sauran yankuna";
 "maps.language" = "Harshe";
 "maps.local_languages" = "Harsunan gida";
 "maps.other_languages" = "Sauran harsuna";

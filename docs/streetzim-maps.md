@@ -3,10 +3,30 @@
 Open Maps directly from the Library sidebar on macOS and iPad, or the Maps
 tab in the iPhone library sheet. Maps is also available under Categories.
 The map catalog loads independently of the ordinary OPDS book catalog.
-Choose a country or region and a map language. The initial language follows
+Choose a map area and a map language. The initial language follows
 the app's language, then English, then the first language the region offers.
 An explicit choice is preserved when switching regions that offer it.
 Languages in the library's ordinary OPDS filter do not hide multilingual maps.
+
+## Choosing a map area
+
+Open **Map area** to browse **Cities & local areas**, **Countries**, or
+**Regions & continents**. Each group is alphabetical by its displayed titles.
+Search from the first screen to find areas across all groups, or search inside
+a group to narrow its list. Search ignores case and accents and also matches
+catalog IDs with spaces or hyphens.
+
+Selecting an area closes the browser and returns to the language/download
+controls. Cancel leaves the existing selection untouched. Switching areas keeps
+an explicit language choice when the new area offers it; saved maps are unchanged.
+
+`Support/StreetZimAreaGroups.plist` is an explicit geographic snapshot of
+StreetZim's `cloud/regions.tsv` and `cloud/region-variants.tsv`. Build-size tiers
+are not geographic categories: Canada, China, Russia and the United States remain
+countries even though their build tier is `continent`. Variants retain their
+own IDs. The snapshot never adds unavailable downloads, and new/unrecognized IDs
+remain selectable under **Other areas** until the snapshot is updated.
+
 
 ## Languages and translation status
 
@@ -19,9 +39,10 @@ existing English fallback until a reliable translation is available.
 Only the Maps controls carry the machine-translation notice; it makes no claim
 about Kiwix's existing translations. `Support/MapsMachineTranslatedLocales.plist`
 records the unreviewed locales. After a native speaker reviews a Maps translation,
-remove that locale from the list. Kabyle was produced with actual
-`agbalu/Amrouche-1.3B` inference; the remaining new strings are machine-generated,
-not native-speaker approved. Preserve `%@` placeholders when correcting them.
+remove that locale from the list. The initial Kabyle Maps batch used actual
+`agbalu/Amrouche-1.3B` inference; the later area-browser labels and other new
+translations are machine-generated, not native-speaker approved. Preserve `%@`
+placeholders when correcting them.
 
 App-interface language and map-content language are independent. Every language
 the StreetZim catalog offers remains selectable, including languages without a
@@ -212,6 +233,13 @@ after publication, and rebuilding an unreadable installed map while preserving
 its damaged file. `DownloadedMapsTests` uses real SQLite stores and the real
 CoreKiwix importer to cover reopen, deduplication, map filtering, failed saves,
 and preserving unrelated pending edits.
+
+`StreetZimAreaTests` covers geographic classification, unknown IDs, distinct
+variants, locale-aware ordering, accent/case-insensitive search and empty results.
+The small Debug catalog includes representative city, country, larger-region
+and unknown-area entries, with only the real Testland ZIM pre-imported.
+Native picker UI scenarios exercise browsing, cross-group search, cancellation,
+selection and language preservation on iPhone/iPad and macOS.
 
 `Tests/Fixtures/generate_streetzim_demo.py` regenerates the small UI/import fixture
 and its catalog using `python-libzim`. Its content is original GPL-3.0-or-later

@@ -74,7 +74,11 @@
 "maps.loading" = "Kotya bakarte…";
 "maps.empty" = "Bakarte ezali naino te. Meká lisusu na nsima.";
 "maps.reload" = "Kotya bakarte lisusu";
-"maps.region" = "Mboka to etúká";
+"maps.region" = "Etúká ya karte";
+"maps.areas.local" = "Bingumba mpe bitúká ya mboka";
+"maps.areas.countries" = "Bikólo";
+"maps.areas.regions" = "Bitúká mpe bakontina";
+"maps.areas.other" = "Bitúká mosusu";
 "maps.language" = "Lokótá";
 "maps.local_languages" = "Nkótá ya mboka";
 "maps.other_languages" = "Nkótá mosusu";

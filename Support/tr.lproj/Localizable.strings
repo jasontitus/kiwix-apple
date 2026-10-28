@@ -352,7 +352,11 @@
 "maps.loading" = "Haritalar yükleniyor…";
 "maps.empty" = "Henüz kullanılabilir harita yok. Lütfen daha sonra tekrar deneyin.";
 "maps.reload" = "Haritaları yeniden yükle";
-"maps.region" = "Ülke veya bölge";
+"maps.region" = "Harita alanı";
+"maps.areas.local" = "Şehirler ve yerel alanlar";
+"maps.areas.countries" = "Ülkeler";
+"maps.areas.regions" = "Bölgeler ve kıtalar";
+"maps.areas.other" = "Diğer alanlar";
 "maps.language" = "Dil";
 "maps.local_languages" = "Yerel diller";
 "maps.other_languages" = "Diğer diller";

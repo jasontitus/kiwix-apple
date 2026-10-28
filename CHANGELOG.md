@@ -2,6 +2,7 @@
 
 - NEW:
     - Open StreetZim Maps directly from the library sidebar or iPhone library tabs.
+    - Browse map areas by cities/local areas, countries, or larger regions, with search across all groups.
     - Show incoming bytes while each StreetZim map part downloads.
     - Localize native Maps controls in Kiwix's existing app languages, with unreviewed machine translations identified.
     - Let ZIM pages request user-consented camera access through the standard browser getUserMedia API on iOS and macOS.

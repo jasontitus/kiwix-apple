@@ -218,7 +218,11 @@
 "maps.loading" = "Kaarte gi gelueden…";
 "maps.empty" = "Et sinn nach keng Kaarte verfügbar. Probéiert et wgl. méi spéit nach eng Kéier.";
 "maps.reload" = "Kaarten nei lueden";
-"maps.region" = "Land oder Regioun";
+"maps.region" = "Kaartegebitt";
+"maps.areas.local" = "Stied a lokal Gebidder";
+"maps.areas.countries" = "Länner";
+"maps.areas.regions" = "Regiounen a Kontinenter";
+"maps.areas.other" = "Aner Gebidder";
 "maps.language" = "Sprooch";
 "maps.local_languages" = "Lokal Sproochen";
 "maps.other_languages" = "Aner Sproochen";

@@ -272,7 +272,11 @@
 "maps.loading" = "地図を読み込み中…";
 "maps.empty" = "利用できる地図はまだありません。後でもう一度お試しください。";
 "maps.reload" = "地図を再読み込み";
-"maps.region" = "国または地域";
+"maps.region" = "地図の範囲";
+"maps.areas.local" = "都市と周辺地域";
+"maps.areas.countries" = "国";
+"maps.areas.regions" = "広域地域と大陸";
+"maps.areas.other" = "その他の地域";
 "maps.language" = "言語";
 "maps.local_languages" = "現地の言語";
 "maps.other_languages" = "その他の言語";

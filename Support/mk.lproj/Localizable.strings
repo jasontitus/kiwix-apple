@@ -291,7 +291,11 @@
 "maps.loading" = "Вчитување карти…";
 "maps.empty" = "Сè уште нема достапни карти. Обидете се повторно подоцна.";
 "maps.reload" = "Превчитај карти";
-"maps.region" = "Земја или регион";
+"maps.region" = "Област на картата";
+"maps.areas.local" = "Градови и локални области";
+"maps.areas.countries" = "Земји";
+"maps.areas.regions" = "Региони и континенти";
+"maps.areas.other" = "Други области";
 "maps.language" = "Јазик";
 "maps.local_languages" = "Локални јазици";
 "maps.other_languages" = "Други јазици";

@@ -134,7 +134,11 @@
 "maps.loading" = "मानचित्र लोड हो रहे हैं…";
 "maps.empty" = "अभी कोई मानचित्र उपलब्ध नहीं है। कृपया बाद में फिर कोशिश करें।";
 "maps.reload" = "मानचित्र फिर लोड करें";
-"maps.region" = "देश या क्षेत्र";
+"maps.region" = "मानचित्र क्षेत्र";
+"maps.areas.local" = "शहर और स्थानीय क्षेत्र";
+"maps.areas.countries" = "देश";
+"maps.areas.regions" = "क्षेत्र और महाद्वीप";
+"maps.areas.other" = "अन्य क्षेत्र";
 "maps.language" = "भाषा";
 "maps.local_languages" = "स्थानीय भाषाएँ";
 "maps.other_languages" = "अन्य भाषाएँ";

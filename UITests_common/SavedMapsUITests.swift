@@ -66,6 +66,70 @@ final class SavedMapsUITests: XCTestCase {
         XCTAssertFalse(map.waitForExistence(timeout: 2))
     }
 
+    func testAreaBrowserGroupsSearchAndCancellationPreserveLanguage() throws {
+        continueAfterFailure = false
+        XCUIDevice.shared.orientation = isPad ? .landscapeLeft : .portrait
+        let app = XCUIApplication()
+        app.launchArguments = [
+            "testing", "-streetzim-ui-test-store", UUID().uuidString,
+            "-AppleLanguages", "(en)", "-AppleLocale", "en_US"
+        ]
+        app.launch()
+        navigate(to: "Maps", in: app)
+        let language = app.buttons["streetzim_language"]
+        reveal(language, in: app)
+        language.tap()
+        let french = app.buttons["French (Français)"]
+        XCTAssertTrue(french.waitForExistence(timeout: 5))
+        french.tap()
+
+        let area = app.buttons["streetzim_region"]
+        area.tap()
+        let countries = app.buttons["streetzim_area_group_country"]
+        XCTAssertTrue(countries.waitForExistence(timeout: 5))
+        XCTAssertTrue(app.buttons["streetzim_area_group_local"].exists)
+        XCTAssertTrue(app.buttons["streetzim_area_group_region"].exists)
+        XCTAssertTrue(app.buttons["streetzim_area_group_other"].exists)
+        record(app, name: "Map areas grouped by geographic scope")
+        countries.tap()
+        let iceland = app.buttons["streetzim_area_iceland"]
+        XCTAssertTrue(iceland.waitForExistence(timeout: 5))
+        iceland.tap()
+        XCTAssertTrue(area.label.contains("Iceland"))
+        XCTAssertTrue(language.label.contains("French"))
+
+        area.tap()
+        let cities = app.buttons["streetzim_area_group_local"]
+        XCTAssertTrue(cities.waitForExistence(timeout: 5))
+        cities.tap()
+        XCTAssertTrue(app.buttons["streetzim_area_washington-dc"].waitForExistence(timeout: 5))
+        app.buttons["Cancel"].firstMatch.tap()
+        XCTAssertTrue(area.label.contains("Iceland"))
+
+        area.tap()
+        let search = try XCTUnwrap(app.searchFields.allElementsBoundByIndex.first { $0.isHittable })
+        search.tap()
+        search.typeText("WASHINGTON")
+        let washington = app.buttons["streetzim_area_washington-dc"]
+        XCTAssertTrue(washington.waitForExistence(timeout: 5))
+        XCTAssertFalse(app.buttons["streetzim_area_iceland"].exists)
+        record(app, name: "Search across geographic groups")
+        washington.tap()
+        XCTAssertTrue(area.label.contains("Washington"))
+        XCTAssertTrue(language.label.contains("French"))
+        XCTAssertTrue(savedMap(in: app).label.contains("English"))
+
+        area.tap()
+        let other = app.buttons["streetzim_area_group_other"]
+        XCTAssertTrue(other.waitForExistence(timeout: 5))
+        other.tap()
+        let unknown = app.buttons["streetzim_area_testland"]
+        XCTAssertTrue(unknown.waitForExistence(timeout: 5))
+        unknown.tap()
+        XCTAssertTrue(area.label.contains("Testland"))
+        XCTAssertTrue(language.label.contains("French"))
+    }
+
     private var isPad: Bool { UIDevice.current.userInterfaceIdiom == .pad }
 
     private func savedMap(in app: XCUIApplication) -> XCUIElement {
