@@ -1,6 +1,7 @@
 AppStore/screenshots
 CoreKiwix.xcframework
 *.zim
+!Tests/Fixtures/streetzim-demo.zim
 
 # Xcode
 #
@@ -85,5 +86,6 @@ Brewfile_CI.lock.json
 
 # Generated localization swift file:
 Support/LocalString.swift
+
 # Local sideload signing helper (Apple Pay/IAP stripped for personal dev cert)
 Support/Kiwix-dev.entitlements

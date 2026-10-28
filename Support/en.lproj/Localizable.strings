@@ -146,7 +146,7 @@
 
 "zim_file_catalog.fetching.message" = "Fetching Catalog ...";
 "zim_file_category.section.empty.message" = "No ZIM file under this category.";
-"zim_file_downloads.overlay.empty.message" = "No download tasks";
+"zim_file_downloads.overlay.empty.message" = "No downloads";
 
 "zim_file_new_overlay.empty" = "No new ZIM file";
 "zim_file_new.button.refresh" = "Refresh";
@@ -391,3 +391,40 @@
 "geolocation_error.permission_denied" = "User denied geolocation permission.";
 "geolocation_error.position_unavailable" = "Location is unavailable.";
 "geolocation_error.timeout" = "Location request timed out.";
+
+/* Offline map composition */
+"maps.category" = "Maps";
+"maps.heading" = "Offline maps";
+"maps.translation_notice" = "Map controls translated by machine — corrections welcome.";
+"maps.downloaded" = "Downloaded maps";
+"maps.introduction" = "Choose a country or region and a language. Kiwix composes the map on your device, with Wikipedia and search in that language.";
+"maps.loading" = "Loading maps…";
+"maps.empty" = "No maps are available yet. Please try again later.";
+"maps.reload" = "Reload maps";
+"maps.region" = "Country or region";
+"maps.language" = "Language";
+"maps.local_languages" = "Local languages";
+"maps.other_languages" = "Other languages";
+"maps.language_hint" = "The language starts with your app language when available. You can choose another language for each map.";
+"maps.size" = "Map size";
+"maps.keep_open" = "Keep Kiwix open while the map is being composed.";
+"maps.cancel" = "Cancel";
+"maps.download" = "Download map";
+"maps.open" = "Open map";
+"maps.clear_parts" = "Clear downloaded map parts";
+"maps.clear_hint" = "Finished maps stay in your library. Parts can be downloaded again when needed.";
+"maps.preparing" = "Preparing map…";
+"maps.composing" = "Downloading and composing map…";
+"maps.importing" = "Adding map to library…";
+"maps.completed" = "Map verified and added to your library.";
+"maps.cancelled" = "Cancelled. Downloaded parts are kept for your next attempt.";
+"maps.cleared" = "Downloaded map parts cleared. Your library maps are kept.";
+"maps.error_catalog" = "The map catalog is unavailable. Please try again later.";
+"maps.error_recipe" = "This map's assembly recipe is invalid or unsupported.";
+"maps.error_response" = "The map server did not return the requested data. Please try again.";
+"maps.error_integrity" = "The map data failed verification. Please try again.";
+"maps.error_space" = "There is not enough free space to download and compose this map.";
+"maps.error_import" = "The map was saved, but could not be added to the library.";
+"maps.progress" = "%@ of %@";
+"maps.network_progress" = "Downloading current part: %@ of %@";
+"maps.existing" = "This map version is already in your library.";

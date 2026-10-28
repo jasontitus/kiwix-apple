@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<!-- Unreviewed machine translations of Maps controls only. Remove a locale after human review. -->
+<array>
+    <string>br</string>
+    <string>da</string>
+    <string>de</string>
+    <string>es</string>
+    <string>fi</string>
+    <string>fr</string>
+    <string>ha</string>
+    <string>he</string>
+    <string>hi</string>
+    <string>ia</string>
+    <string>id</string>
+    <string>ig</string>
+    <string>it</string>
+    <string>ja</string>
+    <string>kab</string>
+    <string>ko</string>
+    <string>lb</string>
+    <string>ln</string>
+    <string>mk</string>
+    <string>nl</string>
+    <string>pa</string>
+    <string>pl</string>
+    <string>ps</string>
+    <string>pt-br</string>
+    <string>ro</string>
+    <string>ru</string>
+    <string>sk</string>
+    <string>skr-arab</string>
+    <string>sl</string>
+    <string>sq</string>
+    <string>sv</string>
+    <string>tr</string>
+    <string>uk</string>
+    <string>zh-hans</string>
+    <string>zh-hant</string>
+</array>
+</plist>

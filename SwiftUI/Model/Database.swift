@@ -17,43 +17,89 @@ import CoreData
 import os
 
 struct Database {
-    static let shared = Database()
+    static let shared: Database = {
+        do {
+            return try Database()
+        } catch {
+            fatalError("Unable to open the library database: \(error)")
+        }
+    }()
+
     private let container: NSPersistentContainer
 
-    private init() {
-        container = Self.createContainer()
-    }
-
-    var viewContext: NSManagedObjectContext {
-        container.viewContext
-    }
-
-    /// A persistent container to set up the Core Data stack.
-    private static func createContainer() -> NSPersistentContainer {
-        let container = NSPersistentContainer(name: "DataModel")
-        guard let description = container.persistentStoreDescriptions.first else {
-            fatalError("Failed to retrieve a persistent store description.")
+    init(storeURL: URL? = nil, model: NSManagedObjectModel? = nil) throws {
+        if let model {
+            container = NSPersistentContainer(name: "DataModel", managedObjectModel: model)
+        } else {
+            container = NSPersistentContainer(name: "DataModel")
         }
-        if ProcessInfo.processInfo.arguments.contains("testing") {
+        guard let description = container.persistentStoreDescriptions.first else {
+            throw CocoaError(.fileReadUnknown)
+        }
+        if let storeURL {
+            description.url = storeURL
+        } else if ProcessInfo.processInfo.arguments.contains("testing") {
             description.url = URL(fileURLWithPath: "/dev/null")
         }
-
+        #if DEBUG
+        if storeURL == nil, let directory = try Self.uiTestStoreDirectory() {
+            description.url = directory.appendingPathComponent("DataModel.sqlite")
+        }
+        #endif
+        if let url = description.url {
+            try FileManager.default.createDirectory(
+                at: url.deletingLastPathComponent(), withIntermediateDirectories: true
+            )
+        }
         description.setOption(true as NSNumber, forKey: NSPersistentStoreRemoteChangeNotificationPostOptionKey)
         description.setOption(true as NSNumber, forKey: NSPersistentHistoryTrackingKey)
-
-        container.loadPersistentStores { _, error in
-            if let error = error as NSError? {
-                fatalError("Unresolved error \(error), \(error.userInfo)")
-            }
-        }
-
-        /// - Tag: viewContextMergeParentChanges
+        var options = description.options
+        options[NSMigratePersistentStoresAutomaticallyOption] = description.shouldMigrateStoreAutomatically as NSNumber
+        options[NSInferMappingModelAutomaticallyOption] = description.shouldInferMappingModelAutomatically as NSNumber
+        try container.persistentStoreCoordinator.addPersistentStore(
+            ofType: description.type,
+            configurationName: description.configuration,
+            at: description.url,
+            options: options
+        )
         container.viewContext.automaticallyMergesChangesFromParent = true
         container.viewContext.name = "viewContext"
-        /// - Tag: viewContextMergePolicy
         container.viewContext.mergePolicy = NSMergePolicy.mergeByPropertyObjectTrump
         container.viewContext.undoManager = nil
         container.viewContext.shouldDeleteInaccessibleFaults = true
-        return container
     }
+
+    var viewContext: NSManagedObjectContext { container.viewContext }
+
+    func newBackgroundContext() -> NSManagedObjectContext {
+        let context = container.newBackgroundContext()
+        context.mergePolicy = NSMergePolicy.mergeByPropertyObjectTrump
+        return context
+    }
+
+    /// Close an isolated store before reopening it or removing its directory.
+    func close() throws {
+        container.viewContext.performAndWait {
+            container.viewContext.automaticallyMergesChangesFromParent = false
+            container.viewContext.reset()
+        }
+        for store in container.persistentStoreCoordinator.persistentStores {
+            try container.persistentStoreCoordinator.remove(store)
+        }
+    }
+
+    #if DEBUG
+    static func uiTestStoreDirectory() throws -> URL? {
+        let arguments = ProcessInfo.processInfo.arguments
+        guard let index = arguments.firstIndex(of: "-streetzim-ui-test-store") else { return nil }
+        guard arguments.indices.contains(index + 1),
+              let identifier = UUID(uuidString: arguments[index + 1]) else {
+            throw CocoaError(.fileReadInvalidFileName)
+        }
+        return try FileManager.default.url(
+            for: .applicationSupportDirectory, in: .userDomainMask, appropriateFor: nil, create: true
+        ).appendingPathComponent("StreetZimUITests", isDirectory: true)
+            .appendingPathComponent(identifier.uuidString, isDirectory: true)
+    }
+    #endif
 }

@@ -52,6 +52,7 @@ enum Category: String, CaseIterable, Identifiable, LosslessStringConvertible, Ha
     case wiktionary
     case vikidia
     case ted
+    case maps
     case stackExchange = "stack_exchange"
     case other
 
@@ -87,6 +88,8 @@ enum Category: String, CaseIterable, Identifiable, LosslessStringConvertible, Ha
             return LocalString.enum_category_vikidia
         case .stackExchange:
             return LocalString.enum_category_stackexchange
+        case .maps:
+            return LocalString.maps_category
         case .other:
             return LocalString.enum_category_other
         }
@@ -116,6 +119,8 @@ enum Category: String, CaseIterable, Identifiable, LosslessStringConvertible, Ha
             return "Vikidia"
         case .stackExchange:
             return "StackExchange"
+        case .maps:
+            return "map"
         case .other:
             return "Other"
         }
@@ -194,7 +199,7 @@ enum LibraryLanguageSortingMode: String, CaseIterable, Identifiable, Defaults.Se
 }
 
 enum LibraryTabItem: String, CaseIterable, Identifiable {
-    case categories, new, downloads, opened, hotspot
+    case categories, maps, new, downloads, opened, hotspot
 
     var id: String { self.rawValue }
 
@@ -204,6 +209,8 @@ enum LibraryTabItem: String, CaseIterable, Identifiable {
             return LocalString.enum_libray_tab_item_opened
         case .categories:
             return LocalString.enum_libray_tab_item_categories
+        case .maps:
+            return LocalString.maps_category
         case .downloads:
             return LocalString.enum_libray_tab_item_downloads
         case .new:
@@ -219,6 +226,8 @@ enum LibraryTabItem: String, CaseIterable, Identifiable {
             return "folder"
         case .categories:
             return "books.vertical"
+        case .maps:
+            return "map"
         case .downloads:
             return "tray.and.arrow.down"
         case .new:
@@ -234,7 +243,7 @@ enum NavigationItem: Hashable, Identifiable {
 
     case loading
     case bookmarks, map(location: CLLocation?), tab(objectID: NSManagedObjectID)
-    case opened, categories, new, downloads
+    case opened, categories, maps, new, downloads
     case hotspot
     case settings(scrollToHotspot: Bool)
 }

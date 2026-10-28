@@ -256,7 +256,7 @@ private struct Content<LaunchModel>: View where LaunchModel: LaunchProtocol {
                 browser.refreshVideoState()
             }
         }
-        .onChange(of: library.state) { _, state in
+        .onChange(of: library.state, initial: true) { _, state in
             guard state == .complete else { return }
             showTheLibrary()
         }

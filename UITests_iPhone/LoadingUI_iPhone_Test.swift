@@ -25,18 +25,21 @@ final class LoadingUI_iPhone_Test: XCTestCase {
         }
         
         let app = XCUIApplication()
-        app.activate()
+        app.launchArguments = ["testing", "-AppleLanguages", "(en)", "-AppleLocale", "en_US"]
+        app.launch()
         let categoriesButton = app.buttons["Categories"]
         Wait.inApp(app, forElement: categoriesButton)
-        XCTAssertTrue(categoriesButton.isSelected)
+        categoriesButton.tap()
+        app.tabBars.buttons["Maps"].tap()
+        Wait.inApp(app, forElement: app.navigationBars["Maps"])
         
         let newButton = app.buttons["New"]
         Wait.inApp(app, forElement: newButton)
         newButton.tap()
         
         app.buttons["Downloads"].tap()
-        app.buttons["Opened"].tap()
-        app.buttons["Hotspot"].tap()
+        openOverflowDestination("Opened", in: app)
+        openOverflowDestination("Hotspot", in: app)
         categoriesButton.tap()
         app.buttons["Done"].tap()
         
@@ -50,5 +53,14 @@ final class LoadingUI_iPhone_Test: XCTestCase {
         XCTAssertFalse(app.buttons["Random Page"].isEnabled)
         XCTAssertFalse(app.buttons["Share"].isEnabled)
         XCTAssertTrue(app.buttons["Show Bookmarks"].isEnabled)
+    }
+
+    @MainActor
+    private func openOverflowDestination(_ title: String, in app: XCUIApplication) {
+        app.tabBars.buttons["More"].tap()
+        let destination = app.staticTexts[title].firstMatch
+        Wait.inApp(app, forElement: destination)
+        destination.tap()
+        Wait.inApp(app, forElement: app.navigationBars[title])
     }
 }

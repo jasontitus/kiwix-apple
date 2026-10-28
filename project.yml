@@ -26,6 +26,7 @@ settings:
     INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription: "Kiwix needs permission to save images to your photos app."
     INFOPLIST_KEY_NSLocationWhenInUseUsageDescription: "Kiwix can share your location with map content from ZIM files you open."
     INFOPLIST_KEY_NSLocationUsageDescription: "Kiwix can share your location with map content from ZIM files you open."
+    INFOPLIST_KEY_NSCameraUsageDescription: "Kiwix lets ZIM content use your camera when you allow it, for example to scan a code or take a photo."
     INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace: YES
     INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents: YES
     SWIFT_OBJC_INTEROP_MODE: objcxx
@@ -36,6 +37,8 @@ settings:
     APP_STORE_ID: $(APP_STORE_ID)
     INFOPLIST_KEY_UILaunchScreen_Generation: YES
     SWIFT_VERSION: 6
+    STREETZIM_CATALOG_URL: https://streetzim.web.app/build/recipes/index.json
+    STREETZIM_PROXY_URL: https://streetzim-build-proxy.tiltastech.workers.dev
 
   configs:
     debug:
@@ -65,6 +68,7 @@ targetTemplates:
       path: Support/Kiwix.entitlements
       properties:
         com.apple.security.app-sandbox: true
+        com.apple.security.device.camera: true
         com.apple.security.files.user-selected.read-write: true
         com.apple.security.network.client: true
         com.apple.security.network.server: true
@@ -128,6 +132,16 @@ targets:
       - path: Kiwix/SplashScreenKiwix.storyboard
         destinationFilters:
           - iOS
+    postBuildScripts:
+      - name: Stage offline map UI fixtures in Debug
+        basedOnDependencyAnalysis: false
+        script: |
+          if [ "${CONFIGURATION}" = Debug ]; then
+            destination="${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/StreetZimUITests"
+            mkdir -p "${destination}"
+            cp "${SRCROOT}/Tests/Fixtures/streetzim-demo.zim" "${destination}/"
+            cp "${SRCROOT}/Tests/Fixtures/streetzim-demo-index.json" "${destination}/"
+          fi
   UnitTests:
     type: bundle.unit-test
     supportedDestinations: [iOS, macOS]
@@ -144,6 +158,10 @@ targets:
         # see: https://developer.apple.com/documentation/security/accessing-files-from-the-macos-app-sandbox
     sources:
       - path: Tests
+        excludes:
+          - Fixtures
+      - path: Tests/Fixtures/streetzim-demo.zim
+        buildPhase: resources
     dependencies:
       - target: Kiwix
 

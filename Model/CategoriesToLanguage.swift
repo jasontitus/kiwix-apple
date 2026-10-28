@@ -32,6 +32,7 @@ struct CategoriesToLanguages: CategoriesProtocol {
     }
 
     func has(category: Category, inLanguages langCodes: Set<String>) -> Bool {
+        if category == .maps { return true }
         guard !langCodes.isEmpty, !dictionary.isEmpty else {
             return true // no languages or category filters provided, do not filter
         }

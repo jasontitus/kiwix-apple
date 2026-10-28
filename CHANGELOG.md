@@ -1,5 +1,24 @@
 # 3.18.0
 
+- NEW:
+    - Open StreetZim Maps directly from the library sidebar or iPhone library tabs.
+    - Show incoming bytes while each StreetZim map part downloads.
+    - Localize native Maps controls in Kiwix's existing app languages, with unreviewed machine translations identified.
+    - Let ZIM pages request user-consented camera access through the standard browser getUserMedia API on iOS and macOS.
+
+- FIX:
+    - Avoid remaining on "Fetching Catalog…" when the catalog is already available on first launch.
+    - Keep downloaded maps visible in Maps and Downloads after navigation, language changes, and app restarts.
+    - Identify saved StreetZim maps by region and language while preserving their original archive titles.
+    - Remove the confusing pre-download transfer estimate; show only Map size.
+    - Keep untrusted recipe validation off the UI thread and avoid repeated mask/chunk scans.
+    - Roll back failed map imports without losing unrelated library edits.
+    - Show active map transfer progress and cancellation in Downloads alongside book downloads.
+    - Ignore late network progress from cancelled map downloads.
+    - Preserve Chinese script and explicit regional variants when choosing a map language.
+    - Put region-local map languages first and alphabetize each language-picker section by its displayed names.
+    - Rebuild unreadable saved maps without overwriting the damaged archive.
+
 # 3.17.1
 
 - FIX:
