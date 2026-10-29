@@ -66,6 +66,74 @@ final class SavedMapsUITests: XCTestCase {
         XCTAssertFalse(map.waitForExistence(timeout: 2))
     }
 
+    func testReaderSearchOpensResultAndCanBeReopenedAndDismissed() throws {
+        try exerciseReaderSearch(useTextField: false)
+    }
+
+    func testReaderTextFieldSearchSupportsClearAndCancellation() throws {
+        try exerciseReaderSearch(useTextField: true)
+    }
+
+    private func exerciseReaderSearch(useTextField: Bool) throws {
+        continueAfterFailure = false
+        XCUIDevice.shared.orientation = isPad ? .landscapeLeft : .portrait
+        let app = XCUIApplication()
+        app.launchArguments = [
+            "testing", "-streetzim-ui-test-store", UUID().uuidString,
+            "-AppleLanguages", "(en)", "-AppleLocale", "en_US"
+        ]
+        if useTextField { app.launchArguments.append("-reader-search-text-field-ui-test") }
+        app.launch()
+        navigate(to: "Downloads", in: app)
+        let map = savedMap(in: app)
+        XCTAssertTrue(map.waitForExistence(timeout: 15))
+        map.tap()
+        XCTAssertTrue(app.webViews.staticTexts["StreetZim test map"].firstMatch.waitForExistence(timeout: 15))
+
+        // Focus the reader's native search field, not a control inside the ZIM page.
+        let macSearch = app.textFields["reader_search_field"]
+        let search = macSearch.exists ? macSearch : app.searchFields.firstMatch
+        XCTAssertTrue(search.waitForExistence(timeout: 5))
+        search.tap()
+        search.typeText("StreetZim")
+        let result = app.scrollViews.buttons["StreetZim fixture detail"].firstMatch
+        XCTAssertTrue(result.waitForExistence(timeout: 15))
+        record(app, name: "Reader search results from the real offline archive")
+        if useTextField {
+            let clear = app.buttons["reader_search_clear"]
+            XCTAssertTrue(clear.waitForExistence(timeout: 5))
+            clear.tap()
+            XCTAssertFalse(result.waitForExistence(timeout: 2))
+            search.typeText("StreetZim")
+            XCTAssertTrue(result.waitForExistence(timeout: 15))
+        }
+        result.tap()
+        let detail = app.webViews.staticTexts["StreetZim fixture detail"].firstMatch
+        XCTAssertTrue(detail.waitForExistence(timeout: 10))
+
+        // Repeated presentation catches focus/layout failures even before typing.
+        for _ in 0..<2 {
+            if !isPad && !useTextField { app.webViews.firstMatch.swipeDown() }
+            XCTAssertTrue(search.waitForExistence(timeout: 5))
+            search.tap()
+            search.typeText("StreetZim")
+            XCTAssertTrue(result.waitForExistence(timeout: 15))
+            if isPad && !useTextField {
+                let clear = search.buttons["Clear text"]
+                XCTAssertTrue(clear.waitForExistence(timeout: 5))
+                clear.tap()
+            } else {
+                let cancel = app.buttons.matching(NSPredicate(
+                    format: "label IN %@", ["Cancel", "Close"]
+                )).firstMatch
+                XCTAssertTrue(cancel.waitForExistence(timeout: 5))
+                cancel.tap()
+            }
+            XCTAssertTrue(detail.waitForExistence(timeout: 5))
+        }
+        record(app, name: "Reader preserved after dismissing repeated searches")
+    }
+
     func testAreaBrowserGroupsSearchAndCancellationPreserveLanguage() throws {
         continueAfterFailure = false
         XCUIDevice.shared.orientation = isPad ? .landscapeLeft : .portrait

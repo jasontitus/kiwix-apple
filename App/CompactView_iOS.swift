@@ -32,11 +32,10 @@ struct CompactView: View {
         } else if case let .tab(tabID) = navigation.currentItem {
             NavigationStack {
                 SearchableContent(viewModel: searchViewModel, tabID: tabID)
-                    .searchable(
+                    .modifier(ReaderSearchModifier(
                         text: $searchViewModel.searchText,
-                        placement: .navigationBarDrawer(displayMode: .automatic),
-                        prompt: LocalString.common_search
-                    )
+                        placement: .navigationBarDrawer(displayMode: .automatic)
+                    ))
             }
             .onReceive(openURL) { _ in
                 dismissSearch()
@@ -48,12 +47,13 @@ struct CompactView: View {
 private struct SearchableContent: View {
     @ObservedObject var viewModel: SearchViewModel
     @Environment(\.isSearching) private var isSearching
+    @Environment(\.isReaderSearchPresented) private var isReaderSearchPresented
     let tabID: NSManagedObjectID
     
     var body: some View {
         CompactTabView(tabID: tabID)
             .overlay {
-                if isSearching {
+                if isSearching || isReaderSearchPresented {
                     SearchResults(viewModel: viewModel)
                 }
             }

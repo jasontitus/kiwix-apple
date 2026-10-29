@@ -19,6 +19,7 @@
     - Preserve Chinese script and explicit regional variants when choosing a map language.
     - Put region-local map languages first and alphabetize each language-picker section by its displayed names.
     - Rebuild unreadable saved maps without overwriting the damaged archive.
+    - Avoid UIKit's reader-search presentation crash when running the iOS app on Mac, without changing iPhone, iPad, or native Mac search.
 
 # 3.17.1
 

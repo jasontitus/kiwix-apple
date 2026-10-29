@@ -168,6 +168,43 @@ real HTML pages, terminates/relaunches the app, reopens the saved map, deletes
 it through the normal library action, and verifies deletion after another launch.
 It requires no accounts, live catalog, or multi-GB download.
 
+### Reader-search regression on iOS apps running on Mac
+
+`SavedMapsUITests.testReaderSearchOpensResultAndCanBeReopenedAndDismissed`
+opens the real offline fixture, focuses native reader search, searches for
+**StreetZim**, opens **StreetZim fixture detail**, then repeatedly searches and
+dismisses search. The iPad's native control uses Clear text rather than a
+Cancel button. Result queries are scoped to the results scroll view so the
+reader's sidebar tab cannot satisfy them.
+
+`testReaderTextFieldSearchSupportsClearAndCancellation` exercises the same
+archive/results flow with the scene-local text field, including clear and
+repeated cancellation. The Debug-only `-reader-search-text-field-ui-test`
+argument makes that presentation testable on simulators; release builds ignore
+it. Xcode does not support UI tests on its Designed for iPad Mac destination,
+and this Mac rejected the isolated iOS development app at launch. Simulator
+coverage of the text-field presentation is not an end-to-end iOS-on-Mac run.
+
+SDK 27-built iOS apps on older macOS can assert inside
+`_UISearchPresentationController` → `UINavigationBar.defaultSizeForOrientation`
+→ `UIScreen._preferredFocusedWindow` because screen-based focus is unsupported.
+The matching stock-UIKit report is
+[Apple Developer Forums thread 841090](https://developer.apple.com/forums/thread/841090)
+(FB24201508); its author reports an OS fix in macOS 27.2 beta.
+Enabling multiple scenes also avoids that assertion, but would change this
+app's shared navigation model, so the app does not enable it as a workaround.
+
+Only when `ProcessInfo.processInfo.isiOSAppOnMac` is true, reader search uses a
+standard SwiftUI text field in the current navigation toolbar instead of
+creating UIKit's search presentation controller. It still uses the existing
+archive search model and result views. Beta acceptance should check focus,
+typing, clear, opening a result, Cancel, Escape, and Command-F in the actual
+iOS-on-Mac runtime. The workaround applies to all iOS-on-Mac versions rather
+than guessing the host macOS version from iOS availability checks. iPhone,
+iPad, and native macOS retain `.searchable`. Other native searchable screens
+are not covered by this targeted workaround.
+
+
 ## Reusing a downloaded language version
 
 The assembler first looks for the exact base UUID in the library. If it

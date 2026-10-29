@@ -46,11 +46,7 @@ struct BrowserTab: View {
             .focusedSceneValue(\.canGoBack, browser.canGoBack)
             .focusedSceneValue(\.canGoForward, browser.canGoForward)
             .modifier(ExternalLinkHandler(externalURL: $browser.externalURL))
-            .searchable(
-                text: $search.searchText,
-                placement: .toolbarPrincipal,
-                prompt: LocalString.common_search
-            )
+            .modifier(ReaderSearchModifier(text: $search.searchText, placement: .toolbarPrincipal))
             .onChange(of: scenePhase) { [weak browser] _, newValue in
                 switch newValue {
                 case .active:
@@ -98,6 +94,7 @@ struct BrowserTab: View {
         @EnvironmentObject private var library: LibraryViewModel
         @EnvironmentObject private var navigation: NavigationViewModel
         @Environment(\.isSearching) private var isSearching
+        @Environment(\.isReaderSearchPresented) private var isReaderSearchPresented
         @Environment(\.dismissSearch) private var dismissSearch
         @FetchRequest(
             sortDescriptors: [NSSortDescriptor(keyPath: \ZimFile.size, ascending: false)],
@@ -110,7 +107,7 @@ struct BrowserTab: View {
         @ObservedObject var search: SearchViewModel
         
         private var isSearchingState: Bool {
-            isSearching || !search.searchText.isEmpty
+            isSearching || isReaderSearchPresented || !search.searchText.isEmpty
         }
         
         var body: some View {
@@ -119,7 +116,7 @@ struct BrowserTab: View {
                                      hasSeenCategories: hasSeenCategories)
             GeometryReader { proxy in
                 Group {
-                    if !search.searchText.isEmpty {
+                    if !search.searchText.isEmpty || isReaderSearchPresented {
                         SearchResults(viewModel: search)
                             .environment(\.horizontalSizeClass, proxy.size.width > 650 ? .regular : .compact)
                     } else {
