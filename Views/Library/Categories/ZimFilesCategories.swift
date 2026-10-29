@@ -112,7 +112,9 @@ struct ZimFilesCategory: View {
     
     var body: some View {
         Group {
-            if results.isEmpty {
+            if category == .maps {
+                StreetZimMaps(searchText: searchText, dismiss: dismiss)
+            } else if results.isEmpty {
                 CategoryEmptySection()
             } else {
                 LazyVGrid(columns: ([Self.gridItem]), alignment: .leading, spacing: 12) {

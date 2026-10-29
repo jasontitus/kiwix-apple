@@ -325,6 +325,16 @@ final class ZimFile: NSManagedObject {
             ])
         }
     }
+
+    static func downloadedMapsPredicate() -> NSPredicate {
+        NSCompoundPredicate(andPredicateWithSubpredicates: [
+            openedPredicate(),
+            NSCompoundPredicate(orPredicateWithSubpredicates: [
+                NSPredicate(format: "category == %@", Category.maps.rawValue),
+                NSPredicate(format: "tags MATCHES[c] %@", "(^|.*;)maps(;.*|$)")
+            ])
+        ])
+    }
     
     // it's the same condition, dowloaded and available (not missing)
     static func integrityCheckablePredicate() -> NSPredicate {

@@ -87,6 +87,9 @@ struct LibraryTab: View {
                         .onChange(of: selectedLang) { _, newValue in
                             categories = CategoriesToLanguages().categoriesIn(languageCode: newValue)
                         }
+                    case .maps:
+                        StreetZimMaps(searchText: searchText, dismiss: dismiss)
+                            .navigationTitle(LocalString.maps_category)
                     case .opened:
                         ZimFilesOpenedNavStack(dismiss: dismiss)
                     case .downloads:

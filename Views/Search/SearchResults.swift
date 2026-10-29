@@ -20,6 +20,7 @@ import SwiftUI
 struct SearchResults: View {
     @Default(.recentSearchTexts) private var recentSearchTexts
     @Environment(\.dismissSearch) private var dismissSearch
+    @Environment(\.dismissReaderSearch) private var dismissReaderSearch
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @Environment(\.managedObjectContext) private var managedObjectContext
     @Environment(\.isSearching) private var isSearching
@@ -102,7 +103,7 @@ struct SearchResults: View {
                                         },
                                         onDismiss: {
                                             $focusedSearchItem.wrappedValue = nil
-                                            dismissSearch()
+                                            dismissSearchPresentation()
                                         })
                                 )
                             }
@@ -129,7 +130,7 @@ struct SearchResults: View {
                                         },
                                         onDismiss: {
                                             $focusedSearchItem.wrappedValue = nil
-                                            dismissSearch()
+                                            dismissSearchPresentation()
                                         })
                                 )
                             }
@@ -181,6 +182,14 @@ struct SearchResults: View {
         }
     }
 
+    private func dismissSearchPresentation() {
+        if let dismissReaderSearch {
+            dismissReaderSearch()
+        } else {
+            dismissSearch()
+        }
+    }
+
     private func openResult(result: SearchResult) {
         recentSearchTexts = {
             var searchTexts = Defaults[.recentSearchTexts]
@@ -189,7 +198,7 @@ struct SearchResults: View {
             return searchTexts
         }()
 
-        dismissSearch()
+        dismissSearchPresentation()
         #if os(macOS)
         // delayed fix for placement: .toolbarPrincipal on macOS
         // as it's not always dismissing properly, so we try again if needed

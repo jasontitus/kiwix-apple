@@ -662,6 +662,20 @@ import CoreKiwix
 
     // MARK: - WKUIDelegate
 
+    func webView(
+        _ webView: WKWebView,
+        decideMediaCapturePermissionsFor origin: WKSecurityOrigin,
+        initiatedBy frame: WKFrameInfo,
+        type: WKMediaCaptureType
+    ) async -> WKPermissionDecision {
+        await ZIMCameraPermission.shared.webView(
+            webView,
+            decideMediaCapturePermissionsFor: origin,
+            initiatedBy: frame,
+            type: type
+        )
+    }
+
 #if os(macOS)
     @MainActor
     func webView(
@@ -714,6 +728,7 @@ import CoreKiwix
         let configuration = UIContextMenuConfiguration(
             previewProvider: {
                 let webView = WKWebView(frame: .zero, configuration: WebViewConfiguration())
+                webView.uiDelegate = ZIMCameraPermission.shared
                 if !Bundle.main.isProduction {
                     webView.isInspectable = true
                 }

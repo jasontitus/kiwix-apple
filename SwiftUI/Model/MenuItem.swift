@@ -30,6 +30,7 @@ enum MenuItem: Hashable, Identifiable, RawRepresentable, Defaults.Serializable {
             if let item = [
                 MenuItem.bookmarks,
                 .categories,
+                .maps,
                 .donation,
                 .downloads,
                 .hotspot,
@@ -69,6 +70,7 @@ enum MenuItem: Hashable, Identifiable, RawRepresentable, Defaults.Serializable {
     case bookmarks
     case opened
     case categories
+    case maps
     case new
     case downloads
     case settings(scrollToHotspot: Bool)
@@ -82,6 +84,7 @@ enum MenuItem: Hashable, Identifiable, RawRepresentable, Defaults.Serializable {
         case .tab(let objectID): self = .tab(objectID: objectID)
         case .opened: self = .opened
         case .categories: self = .categories
+        case .maps: self = .maps
         case .new: self = .new
         case .downloads: self = .downloads
         case let .settings(scrollToHotspot): self = .settings(scrollToHotspot: scrollToHotspot)
@@ -95,6 +98,7 @@ enum MenuItem: Hashable, Identifiable, RawRepresentable, Defaults.Serializable {
         case .bookmarks: .bookmarks
         case .opened: .opened
         case .categories: .categories
+        case .maps: .maps
         case .new: .new
         case .downloads: .downloads
         // by selecting the side menu settings, we don't want to scroll
@@ -118,6 +122,8 @@ enum MenuItem: Hashable, Identifiable, RawRepresentable, Defaults.Serializable {
             return LocalString.enum_navigation_item_opened
         case .categories:
             return LocalString.enum_navigation_item_categories
+        case .maps:
+            return LocalString.maps_category
         case .new:
             return LocalString.enum_navigation_item_new
         case .downloads:
@@ -145,6 +151,8 @@ enum MenuItem: Hashable, Identifiable, RawRepresentable, Defaults.Serializable {
             "opened"
         case .categories:
             "categories"
+        case .maps:
+            "maps"
         case .new:
             "new"
         case .downloads:
@@ -172,6 +180,8 @@ enum MenuItem: Hashable, Identifiable, RawRepresentable, Defaults.Serializable {
             return "folder"
         case .categories:
             return "books.vertical"
+        case .maps:
+            return "map"
         case .new:
             return "newspaper"
         case .downloads:
@@ -189,7 +199,7 @@ enum MenuItem: Hashable, Identifiable, RawRepresentable, Defaults.Serializable {
         switch self {
         case .donation:
             return UIColor.red
-        case .tab, .bookmarks, .opened, .categories, .new, .downloads, .hotspot, .settings:
+        case .tab, .bookmarks, .opened, .categories, .maps, .new, .downloads, .hotspot, .settings:
             return nil
         }
     }

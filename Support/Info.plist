@@ -4,11 +4,17 @@
 <dict>
 	<key>APP_STORE_ID</key>
 	<string>id997079563</string>
+	<key>StreetZimCatalogURL</key>
+	<string>$(STREETZIM_CATALOG_URL)</string>
+	<key>StreetZimProxyURL</key>
+	<string>$(STREETZIM_PROXY_URL)</string>
 	<key>CFBundleDocumentTypes</key>
 	<array>
 		<dict>
 			<key>CFBundleTypeName</key>
 			<string>OpenZIM Content File</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
 			<key>LSHandlerRank</key>
 			<string>Owner</string>
 			<key>LSItemContentTypes</key>

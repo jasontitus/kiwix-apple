@@ -29,7 +29,7 @@ struct LibraryOperations {
     /// Open a zim file with url
     /// - Parameter url: url of the zim file
     @discardableResult
-    static func open(url: URL) async -> ZimFileMetaStruct? {
+    static func open(url: URL, database: Database = .shared) async -> ZimFileMetaStruct? {
         guard let fileURLBookmark = await ZimFileService.getFileURLBookmarkData(for: url),
                 let metastruct = await ZimFileService.getMetaData(url: url) else { return nil }
 
@@ -41,21 +41,29 @@ struct LibraryOperations {
         }
 
         // upsert zim file in the database
-        await Database.shared.viewContext.perform {
+        // Import into an owned context: a failed save must not expose unsaved
+        // map rows or roll back unrelated edits in the UI's view context.
+        let context = database.newBackgroundContext()
+        let persisted = await context.perform {
             let predicate = NSPredicate(format: "fileID == %@", metastruct.fileID as CVarArg)
             let fetchRequest = ZimFile.fetchRequest(predicate: predicate)
             fetchRequest.fetchLimit = 1
-            let context = Database.shared.viewContext
-            guard let zimFile = try? fetchRequest.execute().first ?? ZimFile(context: context) else {
-                return
-            }
-            LibraryOperations.configureZimFile(zimFile, metadata: metastruct)
-            zimFile.fileURLBookmark = fileURLBookmark
-            zimFile.isMissing = false
-            if context.hasChanges {
-                try? context.save()
+            do {
+                let zimFile = try context.fetch(fetchRequest).first ?? ZimFile(context: context)
+                LibraryOperations.configureZimFile(zimFile, metadata: metastruct)
+                zimFile.fileURLBookmark = fileURLBookmark
+                zimFile.isMissing = false
+                if context.hasChanges {
+                    try context.save()
+                }
+                return true
+            } catch {
+                context.rollback()
+                Log.LibraryOperations.error("Unable to save imported ZIM: \(error.localizedDescription, privacy: .public)")
+                return false
             }
         }
+        guard persisted else { return nil }
         return metastruct
     }
     

@@ -35,6 +35,37 @@ downloadable for older versions of macOS and iOS on the Mac App Store.
   reasons behind this is the lack (only recent) support of open video
   formats used in the ZIM files.
 
+## Camera access from ZIM content
+
+ZIM pages can request the camera on iOS and macOS through the standard browser
+API, without a Kiwix-specific JavaScript bridge or changes to an archive that
+already uses it:
+
+```javascript
+const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+video.srcObject = stream; // A <video autoplay muted playsinline> element.
+```
+
+WebKit and the operating system ask for permission when needed; Kiwix does not
+silently grant access. Camera requests must originate from the same `zim://`
+archive origin as the page open in that reader or link preview. Other origins,
+microphone requests, and combined camera/microphone requests are denied.
+Existing OS camera restrictions still apply.
+
+The page receives a normal `MediaStream`, so browser camera libraries can keep
+using standard video constraints and track APIs. Stop each track with
+`stream.getTracks().forEach(track => track.stop())` when finished. Handle normal
+API errors such as `NotAllowedError` (permission denied) and `NotFoundError`
+(no camera). iOS simulators do not provide a physical camera.
+
+The generated app declares `NSCameraUsageDescription`; macOS builds also need
+the Camera sandbox/hardened-runtime entitlement. Custom signing configurations
+must retain these settings. See [WebKit's native media-capture support](https://webkit.org/blog/11353/mediarecorder-api/#getusermedia-in-wkwebview).
+
+Physical-device camera permission and live capture remain unverified. The
+automated tests cover the origin/permission policy; confirming that a ZIM WebView
+exposes the API does not establish successful camera capture.
+
 ## Develop
 
 Kiwix developers usually work with latest macOS and Xcode. Check our [Continuous Integration Workflow](https://github.com/kiwix/kiwix-apple/blob/main/.github/workflows/ci.yml) to find out which Xcode version we use on Github Actions.

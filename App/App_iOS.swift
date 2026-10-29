@@ -92,6 +92,13 @@ struct Kiwix: App {
                     }
                 }
                 .task {
+                    #if DEBUG
+                    do {
+                        try await StreetZimUITestSupport.prepare()
+                    } catch {
+                        fatalError("Unable to prepare the isolated map UI fixture: \(error)")
+                    }
+                    #endif
                     switch AppType.current {
                     case .kiwix:
                         await LibraryOperations.reValidate()

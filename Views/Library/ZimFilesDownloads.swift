@@ -16,15 +16,20 @@
 import CoreData
 import SwiftUI
 
-/// A grid of zim files that are being downloaded.
+/// Active book/map downloads and locally available maps.
 struct ZimFilesDownloads: View {
     @EnvironmentObject var selection: SelectedZimFileViewModel
-    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    @ObservedObject private var mapModel = StreetZimViewModel.shared
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \DownloadTask.created, ascending: false)],
         predicate: NSPredicate(format: "zimFile != NULL"),
         animation: .easeInOut
     ) private var downloadTasks: FetchedResults<DownloadTask>
+    @FetchRequest(
+        sortDescriptors: [NSSortDescriptor(keyPath: \ZimFile.name, ascending: true)],
+        predicate: ZimFile.downloadedMapsPredicate(),
+        animation: .easeInOut
+    ) private var downloadedMaps: FetchedResults<ZimFile>
     private let dismiss: (() -> Void)?
 
     init(dismiss: (() -> Void)?) {
@@ -32,18 +37,51 @@ struct ZimFilesDownloads: View {
     }
 
     var body: some View {
-        LazyVGrid(
-            columns: ([GridItem(.adaptive(minimum: 250, maximum: 500), spacing: 12)]),
-            alignment: .leading,
-            spacing: 12
-        ) {
-            ForEach(downloadTasks, id: \.fileID) { downloadTask in
-                if let zimFile = downloadTask.zimFile, zimFile.downloadTask != nil {
-                    LibraryZimFileContext(
-                        content: { DownloadTaskCell(zimFile) },
-                        zimFile: zimFile,
-                        selection: selection,
-                        dismiss: dismiss)
+        VStack(alignment: .leading, spacing: 16) {
+            if mapModel.isRunning {
+                VStack(alignment: .leading, spacing: 8) {
+                    Label(mapModel.region?.title ?? LocalString.maps_heading, systemImage: "map")
+                        .font(.headline)
+                    if let version = mapModel.version {
+                        Text(version.displayName()).foregroundStyle(.secondary)
+                    }
+                    StreetZimDownloadProgress(model: mapModel)
+                }
+                .padding()
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(CellBackground.colorFor(isHovering: false, isSelected: false))
+                .clipShape(CellBackground.clipShapeRectangle)
+            }
+            if !downloadTasks.isEmpty {
+                LazyVGrid(
+                    columns: [GridItem(.adaptive(minimum: 250, maximum: 500), spacing: 12)],
+                    alignment: .leading, spacing: 12
+                ) {
+                    ForEach(downloadTasks, id: \.fileID) { downloadTask in
+                        if let zimFile = downloadTask.zimFile, zimFile.downloadTask != nil {
+                            LibraryZimFileContext(
+                                content: { DownloadTaskCell(zimFile) },
+                                zimFile: zimFile,
+                                selection: selection,
+                                dismiss: dismiss)
+                        }
+                    }
+                }
+            }
+            if !downloadedMaps.isEmpty {
+                Text(LocalString.maps_downloaded).font(.headline)
+                LazyVGrid(
+                    columns: [GridItem(.adaptive(minimum: 250, maximum: 500), spacing: 12)],
+                    alignment: .leading, spacing: 12
+                ) {
+                    ForEach(downloadedMaps, id: \.fileID) { zimFile in
+                        StreetZimSavedMapButton(zimFile: zimFile, regions: mapModel.regions, dismiss: dismiss)
+                            .buttonStyle(.plain)
+                            .padding()
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .background(CellBackground.colorFor(isHovering: false, isSelected: false))
+                            .clipShape(CellBackground.clipShapeRectangle)
+                    }
                 }
             }
         }
@@ -51,7 +89,7 @@ struct ZimFilesDownloads: View {
         .modifier(ToolbarRoleBrowser())
         .navigationTitle(MenuItem.downloads.name)
         .overlay {
-            if downloadTasks.isEmpty {
+            if downloadTasks.isEmpty, downloadedMaps.isEmpty, !mapModel.isRunning {
                 Message(text: LocalString.zim_file_downloads_overlay_empty_message)
             }
         }

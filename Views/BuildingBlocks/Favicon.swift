@@ -41,19 +41,23 @@ struct Favicon: View {
 
     @ViewBuilder
     var image: some View {
-        #if os(macOS)
-        if let data = imageData, let image = NSImage(data: data) {
-            Image(nsImage: image).resizable()
+        if category == .maps {
+            Image(systemName: "map").resizable()
         } else {
-            Image(category.icon).resizable()
+            #if os(macOS)
+            if let data = imageData, let image = NSImage(data: data) {
+                Image(nsImage: image).resizable()
+            } else {
+                Image(category.icon).resizable()
+            }
+            #elseif os(iOS)
+            if let data = imageData, let image = UIImage(data: data) {
+                Image(uiImage: image).resizable()
+            } else {
+                Image(category.icon).resizable()
+            }
+            #endif
         }
-        #elseif os(iOS)
-        if let data = imageData, let image = UIImage(data: data) {
-            Image(uiImage: image).resizable()
-        } else {
-            Image(category.icon).resizable()
-        }
-        #endif
     }
     
     static func asyncImageData(url: URL) async throws -> Data? {

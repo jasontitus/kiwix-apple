@@ -35,7 +35,7 @@ struct RootView: View {
     let openedWithWindowState: WindowState?
     
     private let primaryItems: [MenuItem] = [.bookmarks]
-    private let libraryItems: [MenuItem] = [.opened, .categories, .downloads, .new]
+    private let libraryItems: [MenuItem] = [.opened, .categories, .maps, .downloads, .new]
     private let openURL = NotificationCenter.default.publisher(for: .openURL)
     private let appTerminates = NotificationCenter.default.publisher(for: NSApplication.willTerminateNotification)
     private let tabCloses = NotificationCenter.default.publisher(for: NSWindow.willCloseNotification)
@@ -103,6 +103,9 @@ struct RootView: View {
                         }
                 })
                     .modifier(SearchFocused(isSearchFocused: isSearchFocused))
+            case .maps:
+                StreetZimMaps(searchText: "", dismiss: nil)
+                    .navigationTitle(LocalString.maps_category)
             case .downloads:
                 DetailSidePanel(content: { ZimFilesDownloads(dismiss: nil) })
             case .new:
@@ -245,6 +248,13 @@ struct RootView: View {
             }
             BrowserViewModel.getCached(tabID: tabID).webView.goBack()
         }.task {
+            #if DEBUG
+            do {
+                try await StreetZimUITestSupport.prepare()
+            } catch {
+                fatalError("Unable to prepare the isolated map UI fixture: \(error)")
+            }
+            #endif
             switch AppType.current {
             case .kiwix:
                 await LibraryOperations.reValidate()
